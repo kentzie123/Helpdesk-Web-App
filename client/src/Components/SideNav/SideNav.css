@@ -1,0 +1,32 @@
+.sidenav-container{
+    min-height: 100vh;
+}
+
+.app-logo{
+    height: 35px;
+    width: 35px;
+}
+
+.menu-item{
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px;
+}
+.menu-item.active{
+    color: white;
+    background-color: blue ;
+}
+.menu-item .bi{
+    font-size: 17px;
+    /* color: white; */
+}
+.menu-item .menu-item-text{
+    font-size: 14px;
+}
+/* .menu-item:hover{
+    background-color: #A8F1FF;
+} */
+
+.logout-btn .bi{
+    font-size: 17px;
+}

@@ -1,0 +1,9 @@
+.profile-pic {
+    height: 35px;
+    width: 35px;
+}
+
+.side-nav-btn{
+    font-size: 20px;
+    cursor: pointer;
+}

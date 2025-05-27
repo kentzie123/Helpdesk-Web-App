@@ -1,0 +1,16 @@
+.ticket-info-header{
+    border-bottom: 2px solid rgb(239, 233, 233);
+}
+.ticket-overview-title{
+    font-size: 16px;
+    font-weight: bold;
+    opacity: .7;
+}
+
+.fs-10{
+    font-size: 13px;
+}
+
+.ticket-info-info{
+    min-width: 250px;
+}

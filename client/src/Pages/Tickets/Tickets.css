@@ -1,0 +1,66 @@
+
+.tickets-container{
+   max-height: 650px;
+}
+
+.ticket-owner-pic{
+    height: 35px;
+    width: 35px;
+    border-radius: 50%;
+}
+
+.ticket-status{
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+}
+
+.ticket-id{
+    font-size: 12px;
+    font-weight: bold;
+    opacity: .7;
+}
+
+.ticket-owner{
+    font-size: 14px;
+    font-weight: bold;
+}
+.ticket-owner-name{
+    max-width: 150px;
+}
+
+.ticket-issue{
+    font-size: 12px;
+    opacity: .7;
+}
+
+.ticket-date{
+    font-size: 14px;
+    font-weight: bold;
+    opacity: .7;
+}
+
+.ticket-lower-info{
+    border-top: 2px solid rgb(239, 233, 233);
+}
+
+.ticket-assigned{
+    font-size: 14px;
+    font-weight: bold;
+    opacity: .7;
+}
+
+.ticket-assign-container .bi-person{
+    opacity: .7;
+    font-size: 18px;
+}
+
+.ticket-more-info{
+    font-size: 14px;
+    text-decoration: none;
+    
+}
+
+.ticket-more-info .bi-arrow-right-short{
+    font-size: 18px;
+}

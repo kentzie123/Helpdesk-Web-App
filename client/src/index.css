@@ -1,0 +1,28 @@
+body{
+  min-height: 100vh;  
+}
+
+:root{
+  --lg-text: 18px;
+  --md-text: 16px;
+  --sm-text: 14px;
+  --xs-text: 12px;
+}
+
+.lg-text{
+  font-size: var(--lg-text);
+}
+.md-text{
+  font-size: var(--md-text);
+}
+.sm-text{
+  font-size: var(--sm-text);
+}
+.xs-text{
+  font-size: var(--xs-text);
+}
+
+
+.lg-text-weight{
+  font-weight: bold;
+}
