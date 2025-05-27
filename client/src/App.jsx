@@ -10,15 +10,17 @@ import Users from './Pages/Users/Users';
 import Layout from './Layouts/Layout';
 import Page403 from './Pages/Page403/Page403';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
+import DeleteModal from './Components/DeleteModal/DeleteModal';
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
 
 
+
 function App() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { userInfo, rolePrivilege, setRolePrivilege, setUserInfo, setTickets } = useGlobalContext();
+  const { userInfo, rolePrivilege, setRolePrivilege, setUserInfo, setTickets, deleteModal } = useGlobalContext();
 
   useEffect(() => {
   const checkLogin = async () => {
@@ -48,7 +50,12 @@ function App() {
 
 
   return (
+    <div className='position-relative'>
+      {
+        deleteModal && <DeleteModal/>
+      }
       <Routes>
+        
           <Route path='/' element={<Login/>}/>
           <Route path='/signup' element={<Signup/>}/>
           <Route path='/forgot' element={<Forgot/>}/>
@@ -68,6 +75,8 @@ function App() {
           </Route>
 
       </Routes>
+    </div>
+      
   )
 }
 

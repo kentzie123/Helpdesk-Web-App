@@ -2,12 +2,16 @@ import './TicketInfo.css';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { useGlobalContext } from '../../Context/Context';
 
 
 const TicketInfo = () => {
-  const [ selectedTicket, setSelectedTicket ] = useState({});
-
+  const { setDeleteModal,selectedTicket, setSelectedTicket } = useGlobalContext();
   const { id } = useParams();
+  
+  const openDeleteModal = ()=>{
+    setDeleteModal(true);
+  }
 
   useEffect(()=>{
 
@@ -24,10 +28,6 @@ const TicketInfo = () => {
     handleSelectedTicket();
     
   },[id])
-
-
-
-  console.log(selectedTicket);
   
 
   return (
@@ -110,7 +110,21 @@ const TicketInfo = () => {
               <div className='col-12 col-lg-4'></div>
             </div>
           </div>
-          
+        </div>
+        <div className='mt-2'>
+          <button className="btn btn-primary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+            <i className="bi bi-pencil-square"></i> Edit
+          </button>
+          <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
+            <div className="offcanvas-header">
+              <h5 className="offcanvas-title" id="offcanvasRightLabel">Edit ticket</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div className="offcanvas-body">
+              ...
+            </div>
+          </div>
+          <button onClick={openDeleteModal} type='button' className='btn btn-danger'><i className="bi bi-trash-fill"></i> Delete</button>
         </div>
     </div>
   )
