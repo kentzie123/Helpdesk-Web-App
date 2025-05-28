@@ -10,7 +10,7 @@ import Users from './Pages/Users/Users';
 import Layout from './Layouts/Layout';
 import Page403 from './Pages/Page403/Page403';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
-import DeleteModal from './Components/DeleteModal/DeleteModal';
+import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom';
 function App() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { userInfo, rolePrivilege, setRolePrivilege, setUserInfo, setTickets, deleteModal } = useGlobalContext();
+  const { userInfo, rolePrivilege, setRolePrivilege, setUserInfo, setTickets, deleteTicketModal, setUsers, users } = useGlobalContext();
 
   useEffect(() => {
   const checkLogin = async () => {
@@ -31,7 +31,8 @@ function App() {
       try {
         const getRole = await axios.get(`http://localhost:3000/api/roles/${savedUser.role}`);
         const getTickets = await axios.get('http://localhost:3000/api/tickets');
-      
+        const getUsers = await axios.get('http://localhost:3000/api/users');
+        setUsers(getUsers.data);      
         setTickets(getTickets.data);
         setRolePrivilege(getRole.data);
 
@@ -39,7 +40,7 @@ function App() {
           navigate('/ticket');
         }
       } catch (error) {
-        console.error("Failed to fetch role privilege:", error);
+        console.error(error);
       }
     }
     setLoading(false);
@@ -52,7 +53,7 @@ function App() {
   return (
     <div className='position-relative'>
       {
-        deleteModal && <DeleteModal/>
+        deleteTicketModal && <DeleteTicketModal/>
       }
       <Routes>
         

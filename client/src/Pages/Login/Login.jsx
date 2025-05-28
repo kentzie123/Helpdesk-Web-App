@@ -30,6 +30,8 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(loginUserResponse.data.user));
       setResponseMessage(loginUserResponse.data.message);
       setUserInfo(loginUserResponse.data.user);
+      console.log(loginUserResponse.data.user);
+      
 
       const getRole = await axios.get(`http://localhost:3000/api/roles/${loginUserResponse.data.user.role}`);
       setRolePrivilege(getRole.data)

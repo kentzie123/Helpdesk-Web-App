@@ -21,6 +21,7 @@ const Signup = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/api/create', {
+        ProfilePic: "",
         fullname,
         email,
         password

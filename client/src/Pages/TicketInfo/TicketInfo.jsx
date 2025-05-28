@@ -6,11 +6,11 @@ import { useGlobalContext } from '../../Context/Context';
 
 
 const TicketInfo = () => {
-  const { setDeleteModal,selectedTicket, setSelectedTicket } = useGlobalContext();
+  const { setDeleteTicketModal,selectedTicket, setSelectedTicket } = useGlobalContext();
   const { id } = useParams();
   
-  const openDeleteModal = ()=>{
-    setDeleteModal(true);
+  const openDeleteTicketModal = ()=>{
+    setDeleteTicketModal(true);
   }
 
   useEffect(()=>{
@@ -124,7 +124,7 @@ const TicketInfo = () => {
               ...
             </div>
           </div>
-          <button onClick={openDeleteModal} type='button' className='btn btn-danger'><i className="bi bi-trash-fill"></i> Delete</button>
+          <button onClick={openDeleteTicketModal} type='button' className='btn btn-danger'><i className="bi bi-trash-fill"></i> Delete</button>
         </div>
     </div>
   )

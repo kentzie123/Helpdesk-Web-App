@@ -2,6 +2,7 @@ import './Tickets.css';
 import { useState } from 'react';
 import TicketCard from '../../Components/TicketCard/TicketCard';
 import { useGlobalContext } from '../../Context/Context';
+import CreateTicketModal from '../../Components/CreateTicketModal/CreateTicketModal';
 
 const Tickets = () => {
   const { tickets } = useGlobalContext();
@@ -72,58 +73,7 @@ const Tickets = () => {
             </button>
           </div>
 
-          <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">Create ticket</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div className="d-flex flex-column justify-content-between offcanvas-body">
-              <div> 
-                <div className='mb-3'>
-                  <div className='mb-1'>Subject</div>
-                  <input type="text" class="form-control" aria-label="Subject" aria-describedby="basic-addon1"></input>
-                </div>
-                <div className="mb-3">
-                  <label for="exampleFormControlTextarea1" className="form-label">Example textarea</label>
-                  <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
-                <div className='mb-3'>
-                  <div className='mb-1'>Category</div>
-                    <select class="form-select form-select" aria-label="Category">
-                      <option selected hidden>Select a category</option>
-                      <option value="technical">Technical Issue</option>
-                      <option value="account">Account Access</option>
-                      <option value="hardware">Hardware Request</option>
-                      <option value="software">Software Installation</option>
-                      <option value="network">Network Problem</option>
-                      <option value="maintenance">Maintenance Request</option>
-                      <option value="other">Other</option>
-                    </select>
-                </div>
-                <div className="mb-3">
-                  <div className='mb-1'>Priority</div>
-                  <select class="form-select form-select" aria-label="Priority">
-                    <option selected hidden>Select priority level</option>
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                    <option value="urgent">Urgent</option>
-                  </select>
-                </div>
-                <div className='mb-3'>
-                  <div className='mb-1'>Assign to</div>
-                  <select class="form-select form-select" aria-label="Priority">
-                    {
-                      
-                    }
-                  </select>    
-                </div>
-              </div>
-              <div>
-                <button type='button' className='btn btn-success w-100'>Create</button>
-              </div>
-            </div>
-          </div>
+          <CreateTicketModal/>
         </div>
 
         <div className='tickets-container border border-secondary rounded m-1 row p-2 g-3 overflow-y-scroll'>

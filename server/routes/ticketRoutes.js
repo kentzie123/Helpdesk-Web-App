@@ -5,7 +5,7 @@ const { getAllTickets, getTicketById, createTicket, updateTicket, deleteTicket  
 
 router.get('/tickets', getAllTickets);
 router.get('/tickets/:ticketId', getTicketById);
-router.post('/create', createTicket);
+router.post('/tickets/create', createTicket);
 router.delete('/tickets/:ticketId', deleteTicket);
 router.patch('/tickets/:ticketId', updateTicket);
 

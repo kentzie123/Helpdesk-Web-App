@@ -1,6 +1,6 @@
 import { useGlobalContext } from '../../Context/Context';
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import appLogo from '../../assets/imgs/appLogo.png';
 import './SideNav.css';
 
 const SideNav = () => {
@@ -20,8 +20,8 @@ const SideNav = () => {
         <div className={`${!navOpen? 'align-items-center' : 'align-items-start'} d-flex flex-column justify-content-between h-100`}>
             
             <div className={`rounded-3 text-decoration-none d-flex gap-2 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
-              <img className='app-logo bg-primary rounded-circle border ' src="" alt="" />
-              {navOpen && <div className='menu-item-text user-select-none fw-bold'>TECH SYS</div>}
+              <img className='app-logo rounded-circle border ' src={appLogo} alt="App Logo" />
+              {navOpen && <div className='menu-item-text user-select-none fw-bold'>HELP HIVE</div>}
             </div>
 
             <div className='d-flex flex-column gap-3 w-100'>

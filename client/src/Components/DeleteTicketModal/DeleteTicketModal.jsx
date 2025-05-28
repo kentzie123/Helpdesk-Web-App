@@ -2,16 +2,16 @@ import axios from "axios";
 import { useGlobalContext } from "../../Context/Context"
 import { useNavigate } from "react-router-dom";
 
-const DeleteModal = () => {
+const DeleteTicketModal = () => {
     const navigate = useNavigate();
 
-    const { setDeleteModal, selectedTicket, setTickets } = useGlobalContext();
+    const { setDeleteTicketModal, selectedTicket, setTickets } = useGlobalContext();
 
     const handleDeleteTicket = async ()=>{
         try{
             await axios.delete (`http://localhost:3000/api/tickets/${selectedTicket.ticketId}`);
             await fetchTickets();
-            setDeleteModal(false);
+            setDeleteTicketModal(false);
             navigate('/ticket');
         }catch(err){
             console.log(err);
@@ -27,8 +27,8 @@ const DeleteModal = () => {
     }
   };
 
-    const closeDeleteModal= ()=>{
-        setDeleteModal(false);
+    const closeDeleteTicketModal= ()=>{
+        setDeleteTicketModal(false);
     }
     return (
         <div className="position-absolute top-50 start-50 translate-middle z-3 bg-body shadow rounded-3 overflow-hidden">
@@ -39,11 +39,11 @@ const DeleteModal = () => {
                 <p>Are you sure you want to delete this ticket?</p>
                 <div className='d-flex gap-3 justify-content-center'>
                     <button onClick={handleDeleteTicket} type='button' className='btn btn-danger'>Yes</button>
-                    <button onClick={closeDeleteModal} type='button' className='btn btn-secondary'>No</button>
+                    <button onClick={closeDeleteTicketModal} type='button' className='btn btn-secondary'>No</button>
                 </div>
             </div>
         </div>
     )
 }
 
-export default DeleteModal
+export default DeleteTicketModal

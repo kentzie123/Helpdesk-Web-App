@@ -2,7 +2,7 @@ import './TopNav.css';
 import { useGlobalContext } from '../../Context/Context';
 
 const TopNav = () => {
-  const { navOpen, setNavOpen } = useGlobalContext();
+  const { navOpen, setNavOpen, userInfo } = useGlobalContext();
 
   return (
     <div className='p-2 border'>
@@ -12,9 +12,9 @@ const TopNav = () => {
               <h4 className='m-0'>Tickets</h4>
             </div>
             <div className='d-flex align-items-center gap-3'>
-                <div className='sm-text'>Welcome Kent Adriane Goc-ong!</div>
+                <div className='sm-text'>Welcome {userInfo.fullname}!</div>
                 <i className="bi bi-bell-fill"></i>
-                <img className='profile-pic rounded-circle bg-primary border' src="" alt="" />
+                <img className='profile-pic rounded-circle bg-primary border' src={userInfo.profilePic} alt={`${userInfo.fullname} profile pic`} />
             </div>
         </div>
     </div>

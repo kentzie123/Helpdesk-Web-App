@@ -37,6 +37,7 @@ const createTicket = async (req, res) => {
 
   try{
     const newTicket = new Ticket({
+      ownerPic,
       ownerName, 
       subject, 
       priority, 

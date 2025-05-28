@@ -35,6 +35,7 @@ const loginUser = async (req, res) => {
       message: 'Login successful', 
       user: { 
         id: user._id, 
+        profilePic: user.profilePic,
         email: user.email, 
         fullname: user.fullname, 
         role: user.role 
@@ -63,6 +64,7 @@ const createUser = async (req, res) => {
 
     
     const newUser = new User({
+      profilePic,
       email,
       password, // Will be hashed automatically by the pre-save hook
       fullname,

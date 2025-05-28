@@ -1,8 +1,8 @@
-import profile1 from '../../assets/imgs/profile1.jpg';
+import defaultProfilePic from '../../assets/imgs/default.jpg';
 import { NavLink } from 'react-router-dom';
 
 const TicketCard = ({ ticket }) => {
-    const { ticketId, ownerName, subject, assignedTo, status, createdDate } = ticket;
+    const { ticketId, ownerName, subject, assignedTo, status, createdDate, ownerPic } = ticket;
 
     const statusColors = {
     'Open': 'bg-secondary text-white',         // Neutral, awaiting action
@@ -54,7 +54,7 @@ const TicketCard = ({ ticket }) => {
                         <div className='d-flex align-items-center'>
                             <img 
                                 className='ticket-owner-pic rounded-circle me-2' 
-                                src={profile1} 
+                                src={ownerPic ? ownerPic : defaultProfilePic} 
                                 alt={`${ownerName}'s profile`} 
                                 width="40" 
                                 height="40"
