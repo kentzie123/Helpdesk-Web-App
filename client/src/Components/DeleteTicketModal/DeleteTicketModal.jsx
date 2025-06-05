@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const DeleteTicketModal = () => {
     const navigate = useNavigate();
 
-    const { setDeleteTicketModal, selectedTicket, setTickets } = useGlobalContext();
+    const { setDeleteTicketModal, selectedTicket, fetchTickets } = useGlobalContext();
 
     const handleDeleteTicket = async ()=>{
         try{
@@ -17,15 +17,6 @@ const DeleteTicketModal = () => {
             console.log(err);
         }
     }
-
-    const fetchTickets = async () => {
-    try {
-      const res = await axios.get("http://localhost:3000/api/tickets");
-      setTickets(res.data);
-    } catch (error) {
-      console.error("Error fetching tickets:", error);
-    }
-  };
 
     const closeDeleteTicketModal= ()=>{
         setDeleteTicketModal(false);

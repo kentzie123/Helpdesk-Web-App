@@ -5,19 +5,18 @@ const TicketCard = ({ ticket }) => {
     const { ticketId, ownerName, subject, assignedTo, status, createdDate, ownerPic } = ticket;
 
     const statusColors = {
-    'Open': 'bg-secondary text-white',         // Neutral, awaiting action
-    'New': 'bg-info text-dark',                // Informational, recently created
-    'In Progress': 'bg-warning text-dark',     // Action ongoing, needs attention
-    'For Approval': 'bg-primary text-white',   // Important, pending higher action
-    'Resolved': 'bg-success text-white',       // Success, issue addressed
-    'Closed': 'bg-dark text-white'             // Final, no further action needed
+    'Open': 'bg-secondary text-white',        
+    'New': 'bg-info text-dark',               
+    'In Progress': 'bg-warning text-dark',    
+    'For Approval': 'bg-primary text-white',   
+    'Resolved': 'bg-success text-white',       
+    'Closed': 'bg-dark text-white'            
 };
 
 
     const timeAgo = (dateString) => {
         try {
-            const [day, month, year] = dateString.split('-');
-            const date = new Date(`${year}-${month}-${day}T00:00:00`);
+            const date = new Date(dateString);
             const now = new Date();
             const seconds = Math.floor((now - date) / 1000);
 
@@ -34,6 +33,7 @@ const TicketCard = ({ ticket }) => {
             return dateString;
         }
     };
+
 
     return (
         <div className='ticket-container p-1 col-lg-3 col-md-6 col-12'>
@@ -74,7 +74,7 @@ const TicketCard = ({ ticket }) => {
                     <div className='ticket-lower-info d-flex justify-content-between align-items-center px-1'>
                         <div className='d-flex align-items-center gap-1 small'>
                             <i className="bi bi-person"></i>
-                            <span>{assignedTo}</span>       
+                            <span>{assignedTo? assignedTo : "Unassigned"}</span>       
                         </div>
 
                         <NavLink to={`/ticket/${ticketId}`} className='text-decoration-none'>

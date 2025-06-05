@@ -11,16 +11,28 @@ import Layout from './Layouts/Layout';
 import Page403 from './Pages/Page403/Page403';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
 import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
+import CreateTicketToastResponse from './Components/CreateTicketToastResponse/CreateTicketToastResponse';
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
+import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
 
 
 
 function App() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const { userInfo, rolePrivilege, setRolePrivilege, setUserInfo, setTickets, deleteTicketModal, setUsers, users } = useGlobalContext();
+  const 
+    {
+      rolePrivilege, 
+      setRolePrivilege, 
+      setUserInfo, 
+      setTickets, 
+      deleteTicketModal, 
+      setUsers, 
+      createTicketResponse,
+      editTicketResponse
+    } = useGlobalContext();
 
   useEffect(() => {
   const checkLogin = async () => {
@@ -55,6 +67,9 @@ function App() {
       {
         deleteTicketModal && <DeleteTicketModal/>
       }
+      { createTicketResponse === "Created ticket successfully"? <CreateTicketToastResponse/> : null }
+      { editTicketResponse === "Ticket updated successfully"? <EditTicketToastResponse/> : null }
+      
       <Routes>
         
           <Route path='/' element={<Login/>}/>

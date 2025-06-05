@@ -1,8 +1,9 @@
 import './TicketInfo.css';
 import { Link, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useGlobalContext } from '../../Context/Context';
+import EditTicketModal from '../../Components/EditTicketModal/EditTicketModal';
 
 
 const TicketInfo = () => {
@@ -115,15 +116,7 @@ const TicketInfo = () => {
           <button className="btn btn-primary me-2" type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
             <i className="bi bi-pencil-square"></i> Edit
           </button>
-          <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
-            <div className="offcanvas-header">
-              <h5 className="offcanvas-title" id="offcanvasRightLabel">Edit ticket</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-            </div>
-            <div className="offcanvas-body">
-              ...
-            </div>
-          </div>
+          <EditTicketModal/>
           <button onClick={openDeleteTicketModal} type='button' className='btn btn-danger'><i className="bi bi-trash-fill"></i> Delete</button>
         </div>
     </div>
