@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const ticketSchema = new mongoose.Schema({
   ticketId: { type: String, required: true, unique: true },
   ownerPic: { type: String },
+  ownerUserId: { type: String, required: true },
   ownerName: { type: String, required: true},
   subject: { type: String, required: true },
   priority: { type: String, enum: ['Low', 'Medium', 'High', 'Urgent'], required: true },

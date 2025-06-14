@@ -6,12 +6,11 @@ const EditTicketToastResponse = () => {
 
     useEffect(() => {
         if (editTicketResponse) {
-            const timer = setTimeout(() => {
-                setEditTicketResponse("");
-            }, 3000);
+            const timer = setTimeout(() => setEditTicketResponse(""), 3000);
             return () => clearTimeout(timer);
         }
     }, [editTicketResponse]);
+
 
     return (
         <div className={`toast position-fixed top-0 start-0 ms-3 mt-3 p-1 z-3 ${editTicketResponse === 'Ticket updated successfully' ? 'text-bg-success' : 'text-bg-danger'} border-0 fade ${editTicketResponse ? 'show' : 'hide'}`} role="alert" aria-live="assertive" aria-atomic="true">

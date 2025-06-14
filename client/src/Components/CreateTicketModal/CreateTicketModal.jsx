@@ -19,6 +19,7 @@ const CreateTicketModal = () => {
             const res = await axios.post('http://localhost:3000/api/tickets', {
                 ownerPic: userInfo.profilePic,
                 ownerName: userInfo.fullname,
+                ownerUserId: userInfo.userID,
                 subject,
                 priority,
                 category,
@@ -26,7 +27,7 @@ const CreateTicketModal = () => {
                 assignedTo,
                 targetResolveDate,
             });
-            await fetchTickets();
+            // await fetchTickets();
             setSubject('');
             setDescription('');
             setCategory('');

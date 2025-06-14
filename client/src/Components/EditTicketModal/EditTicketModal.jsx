@@ -6,7 +6,7 @@ import EditTicketToastResponse from '../EditTicketToastResponse/EditTicketToastR
 const EditTicketModal = () => {
 
     const editTicketClsBtn = useRef(null);
-    const { users, selectedTicket, editTicketResponse, setEditTicketResponse, userInfo } = useGlobalContext();
+    const { users, selectedTicket, editTicketResponse, setEditTicketResponse, userInfo, fetchTicketInfo } = useGlobalContext();
         
     const [editSubject, setSubject] = useState('');
     const [editDescription, setDescription] = useState('');
@@ -40,7 +40,7 @@ const EditTicketModal = () => {
                 targetResolveDate: editTargetResolveDate,
                 modifiedBy: userInfo.fullname
             });
-
+            fetchTicketInfo(selectedTicket.ticketId);
             editTicketClsBtn.current.click();
             setEditTicketResponse(res.data.message || "Ticket updated successfully");
 

@@ -12,10 +12,12 @@ import Page403 from './Pages/Page403/Page403';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
 import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
 import CreateTicketToastResponse from './Components/CreateTicketToastResponse/CreateTicketToastResponse';
+import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
+import StartWorkingToastResponse from './Components/StartWorkingToastResponse/StartWorkingToastResponse';
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
-import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
+
 
 
 
@@ -31,7 +33,8 @@ function App() {
       deleteTicketModal, 
       setUsers, 
       createTicketResponse,
-      editTicketResponse
+      editTicketResponse,
+      startWorkingResponse
     } = useGlobalContext();
 
   useEffect(() => {
@@ -69,6 +72,7 @@ function App() {
       }
       { createTicketResponse === "Created ticket successfully"? <CreateTicketToastResponse/> : null }
       { editTicketResponse === "Ticket updated successfully"? <EditTicketToastResponse/> : null }
+      { startWorkingResponse === "Ticket is now in progress" ? <StartWorkingToastResponse/> : null }
       
       <Routes>
         
