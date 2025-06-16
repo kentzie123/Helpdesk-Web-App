@@ -17,10 +17,14 @@ const AppProvider = ({ children }) => {
   const [startWorkingResponse, setStartWorkingResponse] = useState("");
 
   // Fetch tickets initially
-  const fetchTickets = async () => {
+  const fetchTickets = async (userInfo) => {
     try {
-      const res = await axios.get("http://localhost:3000/api/tickets");
+      const res = await axios.get("http://localhost:3000/api/tickets/by-role",{
+        params: {role: userInfo.role, fullname: userInfo.fullname, userID: userInfo.userID}
+      });
+      
       setTickets(res.data);
+      
     } catch (error) {
       console.error("Error fetching tickets:", error);
     }

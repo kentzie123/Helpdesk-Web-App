@@ -5,7 +5,7 @@ import axios from "axios";
 import CreateTicketToastResponse from "../CreateTicketToastResponse/CreateTicketToastResponse";
 
 const CreateTicketModal = () => {
-    const { userInfo, users, fetchTickets, setCreateTicketResponse, createTicketResponse } = useGlobalContext();
+    const { userInfo, users, setCreateTicketResponse, createTicketResponse } = useGlobalContext();
     const [ subject, setSubject ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ category, setCategory ] = useState('');
@@ -27,7 +27,8 @@ const CreateTicketModal = () => {
                 assignedTo,
                 targetResolveDate,
             });
-            // await fetchTickets();
+           
+            
             setSubject('');
             setDescription('');
             setCategory('');

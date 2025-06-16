@@ -31,7 +31,6 @@ const Signup = () => {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-
       setResponseMessage(response.data.message);
       navigate('/');
     } catch (error) {

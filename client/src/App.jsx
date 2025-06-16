@@ -28,41 +28,51 @@ function App() {
     {
       rolePrivilege, 
       setRolePrivilege, 
-      setUserInfo, 
-      setTickets, 
+      setUserInfo,
       deleteTicketModal, 
       setUsers, 
       createTicketResponse,
       editTicketResponse,
-      startWorkingResponse
+      startWorkingResponse,
+      fetchTickets,
+      userInfo
     } = useGlobalContext();
 
-  useEffect(() => {
-  const checkLogin = async () => {
-    const savedUser = JSON.parse(localStorage.getItem('user'));
 
-    if (savedUser) {
-      setUserInfo(savedUser);
+useEffect(() => {
+  const savedUser = JSON.parse(localStorage.getItem('user'));
+  if (savedUser) {
+    setUserInfo(savedUser); 
+  } else {
+    setLoading(false); 
+  }
+}, []);
+
+
+useEffect(() => {
+  const fetchUserRelatedData = async () => {
+    if (userInfo?.userID) {
       try {
-        const getRole = await axios.get(`http://localhost:3000/api/roles/${savedUser.role}`);
-        const getTickets = await axios.get('http://localhost:3000/api/tickets');
+        const getRole = await axios.get(`http://localhost:3000/api/roles/${userInfo.role}`);
         const getUsers = await axios.get('http://localhost:3000/api/users');
-        setUsers(getUsers.data);      
-        setTickets(getTickets.data);
+        fetchTickets(userInfo)
+        setUsers(getUsers.data);
         setRolePrivilege(getRole.data);
 
         if (window.location.pathname === '/') {
-          navigate('/ticket');
+          navigate('/tickets');
         }
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     }
-    setLoading(false);
   };
 
-  checkLogin();
-}, []);
+  fetchUserRelatedData();
+}, [userInfo]);
+
 
 
   return (
@@ -81,11 +91,11 @@ function App() {
           <Route path='/forgot' element={<Forgot/>}/>
           <Route path='/403' element={<Page403/>}/>
           <Route element={<Layout />}>
-            <Route path='/ticket' element={
+            <Route path='/tickets' element={
               loading ? null : (rolePrivilege.tickets ? <Tickets /> : <Navigate to="/403" />)
             }/>
 
-            <Route path='/user' element={
+            <Route path='/users' element={
               loading ? null : (rolePrivilege.users ? <Users /> : <Navigate to="/403" />)
             }/>
 

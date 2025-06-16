@@ -5,11 +5,12 @@ import './SideNav.css';
 
 const SideNav = () => {
     const navigate = useNavigate();
-    const { navOpen, rolePrivilege ,setUserInfo, setRolePrivilege} = useGlobalContext();
+    const { navOpen, rolePrivilege ,setUserInfo, setRolePrivilege, setTickets} = useGlobalContext();
 
    const handleLogout = () => {
     setUserInfo(null);
     setRolePrivilege({});
+    setTickets([]);
     localStorage.removeItem('user');
     navigate('/');
   };
@@ -35,7 +36,7 @@ const SideNav = () => {
               
               {
                 rolePrivilege.tickets &&
-                <NavLink to='/ticket' className={({isActive})=> `${isActive? 'menu-item active': 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
+                <NavLink to='/tickets' className={({isActive})=> `${isActive? 'menu-item active': 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
                   <i className="bi bi-ticket-fill"></i>
                   {navOpen && <div className='menu-item-text user-select-none'>Tickets</div>}
                 </NavLink>

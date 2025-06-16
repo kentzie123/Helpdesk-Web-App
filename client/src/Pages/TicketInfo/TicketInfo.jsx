@@ -92,15 +92,15 @@ const TicketInfo = () => {
 
   return (
     <div className='border rounded shadow-sm m-2 p-2'>
-      <Link to='/ticket'>
+      <Link to='/tickets'>
         <button type='button' className='btn btn-secondary'>
           <i className="bi bi-arrow-left"></i> Back
         </button>
       </Link>
 
       <div className='border border-secondary rounded mt-2'>
-        <div className='ticket-info-header d-flex align-items-center gap-2 p-3'>
-          <div className='ticket-overview-title'>Overview</div>
+        <div className='ticket-info-header d-flex align-items-center gap-2 p-2 py-3'>
+          <div className='h5 fw-bold m-0'>Overview</div>
           {isOverdue() && (
             <div className='bg-danger text-light px-2' title="Target resolve date has passed and this ticket is still open.">OVERDUE</div>
           )}

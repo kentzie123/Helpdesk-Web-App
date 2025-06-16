@@ -34,7 +34,7 @@ const loginUser = async (req, res) => {
     res.json({ 
       message: 'Login successful', 
       user: { 
-        id: user._id, 
+        userID: user.userID, 
         profilePic: user.profilePic,
         email: user.email, 
         fullname: user.fullname, 
@@ -48,7 +48,7 @@ const loginUser = async (req, res) => {
 
 // Create a new user
 const createUser = async (req, res) => {
-  const { email, password, fullname, role } = req.body;
+  const { email, password, fullname, profilePic } = req.body;
 
   // Input validation
   if (!email || !password || !fullname) {
@@ -66,9 +66,8 @@ const createUser = async (req, res) => {
     const newUser = new User({
       profilePic,
       email,
-      password, // Will be hashed automatically by the pre-save hook
+      password, 
       fullname,
-      role: role || 'client',
     });
 
     await newUser.save();

@@ -28,9 +28,8 @@ const getTicketById = async (req, res) => {
 };
 
 
-// GET tickets based on role and user
 const getTicketsByRole = async (req, res) => {
-  const { role, userID } = req.query; // From query string
+  const { role, fullname, userID } = req.query; // From query string
 
   try {
     let tickets = [];
@@ -43,14 +42,14 @@ const getTicketsByRole = async (req, res) => {
       case 2: // Staff
         tickets = await Ticket.find({
           $or: [
-            { assignedTo: userID },
-            { ownerName: userID } 
+            { assignedTo: fullname },
+            { ownerUserId: userID } 
           ]
         });
         break;
 
       case 3: // Client
-        tickets = await Ticket.find({ ownerName: userID });
+        tickets = await Ticket.find({ ownerUserId: userID });
         break;
 
       default:

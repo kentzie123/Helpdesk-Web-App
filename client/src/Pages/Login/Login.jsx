@@ -35,7 +35,7 @@ const Login = () => {
 
       const getRole = await axios.get(`http://localhost:3000/api/roles/${loginUserResponse.data.user.role}`);
       setRolePrivilege(getRole.data)
-      navigate('/ticket');
+      navigate('/tickets');
 
     } catch(error){
 
