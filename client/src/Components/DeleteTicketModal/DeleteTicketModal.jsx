@@ -5,14 +5,13 @@ import { useNavigate } from "react-router-dom";
 const DeleteTicketModal = () => {
     const navigate = useNavigate();
 
-    const { setDeleteTicketModal, selectedTicket, fetchTickets } = useGlobalContext();
+    const { setDeleteTicketModal, selectedTicket } = useGlobalContext();
 
     const handleDeleteTicket = async ()=>{
         try{
             await axios.delete (`http://localhost:3000/api/tickets/${selectedTicket.ticketId}`);
-            await fetchTickets();
             setDeleteTicketModal(false);
-            navigate('/ticket');
+            navigate('/tickets');
         }catch(err){
             console.log(err);
         }

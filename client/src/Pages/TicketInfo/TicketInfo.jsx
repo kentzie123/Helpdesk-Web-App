@@ -49,16 +49,9 @@ const TicketInfo = () => {
     
         </div>
         <div>
-          {(selectedTicket.status === 'Open' || selectedTicket.status === 'New') &&
-            userInfo.fullname === selectedTicket.assignedTo && (
-            <button
-              className="btn btn-success"
-              type="button"
-              onClick={handleStartWorking}
-            >
+            <button className="btn btn-success" type="button" onClick={handleStartWorking}>
               <i className="bi bi-play-fill"></i> Start Working
             </button>
-          )}
         </div>
       </div>
     )
@@ -179,10 +172,15 @@ const TicketInfo = () => {
         </div>
       </div>
       {
-        userInfo.role === 'Admin' || selectedTicket.status === 'New' || selectedTicket.status === 'Open' 
-          ? <EditAndDeleteTicketButtons/> 
-          : null
+        userInfo.role === 1 ? (
+          <EditAndDeleteTicketButtons />
+        ) : selectedTicket.status === 'New' || selectedTicket.status === 'Open' ? (
+          userInfo.fullname === selectedTicket.assignedTo ? (
+            <EditAndDeleteTicketButtons />
+          ) : null
+        ) : null
       }
+
       <EditTicketModal />
 
     </div>

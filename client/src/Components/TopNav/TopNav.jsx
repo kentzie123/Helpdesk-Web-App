@@ -1,4 +1,5 @@
 import './TopNav.css';
+import defaultProfilePic from '../../assets/imgs/default.jpg';
 import { useGlobalContext } from '../../Context/Context';
 
 const TopNav = () => {
@@ -12,9 +13,9 @@ const TopNav = () => {
               <h4 className='m-0'>Tickets</h4>
             </div>
             <div className='d-flex align-items-center gap-3'>
-                <div className='sm-text'>Welcome {userInfo.fullname}!</div>
+                <div className='sm-text'>Welcome {userInfo?.fullname || 'Guest'}!</div>
                 <i className="bi bi-bell-fill"></i>
-                <img className='profile-pic rounded-circle bg-primary border' src={userInfo.profilePic} alt={`${userInfo.fullname} profile pic`} />
+                <img className='profile-pic rounded-circle bg-primary border' src={!userInfo.profilePic? defaultProfilePic : userInfo.profilePic  } alt={`${userInfo.fullname} profile pic`} />
             </div>
         </div>
     </div>

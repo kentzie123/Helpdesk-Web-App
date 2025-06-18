@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import socket from '../socket';  // Adjust path based on your folder structure
+import socket from '../socket';
 
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [navOpen, setNavOpen] = useState(false);
   const [users, setUsers] = useState([]);
-  const [userInfo, setUserInfo] = useState({});
+  const [userInfo, setUserInfo] = useState(null);
   const [rolePrivilege, setRolePrivilege] = useState({});
   const [tickets, setTickets] = useState([]);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);
@@ -15,6 +15,8 @@ const AppProvider = ({ children }) => {
   const [createTicketResponse, setCreateTicketResponse] = useState("");
   const [editTicketResponse, setEditTicketResponse] = useState("");
   const [startWorkingResponse, setStartWorkingResponse] = useState("");
+  const [notifications, setNotifications] = useState([]);
+  const [popupNotification, setPopupNotification] = useState(null);
 
   // Fetch tickets initially
   const fetchTickets = async (userInfo) => {
@@ -59,13 +61,23 @@ const AppProvider = ({ children }) => {
       setTickets(prev => prev.filter(ticket => ticket._id !== deletedId));
     });
 
+
+    //Notification Socket
+
+    socket.on('notificationCreated', (newNotification) => {     
+      if(userInfo.userID === newNotification.receiverUserId){
+        setPopupNotification(newNotification);
+      }
+    })
+
     // Cleanup on unmount
     return () => {
       socket.off('ticketCreated');
       socket.off('ticketUpdated');
       socket.off('ticketDeleted');
+      socket.off('notificationCreated');
     };
-  }, []);
+  }, [userInfo]);
 
   return (
     <AppContext.Provider value={{
@@ -90,8 +102,11 @@ const AppProvider = ({ children }) => {
       selectedTicket,
       setSelectedTicket,
       users,
-      setUsers
-      
+      setUsers,
+      notifications, 
+      setNotifications,
+      popupNotification, 
+      setPopupNotification
     }}>
       {children}
     </AppContext.Provider>

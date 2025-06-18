@@ -14,6 +14,8 @@ import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal'
 import CreateTicketToastResponse from './Components/CreateTicketToastResponse/CreateTicketToastResponse';
 import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
 import StartWorkingToastResponse from './Components/StartWorkingToastResponse/StartWorkingToastResponse';
+import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
+
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +37,8 @@ function App() {
       editTicketResponse,
       startWorkingResponse,
       fetchTickets,
-      userInfo
+      userInfo,
+      popupNotification
     } = useGlobalContext();
 
 
@@ -55,10 +58,12 @@ useEffect(() => {
       try {
         const getRole = await axios.get(`http://localhost:3000/api/roles/${userInfo.role}`);
         const getUsers = await axios.get('http://localhost:3000/api/users');
+        // const getUserNotifications = await axios.get(`http://localhost:3000/api/notifications/${userInfo.userID}`);
+
         fetchTickets(userInfo)
         setUsers(getUsers.data);
         setRolePrivilege(getRole.data);
-
+        
         if (window.location.pathname === '/') {
           navigate('/tickets');
         }
@@ -80,9 +85,10 @@ useEffect(() => {
       {
         deleteTicketModal && <DeleteTicketModal/>
       }
-      { createTicketResponse === "Created ticket successfully"? <CreateTicketToastResponse/> : null }
-      { editTicketResponse === "Ticket updated successfully"? <EditTicketToastResponse/> : null }
-      { startWorkingResponse === "Ticket is now in progress" ? <StartWorkingToastResponse/> : null }
+      { createTicketResponse ? <CreateTicketToastResponse/> : null }
+      { editTicketResponse ? <EditTicketToastResponse/> : null }
+      { startWorkingResponse ? <StartWorkingToastResponse/> : null }
+      { popupNotification ? <NotificationToastResponse/> : null }
       
       <Routes>
         

@@ -10,7 +10,7 @@ const CreateTicketModal = () => {
     const [ description, setDescription ] = useState('');
     const [ category, setCategory ] = useState('');
     const [ priority, setPriority ] = useState('');
-    const [ assignedTo, setAssignedTo ] = useState('');
+    const [ assignedTo, setAssignedTo ] = useState({});
     const [ targetResolveDate, setTargetResolveDate ] = useState('');
     const createTicketClsBtn = useRef(null);
 
@@ -33,7 +33,7 @@ const CreateTicketModal = () => {
             setDescription('');
             setCategory('');
             setPriority('');
-            setAssignedTo('');
+            setAssignedTo({});
             setTargetResolveDate('');
             setCreateTicketResponse(res.data.message || "Created ticket successfully");
             createTicketClsBtn.current.click();      
@@ -86,14 +86,24 @@ const CreateTicketModal = () => {
                     </div>
                     <div>
                         <div className='mb-1'>Assign to</div>
-                        <select onChange={(e)=>{setAssignedTo(e.target.value)}} value={assignedTo}  className="form-select" aria-label="Priority">
-                            <option value="" selected hidden>Select Assignee</option>         
-                            {
-                                users.map((fn) => (
-                                    <option key={fn.userID} value={fn.fullname}>{fn.fullname}</option>
-                                ))
-                            }
-                        </select>    
+                        <select 
+                        onChange={(e)=> setAssignedTo(JSON.parse(e.target.value))} 
+                        value={JSON.stringify(assignedTo)} 
+                        className="form-select"
+                        >
+                        <option value="" hidden>Select Assignee</option>         
+                        {
+                            users.map((fn) => (
+                            <option 
+                                key={fn.userID} 
+                                value={JSON.stringify({ userID: fn.userID, fullname: fn.fullname })}
+                            >
+                                {fn.fullname}
+                            </option>
+                            ))
+                        }
+                        </select>
+
                     </div>
                     <div>
                         <div className='mb-1'>Target resolve date</div>

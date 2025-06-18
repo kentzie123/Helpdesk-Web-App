@@ -1,4 +1,6 @@
 const Ticket = require('../models/tickets');
+const Notification = require('../models/notification');
+
 
 // GET all tickets
 const getAllTickets = async (req, res) => {
@@ -29,7 +31,7 @@ const getTicketById = async (req, res) => {
 
 
 const getTicketsByRole = async (req, res) => {
-  const { role, fullname, userID } = req.query; // From query string
+  const { role, fullname, userID } = req.query; 
 
   try {
     let tickets = [];
@@ -116,12 +118,30 @@ const createTicket = async (req, res) => {
       priority,
       category,
       description,
-      assignedTo,
-      status: assignedTo ? 'New' : 'Open',
+      assignedTo : assignedTo.fullname,
+      status: assignedTo ? 'New' : 'Open',  
       targetResolveDate
     });
 
     await newTicket.save();
+
+    const prefix = 'NTF';
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.floor(100 + Math.random() * 900);
+
+     if (assignedTo) {
+      const newNotification = new Notification({
+        notificationId: `${prefix}-${timestamp}-${random}`,
+        receiverUserId: assignedTo.userID,
+        ticketId: ticketIdGenerated,
+        title: 'New Ticket Assigned',
+        message: `A new ticket (${ticketIdGenerated}) has been assigned to you.`,
+        status: 'Unread',
+        createdBy: ownerName,
+      });
+
+      await newNotification.save();
+    }
 
     res.status(201).json("Created ticket successfully");
 
@@ -159,10 +179,7 @@ const updateTicket = async (req, res) => {
    
     updateFields.lastModifiedDate = new Date();
 
-    const updatedTicket = await Ticket.findOneAndUpdate(
-      { ticketId },
-      updateFields,
-      { new: true }
+    await Ticket.findOneAndUpdate({ ticketId },updateFields,{ new: true }
     );
 
     res.status(200).json("Ticket updated successfully");
