@@ -7,7 +7,7 @@ const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
   const [navOpen, setNavOpen] = useState(false);
   const [users, setUsers] = useState([]);
-  const [userInfo, setUserInfo] = useState(null);
+  const [userInfo, setUserInfo] = useState({});
   const [rolePrivilege, setRolePrivilege] = useState({});
   const [tickets, setTickets] = useState([]);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);

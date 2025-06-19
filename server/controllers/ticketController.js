@@ -164,7 +164,6 @@ const updateTicket = async (req, res) => {
       return res.status(404).json({ error: 'Ticket not found' });
     }
 
-
     if (updateFields.targetResolveDate) {
       const updatedResolveDate = new Date(updateFields.targetResolveDate);
       const originalResolveDate = new Date(ticket.targetResolveDate);
@@ -176,11 +175,28 @@ const updateTicket = async (req, res) => {
       }
     }
 
-   
     updateFields.lastModifiedDate = new Date();
 
-    await Ticket.findOneAndUpdate({ ticketId },updateFields,{ new: true }
-    );
+    await Ticket.findOneAndUpdate({ ticketId }, updateFields, { new: true });
+
+    // Generate Notification ID
+    const prefix = 'NTF';
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.floor(100 + Math.random() * 900);
+    const notificationId = `${prefix}-${timestamp}-${random}`;
+
+    // Notify the ticket owner
+    const ownerNotification = new Notification({
+      notificationId,
+      receiverUserId: ticket.ownerUserId,
+      ticketId: ticket.ticketId,
+      title: 'Your Ticket Has Been Updated',
+      message: `Your ticket (${ticket.ticketId}) is now ${updateFields.status || ticket.status}.`,
+      status: 'Unread',
+      createdBy: ticket.assignedTo || 'System',
+    });
+
+    await ownerNotification.save();
 
     res.status(200).json("Ticket updated successfully");
   } catch (err) {
@@ -188,6 +204,7 @@ const updateTicket = async (req, res) => {
     res.status(500).json({ error: 'Server error while updating the ticket' });
   }
 };
+
 
 
 

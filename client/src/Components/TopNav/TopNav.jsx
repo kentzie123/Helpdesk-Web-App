@@ -10,7 +10,6 @@ const TopNav = () => {
         <div className='d-flex align-items-center justify-content-between'>
             <div className='d-flex align-items-center gap-2'>
               <i className="side-nav-btn bi bi-list" onClick={() => setNavOpen(prev => !prev)}></i>
-              <h4 className='m-0'>Tickets</h4>
             </div>
             <div className='d-flex align-items-center gap-3'>
                 <div className='sm-text'>Welcome {userInfo?.fullname || 'Guest'}!</div>

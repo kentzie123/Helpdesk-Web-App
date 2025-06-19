@@ -19,6 +19,7 @@ import NotificationToastResponse from './Components/NotificationToastResponse/No
 
 import { useGlobalContext } from './Context/Context';
 import { useNavigate } from 'react-router-dom';
+import Notifications from './Pages/Notifications/Notifications';
 
 
 
@@ -103,6 +104,10 @@ useEffect(() => {
 
             <Route path='/users' element={
               loading ? null : (rolePrivilege.users ? <Users /> : <Navigate to="/403" />)
+            }/>
+
+            <Route path='/notifications' element={
+              loading ? null : (rolePrivilege.notification ? <Notifications /> : <Navigate to="/403" />)
             }/>
 
             <Route path='/ticket/:id' element={

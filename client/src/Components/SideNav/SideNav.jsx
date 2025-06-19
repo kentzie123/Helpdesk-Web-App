@@ -41,6 +41,14 @@ const SideNav = () => {
                   {navOpen && <div className='menu-item-text user-select-none'>Tickets</div>}
                 </NavLink>
               }
+
+              {
+                rolePrivilege.notification &&
+                <NavLink to='/notifications' className={({isActive})=> `${isActive? 'menu-item active': 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
+                  <i className="bi bi-bell-fill"></i>
+                  {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
+                </NavLink>
+              }
               
             </div>
 
