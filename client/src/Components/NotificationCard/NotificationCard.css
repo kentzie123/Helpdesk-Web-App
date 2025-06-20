@@ -1,0 +1,15 @@
+.unread-icon{
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+}
+
+.type{
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+}
+
+.notification-created{
+    font-size: 12px;
+}

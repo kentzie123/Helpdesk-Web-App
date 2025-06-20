@@ -1,7 +1,12 @@
 const Ticket = require('../models/tickets');
 const Notification = require('../models/notification');
 
-
+const generateNotificationId = () => {
+    const prefix = 'NTF';
+    const timestamp = Date.now().toString().slice(-6);
+    const random = Math.floor(100 + Math.random() * 900);
+    return `${prefix}-${timestamp}-${random}`;
+};
 // GET all tickets
 const getAllTickets = async (req, res) => {
   try {
@@ -125,19 +130,16 @@ const createTicket = async (req, res) => {
 
     await newTicket.save();
 
-    const prefix = 'NTF';
-    const timestamp = Date.now().toString().slice(-6);
-    const random = Math.floor(100 + Math.random() * 900);
-
      if (assignedTo) {
       const newNotification = new Notification({
-        notificationId: `${prefix}-${timestamp}-${random}`,
+        notificationId: generateNotificationId(),
         receiverUserId: assignedTo.userID,
         ticketId: ticketIdGenerated,
         title: 'New Ticket Assigned',
         message: `A new ticket (${ticketIdGenerated}) has been assigned to you.`,
         status: 'Unread',
         createdBy: ownerName,
+        type: 'Ticket Assignment'
       });
 
       await newNotification.save();
@@ -179,24 +181,20 @@ const updateTicket = async (req, res) => {
 
     await Ticket.findOneAndUpdate({ ticketId }, updateFields, { new: true });
 
-    // Generate Notification ID
-    const prefix = 'NTF';
-    const timestamp = Date.now().toString().slice(-6);
-    const random = Math.floor(100 + Math.random() * 900);
-    const notificationId = `${prefix}-${timestamp}-${random}`;
 
     // Notify the ticket owner
-    const ownerNotification = new Notification({
-      notificationId,
+    const ticketUpdatedNotification = new Notification({
+      notificationId: generateNotificationId(),
       receiverUserId: ticket.ownerUserId,
       ticketId: ticket.ticketId,
       title: 'Your Ticket Has Been Updated',
       message: `Your ticket (${ticket.ticketId}) is now ${updateFields.status || ticket.status}.`,
       status: 'Unread',
-      createdBy: ticket.assignedTo || 'System',
+      createdBy: ticket.assignedTo,
+      type: 'Ticket Update'
     });
 
-    await ownerNotification.save();
+    await ticketUpdatedNotification.save();
 
     res.status(200).json("Ticket updated successfully");
   } catch (err) {

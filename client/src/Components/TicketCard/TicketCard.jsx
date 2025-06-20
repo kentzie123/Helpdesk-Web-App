@@ -1,17 +1,19 @@
 import defaultProfilePic from '../../assets/imgs/default.jpg';
 import { NavLink } from 'react-router-dom';
+import './TicketCard.css';
 
 const TicketCard = ({ ticket }) => {
     const { ticketId, ownerName, subject, assignedTo, status, createdDate, ownerPic } = ticket;
 
     const statusColors = {
-    'Open': 'bg-secondary text-white',        
-    'New': 'bg-info text-dark',               
-    'In Progress': 'bg-warning text-dark',    
-    'For Approval': 'bg-primary text-white',   
-    'Resolved': 'bg-success text-white',       
-    'Closed': 'bg-dark text-white'            
-};
+        'Open': 'status-open',
+        'New': 'status-new',
+        'In Progress': 'status-in-progress',
+        'For Approval': 'status-for-approval',
+        'Resolved': 'status-resolved',
+        'Closed': 'status-closed'
+    };
+
 
 
     const timeAgo = (dateString) => {

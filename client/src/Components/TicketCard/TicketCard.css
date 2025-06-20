@@ -1,0 +1,31 @@
+/* styles.css or your global stylesheet */
+
+.status-open {
+  background-color: #e2e3e5; /* Light gray */
+  color: #6c757d;            /* Darker gray */
+}
+
+.status-new {
+  background-color: #d1ecf1; /* Light blue */
+  color: #0c5460;            /* Dark teal-blue */
+}
+
+.status-in-progress {
+  background-color: #fff3cd; /* Light yellow */
+  color: #856404;            /* Dark gold */
+}
+
+.status-for-approval {
+  background-color: #cfe2ff; /* Light blue */
+  color: #084298;            /* Dark blue */
+}
+
+.status-resolved {
+  background-color: #d4edda; /* Light green */
+  color: #155724;            /* Dark green */
+}
+
+.status-closed {
+  background-color: #dee2e6; /* Light gray */
+  color: #343a40;            /* Almost black */
+}

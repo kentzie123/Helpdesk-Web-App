@@ -8,7 +8,8 @@ const notificationSchema = new mongoose.Schema({
   message: { type: String, required: true },
   status: { type: String, enum: ['Unread', 'Read'], default: 'Unread' },
   createdBy: { type: String, required: true }, // Who triggered it (System or user)
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  type: { type: String, enum: ['Ticket Assignment', 'Ticket Update']} 
 });
 
 module.exports = mongoose.model('Notification', notificationSchema);

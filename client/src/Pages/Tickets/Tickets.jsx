@@ -32,6 +32,7 @@ const Tickets = () => {
 
   return (
     <div className="main-ticket-container p-2">
+      <h4 className='mb-3'>Tickets</h4>
       <div className='border rounded-2 p-2'>
         <div className='row mb-3 g-2'>
           <div className='col-md-3'>

@@ -7,3 +7,16 @@
     font-size: 20px;
     cursor: pointer;
 }
+
+.notification-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background-color: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 5px;
+  border-radius: 10px;
+  font-weight: bold;
+  line-height: 1;
+}

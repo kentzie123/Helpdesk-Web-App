@@ -2,22 +2,23 @@ const Notification = require('../models/notification');
 
 
 const getAllNotification = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required in URL parameters.' });
+  }
+
   try {
-    const { userId } = req.query;
-    if (!userId) {
-      return res.status(400).json({ error: 'User ID is required' });
-    }
+    const notifications = await Notification.find({ receiverUserId: userId })
+      .sort({ createdAt: -1 });
 
-    const notifications = await Notification.find({ receiverUserId: userId }).sort({ createdAt: -1 });
-
-    if (notifications.length === 0) {
-      return res.status(404).json({ message: 'No notifications found for this user' });
-    }
-
-    res.status(200).json(notifications);
+    res.status(200).json({
+      message: 'Notifications fetched successfully.',
+      notifications,
+    });
   } catch (error) {
     console.error('Error fetching notifications:', error);
-    res.status(500).json({ error: 'Server error while fetching notifications' });
+    res.status(500).json({ error: 'Server error while fetching notifications.' });
   }
 };
 
@@ -25,7 +26,7 @@ const markNotificationAsRead = async (req, res) => {
   const { notificationId } = req.params;
 
   try {
-    const notification = await Notification.findById(notificationId);
+    const notification = await Notification.findOne({ notificationId });
 
     if (!notification) {
       return res.status(404).json({ error: 'Notification not found' });
@@ -41,11 +42,12 @@ const markNotificationAsRead = async (req, res) => {
   }
 };
 
+
 const deleteNotification = async (req, res) => {
   const { notificationId } = req.params;
 
   try {
-    const notification = await Notification.findByIdAndDelete(notificationId);
+    const notification = await Notification.findOneAndDelete({ notificationId });
 
     if (!notification) {
       return res.status(404).json({ error: 'Notification not found' });
@@ -57,6 +59,7 @@ const deleteNotification = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting notification' });
   }
 };
+
 
 module.exports = {
   getAllNotification,

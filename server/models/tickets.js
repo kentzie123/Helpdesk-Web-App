@@ -20,6 +20,6 @@ const ticketSchema = new mongoose.Schema({
   resolvedDate: { type: Date, default: null },
   targetResolveDate: { type: Date },
   lastModifiedDate: { type: Date, default: null }
-}, { collection: 'tickets' });
+}, { collection: 'tickets' }, { timestamps: true });
 
 module.exports = mongoose.model('Ticket', ticketSchema, 'tickets');

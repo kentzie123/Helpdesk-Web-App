@@ -27,6 +27,13 @@ const SideNav = () => {
 
             <div className='d-flex flex-column gap-3 w-100'>
               {
+                <NavLink to='/dashboard' className={({isActive})=> `${isActive? 'menu-item active': 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
+                  <i className="bi bi-people-fill"></i>
+                  {navOpen && <div className='menu-item-text user-select-none'>User Management</div>}
+                </NavLink>
+              }
+
+              {
                 rolePrivilege.users &&
                 <NavLink to='/users' className={({isActive})=> `${isActive? 'menu-item active': 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen? 'justify-content-center' : ''}`}>
                   <i className="bi bi-people-fill"></i>

@@ -6,7 +6,7 @@ const {
     deleteNotification
 } = require('../controllers/notificationController');
 
-router.get('/notifications', getAllNotification);
+router.get('/notifications/:userId', getAllNotification);
 router.patch('/notifications/:notificationId', markNotificationAsRead);
 router.delete('/notifications/:notificationId',deleteNotification);
 

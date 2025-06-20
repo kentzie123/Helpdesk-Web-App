@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate, } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
@@ -15,11 +15,11 @@ import CreateTicketToastResponse from './Components/CreateTicketToastResponse/Cr
 import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
 import StartWorkingToastResponse from './Components/StartWorkingToastResponse/StartWorkingToastResponse';
 import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
-
+import Notifications from './Pages/Notifications/Notifications';
+import Dashboard from './Pages/Dashboard/Dashboard';
 
 import { useGlobalContext } from './Context/Context';
-import { useNavigate } from 'react-router-dom';
-import Notifications from './Pages/Notifications/Notifications';
+
 
 
 
@@ -39,7 +39,8 @@ function App() {
       startWorkingResponse,
       fetchTickets,
       userInfo,
-      popupNotification
+      popupNotification,
+      setNotifications
     } = useGlobalContext();
 
 
@@ -55,12 +56,16 @@ useEffect(() => {
 
 useEffect(() => {
   const fetchUserRelatedData = async () => {
+   
+    
     if (userInfo?.userID) {
       try {
+        const getUserNotifications = await axios.get(`http://localhost:3000/api/notifications/${userInfo.userID}`);
         const getRole = await axios.get(`http://localhost:3000/api/roles/${userInfo.role}`);
         const getUsers = await axios.get('http://localhost:3000/api/users');
-        // const getUserNotifications = await axios.get(`http://localhost:3000/api/notifications/${userInfo.userID}`);
-
+        
+        
+        setNotifications(getUserNotifications.data.notifications)
         fetchTickets(userInfo)
         setUsers(getUsers.data);
         setRolePrivilege(getRole.data);
@@ -68,6 +73,8 @@ useEffect(() => {
         if (window.location.pathname === '/') {
           navigate('/tickets');
         }
+
+       
       } catch (error) {
         console.error(error);
       } finally {
@@ -98,6 +105,10 @@ useEffect(() => {
           <Route path='/forgot' element={<Forgot/>}/>
           <Route path='/403' element={<Page403/>}/>
           <Route element={<Layout />}>
+            {/* <Route path='/dashboard' element={
+              loading ? null : (rolePrivilege.tickets ? <Tickets /> : <Navigate to="/403" />)
+            }/> */}
+
             <Route path='/tickets' element={
               loading ? null : (rolePrivilege.tickets ? <Tickets /> : <Navigate to="/403" />)
             }/>
