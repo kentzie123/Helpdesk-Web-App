@@ -2,11 +2,12 @@ import './TopNav.css';
 import defaultProfilePic from '../../assets/imgs/default.jpg';
 import { useGlobalContext } from '../../Context/Context';
 import { Link} from 'react-router-dom';
+import { useMemo } from 'react';
 
 const TopNav = () => {
-  const { navOpen, setNavOpen, userInfo, notifications } = useGlobalContext();
-  const unreadCount = notifications.filter(n => n.status === 'Unread').length;
-
+  const { setNavOpen, userInfo, notifications } = useGlobalContext();
+  const unreadCount = useMemo (()=>notifications.filter(n => n.status === 'Unread').length ) 
+  
   return (
     <div className='p-2 border'>
       <div className='d-flex align-items-center justify-content-between'>

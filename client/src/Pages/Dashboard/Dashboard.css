@@ -1,0 +1,44 @@
+.stat-card-icon-container{
+    height: 48px;
+    width: 48px;
+}
+
+.stat-card-icon{
+    font-size: 24px;
+    text-shadow: 0 0 1px currentColor;
+}
+
+.status-card-title{
+    font-size: 14px;
+}
+
+.recent-ticket-description{
+    font-size: 14px;
+}
+
+.recent-ticket-priority-status{
+    font-size: 12px;
+}
+
+.recent-ticket-link{
+    font-size: 14px;
+}
+
+.circle{
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+}
+
+.recent-activity-date{
+    font-size: 12px;
+}
+
+.recent-activity-descp{
+    font-size: 14px;
+}
+
+.recent-activity-container, .recent-ticket-container{
+    height: 400px;
+    overflow-y: auto;
+}

@@ -7,7 +7,7 @@ import CreateTicketModal from '../../Components/CreateTicketModal/CreateTicketMo
 const Tickets = () => {
   const { tickets } = useGlobalContext();
   
-
+  
   const [filters, setFilters] = useState({
     search: '',
     status: '',

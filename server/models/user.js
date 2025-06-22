@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   fullname: { type: String, required: true },
   role: { type: Number, default: 3 }
-}, { collection: 'users' });
+}, { collection: 'users' }, { timestamps: true });
 
 // Combined pre-save hook
 UserSchema.pre('save', async function (next) {

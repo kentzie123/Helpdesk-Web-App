@@ -4,12 +4,16 @@ const express = require('express');
 const http = require('http');
 const socketIO = require('socket.io');
 const connectDB = require('./config/db');
+
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/rolePrivilegeRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
+
 const Ticket = require('./models/tickets');
 const Notification = require('./models/notification');
+
 const { log } = require('console');
 
 const app = express();
@@ -31,6 +35,7 @@ app.use('/api', userRoutes);
 app.use('/api', roleRoutes);
 app.use('/api', ticketRoutes);
 app.use('/api', notificationRoutes);
+app.use('/api', pagePrivilegeRoutes);
 
 // Connect to DB and watch changes
 connectDB().then(() => {

@@ -20,116 +20,129 @@ import Dashboard from './Pages/Dashboard/Dashboard';
 
 import { useGlobalContext } from './Context/Context';
 
-
-
-
+const ProtectedRoute = ({ canAccess, children }) => {
+  if (!canAccess) return <Navigate to="/403" />;
+  return children;
+};
 
 function App() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const 
-    {
-      rolePrivilege, 
-      setRolePrivilege, 
-      setUserInfo,
-      deleteTicketModal, 
-      setUsers, 
-      createTicketResponse,
-      editTicketResponse,
-      startWorkingResponse,
-      fetchTickets,
-      userInfo,
-      popupNotification,
-      setNotifications
-    } = useGlobalContext();
 
+  const {
+    rolePrivilege,
+    setUserInfo,
+    deleteTicketModal,
+    createTicketResponse,
+    editTicketResponse,
+    startWorkingResponse,
+    userInfo,
+    popupNotification,
+    canView,
+    fetchAllUserRelatedData,
+    privilegeLoaded
+  } = useGlobalContext();
 
-useEffect(() => {
-  const savedUser = JSON.parse(localStorage.getItem('user'));
-  if (savedUser) {
-    setUserInfo(savedUser); 
-  } else {
-    setLoading(false); 
-  }
-}, []);
+  useEffect(() => {
+    const savedUser = JSON.parse(localStorage.getItem('user'));
+    if (savedUser) {
+      setUserInfo(savedUser);
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
-
-useEffect(() => {
-  const fetchUserRelatedData = async () => {
-   
-    
-    if (userInfo?.userID) {
-      try {
-        const getUserNotifications = await axios.get(`http://localhost:3000/api/notifications/${userInfo.userID}`);
-        const getRole = await axios.get(`http://localhost:3000/api/roles/${userInfo.role}`);
-        const getUsers = await axios.get('http://localhost:3000/api/users');
-        
-        
-        setNotifications(getUserNotifications.data.notifications)
-        fetchTickets(userInfo)
-        setUsers(getUsers.data);
-        setRolePrivilege(getRole.data);
-        
-        if (window.location.pathname === '/') {
+  useEffect(() => {
+    const loadUserData = async () => {
+      if (userInfo?.userID) {
+        setLoading(true);
+        const success = await fetchAllUserRelatedData(userInfo);
+        if (success && window.location.pathname === '/') {
           navigate('/tickets');
         }
-
-       
-      } catch (error) {
-        console.error(error);
-      } finally {
         setLoading(false);
       }
-    }
-  };
+    };
 
-  fetchUserRelatedData();
-}, [userInfo]);
+    loadUserData();
+  }, [userInfo]);
 
 
+  const isReady = !loading && privilegeLoaded;
 
   return (
-    <div className='position-relative'>
-      {
-        deleteTicketModal && <DeleteTicketModal/>
-      }
-      { createTicketResponse ? <CreateTicketToastResponse/> : null }
-      { editTicketResponse ? <EditTicketToastResponse/> : null }
-      { startWorkingResponse ? <StartWorkingToastResponse/> : null }
-      { popupNotification ? <NotificationToastResponse/> : null }
-      
+    <div className="position-relative">
+      {/* Modals and Toasts */}
+      {deleteTicketModal && <DeleteTicketModal />}
+      {createTicketResponse && <CreateTicketToastResponse />}
+      {editTicketResponse && <EditTicketToastResponse />}
+      {startWorkingResponse && <StartWorkingToastResponse />}
+      {popupNotification && <NotificationToastResponse />}
+
       <Routes>
-        
-          <Route path='/' element={<Login/>}/>
-          <Route path='/signup' element={<Signup/>}/>
-          <Route path='/forgot' element={<Forgot/>}/>
-          <Route path='/403' element={<Page403/>}/>
-          <Route element={<Layout />}>
-            {/* <Route path='/dashboard' element={
-              loading ? null : (rolePrivilege.tickets ? <Tickets /> : <Navigate to="/403" />)
-            }/> */}
+        <Route path="/" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/forgot" element={<Forgot />} />
+        <Route path="/403" element={<Page403 />} />
 
-            <Route path='/tickets' element={
-              loading ? null : (rolePrivilege.tickets ? <Tickets /> : <Navigate to="/403" />)
-            }/>
+        <Route element={<Layout />}>
+          <Route
+            path="/dashboard"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Dashboard')}>
+                  <Dashboard />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/tickets"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Tickets')}>
+                  <Tickets />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Users')}>
+                  <Users />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Notifications')}>
+                  <Notifications />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/ticket/:id"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={rolePrivilege?.tickets}>
+                  <TicketInfo />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+        </Route>
 
-            <Route path='/users' element={
-              loading ? null : (rolePrivilege.users ? <Users /> : <Navigate to="/403" />)
-            }/>
-
-            <Route path='/notifications' element={
-              loading ? null : (rolePrivilege.notification ? <Notifications /> : <Navigate to="/403" />)
-            }/>
-
-            <Route path='/ticket/:id' element={
-              loading ? null : (rolePrivilege.tickets ? <TicketInfo /> : <Navigate to="/403" />)
-            }/>
-          </Route>
-
+        {/* Optional fallback for unmatched routes */}
+        <Route path="*" element={<Navigate to="/403" />} />
       </Routes>
     </div>
-      
-  )
+  );
 }
 
-export default App
+export default App;

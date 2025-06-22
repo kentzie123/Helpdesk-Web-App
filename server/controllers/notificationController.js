@@ -60,9 +60,53 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+const markAllAsRead = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required in URL parameters.' });
+  }
+
+  try {
+    const result = await Notification.updateMany(
+      { receiverUserId: userId, status: 'Unread' },
+      { $set: { status: 'Read' } }
+    );
+
+    res.status(200).json({
+      message: `Marked ${result.modifiedCount} notifications as read.`,
+    });
+  } catch (error) {
+    console.error('Error marking all notifications as read:', error);
+    res.status(500).json({ error: 'Server error while marking all as read' });
+  }
+};
+
+const clearAllNotifications = async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).json({ error: 'User ID is required in URL parameters.' });
+  }
+
+  try {
+    const result = await Notification.deleteMany({ receiverUserId: userId });
+
+    res.status(200).json({
+      message: `Deleted ${result.deletedCount} notifications successfully.`,
+    });
+  } catch (error) {
+    console.error('Error clearing all notifications:', error);
+    res.status(500).json({ error: 'Server error while clearing notifications' });
+  }
+};
+
+
 
 module.exports = {
   getAllNotification,
   markNotificationAsRead,
-  deleteNotification
+  deleteNotification,
+  clearAllNotifications,
+  markAllAsRead
 };

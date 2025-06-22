@@ -10,6 +10,6 @@ const rolePrivilegeSchema = new mongoose.Schema({
     settings: { type: Boolean, required: true },
     tickets: { type: Boolean, required: true },
     users: { type: Boolean, required: true }
-}, { collection: 'roles' });
+}, { collection: 'roles' }, { timestamps: true });
 
 module.exports = mongoose.model('Role', rolePrivilegeSchema);

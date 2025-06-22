@@ -2,7 +2,9 @@ import React from 'react'
 
 const Users = () => {
   return (
-    <div>asdasd</div>
+    <div className='p-2'>
+      <h4>Users Management</h4>
+    </div>
   )
 }
 
