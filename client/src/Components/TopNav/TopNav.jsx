@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 
 const TopNav = () => {
   const { setNavOpen, userInfo, notifications } = useGlobalContext();
-  const unreadCount = useMemo (()=>notifications.filter(n => n.status === 'Unread').length ) 
+  const unreadCount = useMemo (()=> (notifications.filter(n => n.status === 'Unread').length), [notifications] ) 
   
   return (
     <div className='p-2 border'>

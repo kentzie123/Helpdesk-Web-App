@@ -143,7 +143,7 @@ const Dashboard = () => {
                         <div key={index} className='d-flex gap-3'>
                           <div className='circle bg-primary mt-2'></div>
                           <div>
-                            <div className='recent-activity-descp fw-medium'>{`Ticket ${notif.ticketId} assigned to you`}</div>
+                            <div className='recent-activity-descp fw-medium'>{notif.message}</div>
                             <div className='text-muted recent-activity-date'>{formatNotificationDate(notif.createdAt)}</div>
                           </div>
                         </div> 
