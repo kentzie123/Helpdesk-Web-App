@@ -37,7 +37,7 @@ const SideNav = () => {
 
           {canView('Dashboard') && (
             <NavLink to='/dashboard' className={({ isActive }) =>
-              `${isActive ? 'menu-item active' : 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+              `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
               <i className="bi bi-house-door-fill"></i>
               {navOpen && <div className='menu-item-text user-select-none'>Dashboard</div>}
             </NavLink>
@@ -45,7 +45,7 @@ const SideNav = () => {
 
           {canView('Users') && (
             <NavLink to='/users' className={({ isActive }) =>
-              `${isActive ? 'menu-item active' : 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+              `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
               <i className="bi bi-people-fill"></i>
               {navOpen && <div className='menu-item-text user-select-none'>Users</div>}
             </NavLink>
@@ -53,7 +53,7 @@ const SideNav = () => {
 
           {canView('Tickets') && (
             <NavLink to='/tickets' className={({ isActive }) =>
-              `${isActive ? 'menu-item active' : 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+              `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
               <i className="bi bi-ticket-fill"></i>
               {navOpen && <div className='menu-item-text user-select-none'>Tickets</div>}
             </NavLink>
@@ -61,14 +61,21 @@ const SideNav = () => {
 
           {canView('Notifications') && (
             <NavLink to='/notifications' className={({ isActive }) =>
-              `${isActive ? 'menu-item active' : 'menu-item'} rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+              `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
               <i className="bi bi-bell-fill"></i>
               {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
             </NavLink>
           )}
 
-        </div>
 
+          {
+           <NavLink to='/reports' className={({ isActive }) =>
+            `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+            <i className="bi bi-bar-chart-line-fill"></i>
+            {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
+          </NavLink>
+          }
+        </div>
         <button className='logout-btn d-flex gap-3 btn w-100' onClick={handleLogout}>
           <i className="bi bi-box-arrow-left"></i>
           {navOpen && <div className='p-0'>Logout</div>}

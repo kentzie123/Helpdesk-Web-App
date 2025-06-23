@@ -170,12 +170,17 @@ const AppProvider = ({ children }) => {
       }
     };
 
+    const handleNotificationDeleted = (notificationsDeletedId) => {
+      setNotifications(prev => prev.filter(n => n._id !== notificationsDeletedId));
+    }
+
     // Attach listeners
     socket.on('ticketCreated', handleTicketCreated);
     socket.on('ticketUpdated', handleTicketUpdated);
     socket.on('ticketDeleted', handleTicketDeleted);
     socket.on('notificationCreated', handleNotificationCreated);
     socket.on('notificationUpdated', handleNotificationUpdated);
+    socket.on('notificationDeleted', handleNotificationDeleted)
 
     // Cleanup on unmount
     return () => {
@@ -184,6 +189,7 @@ const AppProvider = ({ children }) => {
       socket.off('ticketDeleted', handleTicketDeleted);
       socket.off('notificationCreated', handleNotificationCreated);
       socket.off('notificationUpdated', handleNotificationUpdated);
+      socket.off('notificationDeleted', handleNotificationDeleted)
     };
   }, [userInfo]);
 

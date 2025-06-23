@@ -1,10 +1,14 @@
 import NotificationCard from "../../Components/NotificationCard/NotificationCard"
-import { useGlobalContext } from "../../Context/Context"
-import './Notifications.css'
-import { useState } from "react"
+import { useGlobalContext } from "../../Context/Context";
+import { useState } from "react";
+import axios from 'axios';
+import { API_BASE } from "../../config/api";
+
+import './Notifications.css';
+
 
 const Notifications = () => {
-  const { notifications } = useGlobalContext();
+  const { notifications, setNotifications, userInfo } = useGlobalContext();
   const [filterBy, setFilterBy]  = useState('All');
 
   const filteredNotifications = filterBy === 'All'
@@ -13,14 +17,32 @@ const Notifications = () => {
 
   const unreadCount = notifications.filter(n => n.status === 'Unread').length;
 
+  const handleMarkAllRead = async () => {
+    try {
+      await axios.put(`${API_BASE}/api/notifications/mark-all-as-read/${userInfo.userID}`);
+      
+    } catch(err) {
+      console.error('Error marking all notifications as read:', err);
+    }
+  }
+
+  const handleClearAll = async () => {
+    try {
+      await axios.delete(`${API_BASE}/api/notifications/clear-all/${userInfo.userID}`);
+      setNotifications([]);
+    } catch(err) {
+      console.error('Error clearing all notifications:', err)
+    }
+  }
+
   return (
     <div className="p-2">
       <div className="d-flex flex-column gap-3">
         <div className="d-flex align-items-center justify-content-between flex-wrap">
           <h4>Notifications</h4>
           <div className="d-flex gap-2">
-            <button type="button" className="btn btn-light border">Mark All Read</button>
-            <button type="button" className="btn btn-light border">Clear All</button>
+            <button onClick={handleMarkAllRead} type="button" className="btn btn-light border">Mark All Read</button>
+            <button onClick={handleClearAll} type="button" className="btn btn-light border">Clear All</button>
           </div>
         </div>
 

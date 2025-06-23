@@ -11,7 +11,7 @@ const {
 router.get('/notifications/:userId', getAllNotification);
 router.patch('/notifications/:notificationId', markNotificationAsRead);
 router.delete('/notifications/:notificationId',deleteNotification);
-router.put('/mark-all-as-read/:userId', markAllAsRead);
-router.delete('/clear-all/:userId', clearAllNotifications);
+router.put('/notifications/mark-all-as-read/:userId', markAllAsRead);
+router.delete('/notifications/clear-all/:userId', clearAllNotifications);
 
 module.exports = router;

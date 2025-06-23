@@ -17,6 +17,7 @@ import StartWorkingToastResponse from './Components/StartWorkingToastResponse/St
 import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
 import Notifications from './Pages/Notifications/Notifications';
 import Dashboard from './Pages/Dashboard/Dashboard';
+import Reports from './Pages/Reports/Reports';
 
 import { useGlobalContext } from './Context/Context';
 
@@ -130,8 +131,18 @@ function App() {
             path="/ticket/:id"
             element={
               isReady ? (
-                <ProtectedRoute canAccess={rolePrivilege?.tickets}>
+                <ProtectedRoute canAccess={canView('Tickets')}>
                   <TicketInfo />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/reports"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Reports')}>
+                  <Reports />
                 </ProtectedRoute>
               ) : null
             }

@@ -1,0 +1,17 @@
+.f-size-14{
+    font-size: 14px;
+}
+
+.f-size-12{
+    font-size: 12px;
+}
+
+.reports-icon-container{
+    height: 48px;
+    width: 48px;
+}
+
+.reports-card-icon{
+    font-size: 24px;
+    text-shadow: 0 0 1px currentColor;
+}

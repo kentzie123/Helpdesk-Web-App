@@ -71,14 +71,14 @@ const Dashboard = () => {
         total: pendingTickets,
         bgColor: 'bg-warning-subtle',
         txtColor: 'text-warning',
-        icon: 'bi-clock text-warning'
+        icon: 'bi-clock'
       },
       {
         title: 'Urgent',
         total: urgentTickets,
         bgColor: 'bg-danger-subtle',
         txtColor: 'text-danger',
-        icon: 'bi bi-exclamation-triangle'
+        icon: 'bi-exclamation-triangle'
       }
     ]
   ),[totalTickets, resolvedTickets, pendingTickets, urgentTickets])

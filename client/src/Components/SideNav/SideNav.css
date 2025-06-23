@@ -14,7 +14,7 @@
 }
 .menu-item.active{
     color: white;
-    background-color: blue ;
+    background-color: #0d6efd ;
 }
 .menu-item .bi{
     font-size: 17px;
