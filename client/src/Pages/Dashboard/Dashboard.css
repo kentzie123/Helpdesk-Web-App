@@ -5,7 +5,7 @@
 
 .stat-card-icon{
     font-size: 24px;
-    text-shadow: 0 0 1px currentColor;
+    text-shadow: 0 0 .8px currentColor;
 }
 
 .status-card-title{
