@@ -26,3 +26,23 @@ body{
 .lg-text-weight{
   font-weight: bold;
 }
+
+.f-size-14{
+    font-size: 14px;
+}
+
+.f-size-12{
+    font-size: 12px;
+}
+
+.f-size-16{
+    font-size: 18px;
+}
+
+.icon-bold{
+  text-shadow: 0 0 .8px currentColor;
+}
+
+.btn {
+  font-size: 14px !important; 
+}

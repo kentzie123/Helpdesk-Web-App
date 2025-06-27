@@ -18,8 +18,11 @@ import NotificationToastResponse from './Components/NotificationToastResponse/No
 import Notifications from './Pages/Notifications/Notifications';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Reports from './Pages/Reports/Reports';
+import KnowledgeBase from './Pages/KnowledgeBase/KnowledgeBase';
+import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
 
 import { useGlobalContext } from './Context/Context';
+
 
 const ProtectedRoute = ({ canAccess, children }) => {
   if (!canAccess) return <Navigate to="/403" />;
@@ -41,7 +44,8 @@ function App() {
     popupNotification,
     canView,
     fetchAllUserRelatedData,
-    privilegeLoaded
+    privilegeLoaded,
+    deleteArticleModal
   } = useGlobalContext();
 
   useEffect(() => {
@@ -74,6 +78,7 @@ function App() {
   return (
     <div className="position-relative">
       {/* Modals and Toasts */}
+      {deleteArticleModal && <DeleteArticleModal/>}
       {deleteTicketModal && <DeleteTicketModal />}
       {createTicketResponse && <CreateTicketToastResponse />}
       {editTicketResponse && <EditTicketToastResponse />}
@@ -143,6 +148,16 @@ function App() {
               isReady ? (
                 <ProtectedRoute canAccess={canView('Reports')}>
                   <Reports />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/knowledge-base"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Knowledge Base')}>
+                  <KnowledgeBase />
                 </ProtectedRoute>
               ) : null
             }

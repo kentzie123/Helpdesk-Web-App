@@ -9,7 +9,7 @@ const DeleteTicketModal = () => {
 
     const handleDeleteTicket = async () => {
         try {
-            await axios.delete(`API_BASE/api/tickets/${selectedTicket.ticketId}`);
+            await axios.delete(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`);
             setDeleteTicketModal(false);
             navigate('/tickets');
         } catch (err) {
@@ -27,21 +27,21 @@ const DeleteTicketModal = () => {
             aria-modal="true"
             role="dialog"
         >
-            <div className="bg-white rounded-4 shadow p-4" style={{ width: '100%', maxWidth: '400px' }}>
-                <div className="text-center">
-                    <i className="bi bi-exclamation-triangle-fill text-danger fs-1 mb-3"></i>
-                    <h5 className="fw-bold mb-2 text-danger">Confirm Deletion</h5>
-                    <p className="text-secondary">
-                        Are you sure you want to permanently delete this ticket?
-                    </p>
+            <div className="d-flex flex-column gap-2 bg-white rounded-2 shadow p-4 m-2" style={{maxWidth:'500px'}}>
+                <div className="d-flex align-items-center gap-3">
+                    <div className="d-flex align-items-center justify-content-center rounded-circle bg-danger-subtle p-3" style={{width: '45px', height: '45px'}}>
+                        <i className="bi bi-exclamation-triangle text-danger icon-bold" style={{fontSize:'21px'}}></i>
+                    </div>
+                    <div className="f-size-16 fw-medium">Delete Ticket</div>
                 </div>
-                <div className="d-flex justify-content-between mt-4">
-                    <button onClick={closeDeleteTicketModal} className="btn btn-outline-secondary w-100 me-2">
-                        Cancel
-                    </button>
-                    <button onClick={handleDeleteTicket} className="btn btn-danger w-100 ms-2">
-                        Delete
-                    </button>
+                <div className="text-muted f-size-14">
+                    Are you sure you want to delete this ticket? This will permanently remove the ticket.
+                </div>
+                <div className="fw-bold f-size-14">"{selectedTicket.ticketId}"</div>
+                <div className="fw-bold text-danger f-size-14">This action cannot be undone.</div>
+                <div className="d-flex justify-content-end gap-3">
+                    <button onClick={closeDeleteTicketModal} className="btn btn-light border f-size-14">Close</button>
+                    <button onClick={handleDeleteTicket} className="btn btn-danger f-size-14"><i class="bi bi-trash"></i> Delete</button>
                 </div>
             </div>
         </div>

@@ -67,13 +67,20 @@ const SideNav = () => {
             </NavLink>
           )}
 
-
-          {
-           <NavLink to='/reports' className={({ isActive }) =>
+          {canView('Reports') &&
+           (<NavLink to='/reports' className={({ isActive }) =>
             `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
             <i className="bi bi-bar-chart-line-fill"></i>
             {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
-          </NavLink>
+          </NavLink>)
+          }
+
+          {canView('Knowledge Base') &&
+           (<NavLink to='/knowledge-base' className={({ isActive }) =>
+            `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
+            <i class="bi bi-book-fill"></i>
+            {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
+          </NavLink>)
           }
         </div>
         <button className='logout-btn d-flex gap-3 btn w-100' onClick={handleLogout}>

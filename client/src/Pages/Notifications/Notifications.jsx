@@ -41,14 +41,18 @@ const Notifications = () => {
         <div className="d-flex align-items-center justify-content-between flex-wrap">
           <h4>Notifications</h4>
           <div className="d-flex gap-2">
-            <button onClick={handleMarkAllRead} type="button" className="btn btn-light border">Mark All Read</button>
-            <button onClick={handleClearAll} type="button" className="btn btn-light border">Clear All</button>
+            <button onClick={handleMarkAllRead} type="button" className="btn btn-light border f-size-14">Mark All Read</button>
+            <button onClick={handleClearAll} type="button" className="btn btn-light border f-size-14">Clear All</button>
           </div>
         </div>
 
         <div className="d-flex gap-3 border-bottom pb-2 mb-3">
-          <button onClick={()=> setFilterBy('All')} type="button" className={`btn ${filterBy === 'All' ? 'btn-primary' : 'btn-light'}`}>{`All (${notifications.length})`}</button>
-          <button onClick={()=> setFilterBy('Unread')} type="button" className={`btn ${filterBy === 'Unread' ? 'btn-primary' : 'btn-light'}`}>{`Unread (${ unreadCount })`}</button>
+          <button onClick={()=> setFilterBy('All')} type="button" className={`btn ${filterBy === 'All' ? 'btn-primary' : 'btn-light'} f-size-14`}>
+            {`All (${notifications.length})`}
+          </button>
+          <button onClick={()=> setFilterBy('Unread')} type="button" className={`btn ${filterBy === 'Unread' ? 'btn-primary' : 'btn-light'} f-size-14`}>
+            {`Unread (${ unreadCount })`}
+          </button>
         </div>
 
 

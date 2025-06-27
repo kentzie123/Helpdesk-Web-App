@@ -20,7 +20,7 @@ const AppProvider = ({ children }) => {
   const [popupNotification, setPopupNotification] = useState(null);
   const [pagePrivilege, setPagePrivilege] = useState([]);
   const [privilegeLoaded, setPrivilegeLoaded] = useState(false);
-
+  const [deleteArticleModal, setDeleteArticleModal] = useState(false);
 
   
 
@@ -218,6 +218,7 @@ const AppProvider = ({ children }) => {
       popupNotification, setPopupNotification,
       pagePrivilege,setPagePrivilege,
       privilegeLoaded, setPrivilegeLoaded,
+      deleteArticleModal, setDeleteArticleModal,
       fetchTickets,
       fetchTicketInfo,
       formatNotificationDate,

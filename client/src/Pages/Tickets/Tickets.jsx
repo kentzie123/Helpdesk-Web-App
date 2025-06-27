@@ -68,7 +68,7 @@ const Tickets = () => {
             />
           </div>
           <div className='col-md-3'>
-            <button className='d-flex gap-1 btn btn-success w-100' type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+            <button className='d-flex align-items-center gap-1 btn btn-success w-100 h-100' type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
               <i className="bi bi-plus-lg"></i>
               <span>Create ticket</span>
             </button>
