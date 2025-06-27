@@ -27,7 +27,7 @@ const DeleteTicketModal = () => {
             aria-modal="true"
             role="dialog"
         >
-            <div className="d-flex flex-column gap-2 bg-white rounded-2 shadow p-4 m-2" style={{maxWidth:'500px'}}>
+            <div className="d-flex flex-column gap-2 bg-white rounded-3 shadow p-4 m-2" style={{maxWidth:'500px'}}>
                 <div className="d-flex align-items-center gap-3">
                     <div className="d-flex align-items-center justify-content-center rounded-circle bg-danger-subtle p-3" style={{width: '45px', height: '45px'}}>
                         <i className="bi bi-exclamation-triangle text-danger icon-bold" style={{fontSize:'21px'}}></i>

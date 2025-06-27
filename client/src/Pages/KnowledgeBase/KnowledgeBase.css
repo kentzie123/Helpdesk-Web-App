@@ -29,3 +29,11 @@
 .knowledge-base:hover{
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px !important;
 }
+
+.bg-violet-subtle {
+  background-color: #eee6ff; 
+}
+
+.text-violet {
+  color: #7f00ff; 
+}

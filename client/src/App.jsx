@@ -22,6 +22,7 @@ import KnowledgeBase from './Pages/KnowledgeBase/KnowledgeBase';
 import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
 
 import { useGlobalContext } from './Context/Context';
+import ArticleInfo from './Pages/ArticleInfo/ArticleInfo';
 
 
 const ProtectedRoute = ({ canAccess, children }) => {
@@ -158,6 +159,16 @@ function App() {
               isReady ? (
                 <ProtectedRoute canAccess={canView('Knowledge Base')}>
                   <KnowledgeBase />
+                </ProtectedRoute>
+              ) : null
+            }
+          />
+          <Route
+            path="/knowledge-base/info"
+            element={
+              isReady ? (
+                <ProtectedRoute canAccess={canView('Knowledge Base')}>
+                  <ArticleInfo />
                 </ProtectedRoute>
               ) : null
             }
