@@ -78,7 +78,7 @@ const SideNav = () => {
           {canView('Knowledge Base') &&
            (<NavLink to='/knowledge-base' className={({ isActive }) =>
             `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
-            <i class="bi bi-book-fill"></i>
+            <i className="bi bi-book-fill"></i>
             {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
           </NavLink>)
           }

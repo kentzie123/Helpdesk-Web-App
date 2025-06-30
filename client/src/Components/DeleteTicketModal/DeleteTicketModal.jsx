@@ -41,7 +41,7 @@ const DeleteTicketModal = () => {
                 <div className="fw-bold text-danger f-size-14">This action cannot be undone.</div>
                 <div className="d-flex justify-content-end gap-3">
                     <button onClick={closeDeleteTicketModal} className="btn btn-light border f-size-14">Close</button>
-                    <button onClick={handleDeleteTicket} className="btn btn-danger f-size-14"><i class="bi bi-trash"></i> Delete</button>
+                    <button onClick={handleDeleteTicket} className="btn btn-danger f-size-14"><i className="bi bi-trash"></i> Delete</button>
                 </div>
             </div>
         </div>

@@ -5,25 +5,25 @@ const ArticleInfo = () => {
     <div className='px-5 py-3'>
         <div className='d-flex flex-column gap-4'>
             <button className='btn btn-light fw-medium' style={{width: '210px'}}><i className='bi bi-arrow-left me-2'></i> Back to Knowledge Base</button>
-            <div class="card border-0 shadow-sm p-4 d-flex flex-column gap-2 rounded-3 position-relative">
-                <div class="d-flex justify-content-between align-items-start">
-                    <div class="d-flex align-items-center gap-3 text-body-secondary">
-                        <span class="badge rounded-pill text-primary bg-primary-subtle">Security</span>
-                        <span class="text-muted small"><i class="bi bi-eye me-1 icon-bold"></i>570 views</span>
+            <div className="card border-0 shadow-sm p-4 d-flex flex-column gap-2 rounded-3 position-relative">
+                <div className="d-flex justify-content-between align-items-start">
+                    <div className="d-flex align-items-center gap-3 text-body-secondary">
+                        <span className="badge rounded-pill text-primary bg-primary-subtle">Security</span>
+                        <span className="text-muted small"><i className="bi bi-eye me-1 icon-bold"></i>570 views</span>
                     </div>
-                    <div class="d-flex align-items-center gap-1 ">
-                        <i class="bi bi-star-fill text-warning"></i>
-                        <span class="fw-semibold">4.90</span>
-                        <span class="text-muted small">(10 ratings)</span>
+                    <div className="d-flex align-items-center gap-1 ">
+                        <i className="bi bi-star-fill text-warning"></i>
+                        <span className="fw-semibold">4.90</span>
+                        <span className="text-muted small">(10 ratings)</span>
                     </div>
                 </div>
 
-                <h5 class="fw-bold mt-1 mb-2">Setting Up Two-Factor Authentication</h5>
+                <h5 className="fw-bold mt-1 mb-2">Setting Up Two-Factor Authentication</h5>
 
-                <div class="d-flex flex-wrap gap-3 text-muted small align-items-center">
-                    <div><i class="bi bi-person me-1 icon-bold"></i> By Emily Davis</div>
-                    <div><i class="bi bi-calendar-event me-1 icon-bold"></i> Published 3 days ago</div>
-                    <div><i class="bi bi-clock me-1 icon-bold"></i> Updated 21 minutes ago</div>
+                <div className="d-flex flex-wrap gap-3 text-muted small align-items-center">
+                    <div><i className="bi bi-person me-1 icon-bold"></i> By Emily Davis</div>
+                    <div><i className="bi bi-calendar-event me-1 icon-bold"></i> Published 3 days ago</div>
+                    <div><i className="bi bi-clock me-1 icon-bold"></i> Updated 21 minutes ago</div>
                 </div>
             </div>
             <div className='p-4 border shadow-sm rounded-3' style={{whiteSpace: 'pre-wrap'}}>
@@ -58,7 +58,7 @@ const ArticleInfo = () => {
             </div>
 
             <div className='p-4 border shadow-sm rounded-3'>
-                <div><i class="bi bi-tag text-body-secondary icon-bold"></i> Tags</div>
+                <div><i className="bi bi-tag text-body-secondary icon-bold"></i> Tags</div>
                 <div className='d-flex gap-3 mt-2'>
                     {
                         ['2fa','security','setup'].map((tag)=>(
@@ -69,17 +69,17 @@ const ArticleInfo = () => {
             </div>
 
             <div className='p-4 border shadow-sm rounded-3'>
-                <h5 className='fw-medium m-0'><i class="bi bi-hand-thumbs-up me-2"></i>Was this article helpful?</h5>
+                <h5 className='fw-medium m-0'><i className="bi bi-hand-thumbs-up me-2"></i>Was this article helpful?</h5>
                 <div className="mt-2">
                     <div className='d-flex justify-content-between f-size-14'>
                         <div className="d-flex align-items-center gap-3">
                             <div className='fw-medium'>Rate this article</div>
                             <div className='d-flex gap-1 f-size-16'>
-                                <i class="bi bi-star icon-bold opacity-25"></i>
-                                <i class="bi bi-star icon-bold opacity-25"></i>
-                                <i class="bi bi-star icon-bold opacity-25"></i>
-                                <i class="bi bi-star icon-bold opacity-25"></i>
-                                <i class="bi bi-star icon-bold opacity-25"></i>
+                                <i className="bi bi-star icon-bold opacity-25"></i>
+                                <i className="bi bi-star icon-bold opacity-25"></i>
+                                <i className="bi bi-star icon-bold opacity-25"></i>
+                                <i className="bi bi-star icon-bold opacity-25"></i>
+                                <i className="bi bi-star icon-bold opacity-25"></i>
                             </div>
                         </div>
                         <div>

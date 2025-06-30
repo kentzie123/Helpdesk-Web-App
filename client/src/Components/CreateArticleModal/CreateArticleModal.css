@@ -1,0 +1,27 @@
+.create-article-modal {
+  width: 90% !important; /* Default for small screens */
+}
+
+@media (min-width: 576px) {
+  .create-article-modal {
+    width: 75% !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .create-article-modal {
+    width: 60% !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .create-article-modal {
+    width: 50% !important;
+  }
+}
+
+@media (min-width: 1200px) {
+  .create-article-modal {
+    width: 40% !important;
+  }
+}

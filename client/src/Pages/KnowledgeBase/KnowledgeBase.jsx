@@ -1,5 +1,6 @@
 import './KnowledgeBase.css';
 import { useGlobalContext } from '../../Context/Context';
+import CreateArticleModal from '../../Components/CreateArticleModal/CreateArticleModal';
 
 const KnowledgeBase = () => {
     const { setDeleteArticleModal } = useGlobalContext();
@@ -9,14 +10,15 @@ const KnowledgeBase = () => {
 
   return (
     <div className="knowledge-base-main-container d-flex flex-column gap-1 p-2">
+        <CreateArticleModal/>
         <div className="d-flex justify-content-between">
             <h4>Knowledge Base</h4>
             <div className="d-flex gap-2">
                 <button type="button" className="btn btn-light border f-size-14 fw-medium">
                     Show Drafts
                 </button>
-                <button type="button" className="btn btn-primary f-size-14 fw-medium">
-                    <i class="bi bi-plus"></i> New Article
+                <button className="btn btn-primary f-size-14 fw-medium" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                    <i className="bi bi-plus"></i> New Article
                 </button>
             </div>
         </div>
@@ -115,7 +117,7 @@ const KnowledgeBase = () => {
                                 <div className='d-flex gap-2'>
                                     {
                                         ['login','troubleshooting','authentication'].map((tag)=> (
-                                            <div className='rounded-pill bg-body-secondary px-2 py-1 f-size-12 text-muted'><i class="bi bi-tag"></i> {tag}</div>
+                                            <div className='rounded-pill bg-body-secondary px-2 py-1 f-size-12 text-muted'><i className="bi bi-tag"></i> {tag}</div>
                                         ))
                                     }
                                 </div>
