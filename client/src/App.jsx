@@ -20,9 +20,11 @@ import Dashboard from './Pages/Dashboard/Dashboard';
 import Reports from './Pages/Reports/Reports';
 import KnowledgeBase from './Pages/KnowledgeBase/KnowledgeBase';
 import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
+import CreateArticleToastResponse from './Components/CreateArticleToastResponse/CreateArticleToastResponse';
 
 import { useGlobalContext } from './Context/Context';
 import ArticleInfo from './Pages/ArticleInfo/ArticleInfo';
+
 
 
 const ProtectedRoute = ({ canAccess, children }) => {
@@ -46,7 +48,8 @@ function App() {
     canView,
     fetchAllUserRelatedData,
     privilegeLoaded,
-    deleteArticleModal
+    deleteArticleModal,
+    createArticleResponse
   } = useGlobalContext();
 
   useEffect(() => {
@@ -85,6 +88,7 @@ function App() {
       {editTicketResponse && <EditTicketToastResponse />}
       {startWorkingResponse && <StartWorkingToastResponse />}
       {popupNotification && <NotificationToastResponse />}
+      {createArticleResponse && <CreateArticleToastResponse/>}
 
       <Routes>
         <Route path="/" element={<Login />} />
@@ -164,7 +168,7 @@ function App() {
             }
           />
           <Route
-            path="/knowledge-base/info"
+            path="/knowledge-base/:slug"
             element={
               isReady ? (
                 <ProtectedRoute canAccess={canView('Knowledge Base')}>
@@ -176,7 +180,7 @@ function App() {
         </Route>
 
         {/* Optional fallback for unmatched routes */}
-        <Route path="*" element={<Navigate to="/403" />} />
+        {/* <Route path="*" element={<Navigate to="/403" />} /> */}
       </Routes>
     </div>
   );

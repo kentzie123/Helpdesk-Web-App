@@ -10,9 +10,11 @@ const roleRoutes = require('./routes/rolePrivilegeRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
+const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
 
 const Ticket = require('./models/tickets');
 const Notification = require('./models/notification');
+const Article = require('./models/knowledgeBase');
 
 const { log } = require('console');
 
@@ -36,24 +38,53 @@ app.use('/api', roleRoutes);
 app.use('/api', ticketRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', pagePrivilegeRoutes);
+app.use('/api', knowledgeBaseRoutes);
 
 // Connect to DB and watch changes
 connectDB().then(() => {
+  const ticketChangeStream = Ticket.watch();
   const notificationChangeStream = Notification.watch();
-  const changeStream = Ticket.watch();
+  const articleChangeStream = Article.watch();
+
+  // Article Change Stream
+  articleChangeStream.on('change', (change) => {
+      console.log('🟡 Article Change detected:', change.operationType);
+      if(change.operationType === 'insert'){
+        const newArticle = change.fullDocument;
+        io.emit('articleCreated', newArticle);
+        console.log('🟢 Emitted articleCreated');
+      }
+      if (change.operationType === 'update') {
+      // By default, update only returns updated fields, not the full doc
+      // So we fetch the full document manually using _id
+      Article.findById(change.documentKey._id).then((updatedArticle) => {
+        if (updatedArticle) {
+          io.emit('articleUpdated', updatedArticle);
+          console.log('🔵 Emitted articleUpdated');
+        }
+      }).catch(err => console.error('Error fetching updated ticket:', err));
+    }
+    // Delete
+    if (change.operationType === 'delete') {
+      const deletedId = change.documentKey._id;
+      io.emit('articleDeleted', deletedId);
+      console.log('🔴 Emitted articleDeleted');
+    }
+  })
+
 
 
   // Ticket Change Stream
-  changeStream.on('change', (change) => {
+  ticketChangeStream.on('change', (change) => {
 
-    console.log('🟡 Change detected:', change.operationType);
-
+    console.log('🟡 Ticket Change detected:', change.operationType);
+    // Create
     if (change.operationType === 'insert') {
       const newTicket = change.fullDocument;
       io.emit('ticketCreated', newTicket);
       console.log('🟢 Emitted ticketCreated');
     }
-
+    // Update
     if (change.operationType === 'update') {
       // By default, update only returns updated fields, not the full doc
       // So we fetch the full document manually using _id
@@ -64,13 +95,15 @@ connectDB().then(() => {
         }
       }).catch(err => console.error('Error fetching updated ticket:', err));
     }
-
+    // Delete
     if (change.operationType === 'delete') {
       const deletedId = change.documentKey._id;
       io.emit('ticketDeleted', deletedId);
       console.log('🔴 Emitted ticketDeleted');
     }
   });
+
+
 
   // Notification Change Stream
   notificationChangeStream.on('change', (change) => {

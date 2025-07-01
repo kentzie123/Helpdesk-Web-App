@@ -6,17 +6,23 @@ import { API_BASE } from '../config/api';
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-  const [navOpen, setNavOpen] = useState(false);
+
   const [users, setUsers] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [rolePrivilege, setRolePrivilege] = useState({});
   const [tickets, setTickets] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState({});
+  const [articles, setArticles] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState({})
+  //--------------------------------------------------------------------
   const [createTicketResponse, setCreateTicketResponse] = useState('');
   const [editTicketResponse, setEditTicketResponse] = useState('');
   const [startWorkingResponse, setStartWorkingResponse] = useState('');
-  const [notifications, setNotifications] = useState([]);
+  const [createArticleResponse, setCreateArticleResponse] = useState('');
+  //--------------------------------------------------------------------
+  const [navOpen, setNavOpen] = useState(false);
   const [popupNotification, setPopupNotification] = useState(null);
   const [pagePrivilege, setPagePrivilege] = useState([]);
   const [privilegeLoaded, setPrivilegeLoaded] = useState(false);
@@ -28,17 +34,19 @@ const AppProvider = ({ children }) => {
   const fetchAllUserRelatedData = async (user) => {
   try {
     await fetchPagePrivilege(Number(user.role)); // sets pagePrivilege
-    const [notificationsRes, roleRes, usersRes] = await Promise.all([
+    const [notificationsRes, roleRes, usersRes, articlesRes] = await Promise.all([
       axios.get(`${API_BASE}/api/notifications/${user.userID}`),
       axios.get(`${API_BASE}/api/roles/${user.role}`),
-      axios.get(`${API_BASE}/api/users`)
+      axios.get(`${API_BASE}/api/users`),
+      axios.get(`${API_BASE}/api/knowledge-base`)
     ]);
 
     fetchTickets(user); // sets tickets
     setNotifications(notificationsRes.data.notifications);
     setUsers(usersRes.data);
     setRolePrivilege(roleRes.data);
-
+    setArticles(articlesRes.data);
+    
     setPrivilegeLoaded(true);
     return true; // success
   } catch (error) {
@@ -80,7 +88,14 @@ const AppProvider = ({ children }) => {
     }
   };
 
-
+  const fetchArticleInfo = async (slug) =>{
+    try {
+      const res = await axios.get(`${API_BASE}/api/knowledge-base/${slug}`);
+      setSelectedArticle(res.data);
+    } catch(error) {
+      console.error('Error fetching article info:', error);
+    }
+  }
 
 
 
@@ -100,8 +115,6 @@ const AppProvider = ({ children }) => {
     const page = pagePrivilege.find(p => p.page === pageName);
     return page?.view;
   },[pagePrivilege]);
-
-
 
 
 
@@ -132,7 +145,25 @@ const AppProvider = ({ children }) => {
 
 
 
+  const timeAgo = (dateString) => {
+      try {
+          const date = new Date(dateString);
+          const now = new Date();
+          const seconds = Math.floor((now - date) / 1000);
 
+          if (isNaN(seconds)) return dateString;
+
+          if (seconds < 60) return `${seconds}s ago`;
+          const minutes = Math.floor(seconds / 60);
+          if (minutes < 60) return `${minutes}m ago`;
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) return `${hours}h ago`;
+          const days = Math.floor(hours / 24);
+          return `${days}d ago`;
+      } catch {
+          return dateString;
+      }
+  };
 
 
 
@@ -219,11 +250,16 @@ const AppProvider = ({ children }) => {
       pagePrivilege,setPagePrivilege,
       privilegeLoaded, setPrivilegeLoaded,
       deleteArticleModal, setDeleteArticleModal,
+      articles, setArticles,
+      selectedArticle, setSelectedArticle,
+      createArticleResponse, setCreateArticleResponse,
       fetchTickets,
       fetchTicketInfo,
       formatNotificationDate,
       fetchPagePrivilege,
-      canView
+      fetchArticleInfo,
+      canView,
+      timeAgo
     }}>
       {children}
     </AppContext.Provider>

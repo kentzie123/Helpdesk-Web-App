@@ -2,12 +2,14 @@ const mongoose = require('mongoose');
 
 const ArticleSchema = new mongoose.Schema({
   title: { type: String, required: true },
-  slug: { type: String, required: true, unique: true }, // for clean URLs
+  slug: { type: String, required: true, unique: true },
   category: { type: String, required: true },
+
+  description: { type: String },
 
   author: {
     name: { type: String, required: true },
-    avatarInitials: { type: String },
+    profilePic: { type: String },
     role: { type: String }
   },
 
@@ -19,9 +21,8 @@ const ArticleSchema = new mongoose.Schema({
   },
 
   tags: [{ type: String }],
-
-  content: { type: String, required: true }, // markdown or raw text
-
+  isPublished: { type: Boolean, default: false },
+  content: { type: String, required: true },
   publishedAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now }
 });

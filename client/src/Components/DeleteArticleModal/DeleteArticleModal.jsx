@@ -1,8 +1,21 @@
-import { useGlobalContext } from "../../Context/Context"
+import axios from "axios";
+import { useGlobalContext } from "../../Context/Context";
+import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config/api";
 
 const DeleteArticleModal = () => {
+    const navigate = useNavigate();
+    const { setDeleteArticleModal, selectedArticle } = useGlobalContext();
 
-    const { setDeleteArticleModal } = useGlobalContext();
+    const handleDeleteArticle = async ()=>{
+        try{
+            await axios.delete(`${API_BASE}/api/knowledge-base/${selectedArticle.slug}`);
+            setDeleteArticleModal(false);
+            navigate('/knowledge-base');
+        }catch(err){
+            console.error(err);
+        }
+    }
 
     const closeArticleModal = () => {
         setDeleteArticleModal(false);
@@ -24,11 +37,11 @@ const DeleteArticleModal = () => {
                 <div className="text-muted f-size-14">
                     Are you sure you want to delete this knowledge base article? This will permanently remove the article and all associated data.
                 </div>
-                <div className="fw-bold f-size-14">"Sample Knowledge Base Article"</div>
+                <div className="fw-bold f-size-14">{`"${selectedArticle.title}"`}</div>
                 <div className="fw-bold text-danger f-size-14">This action cannot be undone.</div>
                 <div className="d-flex justify-content-end gap-3">
                     <button onClick={closeArticleModal} className="btn btn-light border f-size-14">Close</button>
-                    <button className="btn btn-danger f-size-14"><i className="bi bi-trash"></i> Delete</button>
+                    <button onClick={handleDeleteArticle} className="btn btn-danger f-size-14"><i className="bi bi-trash"></i> Delete</button>
                 </div>
             </div>
         </div>

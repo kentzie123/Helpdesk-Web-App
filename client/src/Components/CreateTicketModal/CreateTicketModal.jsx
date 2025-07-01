@@ -39,8 +39,9 @@ const CreateTicketModal = () => {
             createTicketClsBtn.current.click();      
             
         } catch (err) {
-            setCreateTicketResponse(err.response?.data?.error || "Error creating ticket");
+            console.log(err);
             
+            setCreateTicketResponse(err.response?.data?.error || "Error creating ticket"); 
         }
     }
 
