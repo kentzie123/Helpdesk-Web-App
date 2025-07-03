@@ -1,36 +1,41 @@
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+// React & Router
 import { useEffect, useState } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+// Context
+import { useGlobalContext } from './Context/Context';
+
+// Layouts
+import Layout from './Layouts/Layout';
+
+// Pages
 import Login from './Pages/Login/Login';
 import Signup from './Pages/Signup/Signup';
 import Forgot from './Pages/Forgot/Forgot';
 import Tickets from './Pages/Tickets/Tickets';
-import Users from './Pages/Users/Users';
-import Layout from './Layouts/Layout';
-import Page403 from './Pages/Page403/Page403';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
-import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
-import CreateTicketToastResponse from './Components/CreateTicketToastResponse/CreateTicketToastResponse';
-import EditTicketToastResponse from './Components/EditTicketToastResponse/EditTicketToastResponse';
-import StartWorkingToastResponse from './Components/StartWorkingToastResponse/StartWorkingToastResponse';
-import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
+import Users from './Pages/Users/Users';
 import Notifications from './Pages/Notifications/Notifications';
 import Dashboard from './Pages/Dashboard/Dashboard';
 import Reports from './Pages/Reports/Reports';
 import KnowledgeBase from './Pages/KnowledgeBase/KnowledgeBase';
-import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
-import CreateArticleToastResponse from './Components/CreateArticleToastResponse/CreateArticleToastResponse';
-
-import { useGlobalContext } from './Context/Context';
 import ArticleInfo from './Pages/ArticleInfo/ArticleInfo';
+import Page403 from './Pages/Page403/Page403';
+
+// Components
+import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
+import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
+import ToastNotification from './Components/ToastNotification/ToastNotification';
+import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
 
 
-
+// Route guard
 const ProtectedRoute = ({ canAccess, children }) => {
   if (!canAccess) return <Navigate to="/403" />;
   return children;
 };
+
 
 function App() {
   const navigate = useNavigate();
@@ -39,19 +44,22 @@ function App() {
   const {
     rolePrivilege,
     setUserInfo,
-    deleteTicketModal,
-    createTicketResponse,
-    editTicketResponse,
-    startWorkingResponse,
+    deleteTicketModal, 
     userInfo,
     popupNotification,
     canView,
     fetchAllUserRelatedData,
     privilegeLoaded,
     deleteArticleModal,
-    createArticleResponse
+    editTicketResponse, setEditTicketResponse,
+    startWorkingResponse, setStartWorkingResponse,
+    createArticleResponse, setCreateArticleResponse,
+    createTicketResponse, setCreateTicketResponse,
+    deleteArticleResponse, setDeleteArticleResponse,
+    deleteTicketResponse, setDeleteTicketResponse
   } = useGlobalContext();
 
+  // Load saved user from localStorage
   useEffect(() => {
     const savedUser = JSON.parse(localStorage.getItem('user'));
     if (savedUser) {
@@ -61,6 +69,7 @@ function App() {
     }
   }, []);
 
+  // Fetch all user-related data if user is present
   useEffect(() => {
     const loadUserData = async () => {
       if (userInfo?.userID) {
@@ -76,19 +85,60 @@ function App() {
     loadUserData();
   }, [userInfo]);
 
-
   const isReady = !loading && privilegeLoaded;
 
   return (
     <div className="position-relative">
-      {/* Modals and Toasts */}
-      {deleteArticleModal && <DeleteArticleModal/>}
+      {/* Modals */}
+      {deleteArticleModal && <DeleteArticleModal />}
       {deleteTicketModal && <DeleteTicketModal />}
-      {createTicketResponse && <CreateTicketToastResponse />}
-      {editTicketResponse && <EditTicketToastResponse />}
-      {startWorkingResponse && <StartWorkingToastResponse />}
+
+      {/* Toast Notifications */}
+      {createTicketResponse && (
+        <ToastNotification
+          state={createTicketResponse}
+          setState={setCreateTicketResponse}
+          message="Created ticket successfully"
+        />
+      )}
+      {editTicketResponse && (
+        <ToastNotification
+          state={editTicketResponse}
+          setState={setEditTicketResponse}
+          message="Ticket updated successfully"
+        />
+      )}
+      {startWorkingResponse && (
+        <ToastNotification
+          state={startWorkingResponse}
+          setState={setStartWorkingResponse}
+          message="Ticket is now in progress"
+        />
+      )}
+      {createArticleResponse && (
+        <ToastNotification
+          state={createArticleResponse}
+          setState={setCreateArticleResponse}
+          message="Created article successfully"
+        />
+      )}
+      {deleteArticleResponse && (
+        <ToastNotification
+          state={deleteArticleResponse}
+          setState={setDeleteArticleResponse}
+          message="Article deleted successfully"
+        />
+      )}
+      {deleteTicketResponse && (
+        <ToastNotification
+          state={deleteTicketResponse}
+          setState={setDeleteTicketResponse}
+          message="Ticket deleted successfully"
+        />
+      )}
+
+      {/* Global Notification */}
       {popupNotification && <NotificationToastResponse />}
-      {createArticleResponse && <CreateArticleToastResponse/>}
 
       <Routes>
         <Route path="/" element={<Login />} />
@@ -100,86 +150,86 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Dashboard')}>
                   <Dashboard />
                 </ProtectedRoute>
-              ) : null
+              )
             }
           />
           <Route
             path="/tickets"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Tickets')}>
                   <Tickets />
                 </ProtectedRoute>
-              ) : null
-            }
-          />
-          <Route
-            path="/users"
-            element={
-              isReady ? (
-                <ProtectedRoute canAccess={canView('Users')}>
-                  <Users />
-                </ProtectedRoute>
-              ) : null
-            }
-          />
-          <Route
-            path="/notifications"
-            element={
-              isReady ? (
-                <ProtectedRoute canAccess={canView('Notifications')}>
-                  <Notifications />
-                </ProtectedRoute>
-              ) : null
+              )
             }
           />
           <Route
             path="/ticket/:id"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Tickets')}>
                   <TicketInfo />
                 </ProtectedRoute>
-              ) : null
+              )
+            }
+          />
+          <Route
+            path="/users"
+            element={
+              isReady && (
+                <ProtectedRoute canAccess={canView('Users')}>
+                  <Users />
+                </ProtectedRoute>
+              )
+            }
+          />
+          <Route
+            path="/notifications"
+            element={
+              isReady && (
+                <ProtectedRoute canAccess={canView('Notifications')}>
+                  <Notifications />
+                </ProtectedRoute>
+              )
             }
           />
           <Route
             path="/reports"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Reports')}>
                   <Reports />
                 </ProtectedRoute>
-              ) : null
+              )
             }
           />
           <Route
             path="/knowledge-base"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Knowledge Base')}>
                   <KnowledgeBase />
                 </ProtectedRoute>
-              ) : null
+              )
             }
           />
           <Route
             path="/knowledge-base/:slug"
             element={
-              isReady ? (
+              isReady && (
                 <ProtectedRoute canAccess={canView('Knowledge Base')}>
                   <ArticleInfo />
                 </ProtectedRoute>
-              ) : null
+              )
             }
           />
         </Route>
 
-        {/* Optional fallback for unmatched routes */}
+        {/* Fallback route for unmatched paths (optional) */}
         {/* <Route path="*" element={<Navigate to="/403" />} /> */}
       </Routes>
     </div>

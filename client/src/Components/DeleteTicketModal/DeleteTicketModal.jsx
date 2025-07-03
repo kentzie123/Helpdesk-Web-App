@@ -5,11 +5,13 @@ import { API_BASE } from "../../config/api";
 
 const DeleteTicketModal = () => {
     const navigate = useNavigate();
-    const { setDeleteTicketModal, selectedTicket } = useGlobalContext();
+    const { setDeleteTicketModal, selectedTicket, setDeleteTicketResponse } = useGlobalContext();
 
     const handleDeleteTicket = async () => {
         try {
-            await axios.delete(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`);
+            const res = await axios.delete(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`);
+
+            setDeleteTicketResponse(res.data.message);
             setDeleteTicketModal(false);
             navigate('/tickets');
         } catch (err) {

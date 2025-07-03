@@ -5,11 +5,13 @@ import { API_BASE } from "../../config/api";
 
 const DeleteArticleModal = () => {
     const navigate = useNavigate();
-    const { setDeleteArticleModal, selectedArticle } = useGlobalContext();
+    const { setDeleteArticleModal, selectedArticle, setDeleteArticleResponse } = useGlobalContext();
 
     const handleDeleteArticle = async ()=>{
         try{
-            await axios.delete(`${API_BASE}/api/knowledge-base/${selectedArticle.slug}`);
+            const res = await axios.delete(`${API_BASE}/api/knowledge-base/${selectedArticle.slug}`);
+
+            setDeleteArticleResponse(res.data.message);  
             setDeleteArticleModal(false);
             navigate('/knowledge-base');
         }catch(err){

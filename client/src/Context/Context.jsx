@@ -6,63 +6,69 @@ import { API_BASE } from '../config/api';
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
-
+  //============================= STATE =============================
   const [users, setUsers] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [rolePrivilege, setRolePrivilege] = useState({});
-  const [tickets, setTickets] = useState([]);
-  const [notifications, setNotifications] = useState([]);
-  const [deleteTicketModal, setDeleteTicketModal] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useState({});
-  const [articles, setArticles] = useState([]);
-  const [selectedArticle, setSelectedArticle] = useState({})
-  //--------------------------------------------------------------------
-  const [createTicketResponse, setCreateTicketResponse] = useState('');
-  const [editTicketResponse, setEditTicketResponse] = useState('');
-  const [startWorkingResponse, setStartWorkingResponse] = useState('');
-  const [createArticleResponse, setCreateArticleResponse] = useState('');
-  //--------------------------------------------------------------------
-  const [navOpen, setNavOpen] = useState(false);
-  const [popupNotification, setPopupNotification] = useState(null);
   const [pagePrivilege, setPagePrivilege] = useState([]);
   const [privilegeLoaded, setPrivilegeLoaded] = useState(false);
+
+  const [tickets, setTickets] = useState([]);
+  const [selectedTicket, setSelectedTicket] = useState({});
+  const [deleteTicketModal, setDeleteTicketModal] = useState(false);
+
+  const [articles, setArticles] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState({});
   const [deleteArticleModal, setDeleteArticleModal] = useState(false);
 
+  const [notifications, setNotifications] = useState([]);
+  const [popupNotification, setPopupNotification] = useState(null);
+
+  const [createTicketResponse, setCreateTicketResponse] = useState('');
+  const [createArticleResponse, setCreateArticleResponse] = useState('');
   
+  const [editArticleResponse, setEditArticleResponse] = useState('');
+  const [editTicketResponse, setEditTicketResponse] = useState('');
 
+  const [deleteTicketResponse, setDeleteTicketResponse] = useState('');
+  const [deleteArticleResponse, setDeleteArticleResponse] = useState('');
 
+  const [startWorkingResponse, setStartWorkingResponse] = useState('');
+
+  const [navOpen, setNavOpen] = useState(false);
+
+  //============================ FETCH ==============================
   const fetchAllUserRelatedData = async (user) => {
-  try {
-    await fetchPagePrivilege(Number(user.role)); // sets pagePrivilege
-    const [notificationsRes, roleRes, usersRes, articlesRes] = await Promise.all([
-      axios.get(`${API_BASE}/api/notifications/${user.userID}`),
-      axios.get(`${API_BASE}/api/roles/${user.role}`),
-      axios.get(`${API_BASE}/api/users`),
-      axios.get(`${API_BASE}/api/knowledge-base`)
-    ]);
+    try {
+      await fetchPagePrivilege(Number(user.role));
+      const [notificationsRes, roleRes, usersRes, articlesRes] = await Promise.all([
+        axios.get(`${API_BASE}/api/notifications/${user.userID}`),
+        axios.get(`${API_BASE}/api/roles/${user.role}`),
+        axios.get(`${API_BASE}/api/users`),
+        axios.get(`${API_BASE}/api/knowledge-base`)
+      ]);
+      fetchTickets(user);
+      setNotifications(notificationsRes.data.notifications);
+      setRolePrivilege(roleRes.data);
+      setUsers(usersRes.data);
+      setArticles(articlesRes.data);
+      setPrivilegeLoaded(true);
+      return true;
+    } catch (error) {
+      console.error('Error fetching user-related data:', error);
+      return false;
+    }
+  };
 
-    fetchTickets(user); // sets tickets
-    setNotifications(notificationsRes.data.notifications);
-    setUsers(usersRes.data);
-    setRolePrivilege(roleRes.data);
-    setArticles(articlesRes.data);
-    
-    setPrivilegeLoaded(true);
-    return true; // success
-  } catch (error) {
-    console.error('Error fetching user-related data:', error);
-    return false;
-  }
-};
+  const fetchPagePrivilege = async (roleId) => {
+    try {
+      const res = await axios.get(`${API_BASE}/api/privilege/${roleId}`);
+      setPagePrivilege(res.data);
+    } catch (err) {
+      console.error('Error fetching page privileges:', err);
+    }
+  };
 
-
-
-
-
-
-
-
-  // Fetch tickets based on user info
   const fetchTickets = async (user) => {
     try {
       const res = await axios.get(`${API_BASE}/api/tickets/by-role`, {
@@ -78,7 +84,6 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  // Fetch a single ticket info
   const fetchTicketInfo = async (id) => {
     try {
       const res = await axios.get(`${API_BASE}/api/tickets/${id}`);
@@ -88,41 +93,31 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const fetchArticleInfo = async (slug) =>{
+  const fetchArticleInfo = async (slug) => {
     try {
       const res = await axios.get(`${API_BASE}/api/knowledge-base/${slug}`);
       setSelectedArticle(res.data);
-    } catch(error) {
+    } catch (error) {
       console.error('Error fetching article info:', error);
     }
-  }
+  };
 
+  const handleArticleInfoUpdate = async (slug, updatedFields) => {
+    try {
+      await axios.put(`${API_BASE}/api/knowledge-base/${slug}`, updatedFields);
+    } catch (err) {
+      console.error('Error updating article info:', err);
+    }
+  };
 
-
-
-  // Fetch page privileges for a specific role
-  const fetchPagePrivilege = async (roleId) => {
-  try {
-    const res = await axios.get(`${API_BASE}/api/privilege/${roleId}`);
-    setPagePrivilege(res.data);
-    
-  } catch (err) {
-    console.error('Error fetching page privileges:', err);
-  }
-};
-
+ 
+  //========================= PRIVILEGE CHECK =========================
   const canView = useCallback((pageName) => {
     const page = pagePrivilege.find(p => p.page === pageName);
     return page?.view;
-  },[pagePrivilege]);
+  }, [pagePrivilege]);
 
-
-
-
-
-
-
-  // Format date for notifications
+  //=========================== HELPERS ==============================
   const formatNotificationDate = (dateString) => {
     const localDate = new Date(dateString);
     const now = new Date();
@@ -143,45 +138,32 @@ const AppProvider = ({ children }) => {
     return `${(localDate.getMonth() + 1).toString().padStart(2, '0')}/${localDate.getDate().toString().padStart(2, '0')}/${localDate.getFullYear()} ${time}`;
   };
 
-
-
   const timeAgo = (dateString) => {
-      try {
-          const date = new Date(dateString);
-          const now = new Date();
-          const seconds = Math.floor((now - date) / 1000);
-
-          if (isNaN(seconds)) return dateString;
-
-          if (seconds < 60) return `${seconds}s ago`;
-          const minutes = Math.floor(seconds / 60);
-          if (minutes < 60) return `${minutes}m ago`;
-          const hours = Math.floor(minutes / 60);
-          if (hours < 24) return `${hours}h ago`;
-          const days = Math.floor(hours / 24);
-          return `${days}d ago`;
-      } catch {
-          return dateString;
-      }
+    try {
+      const date = new Date(dateString);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      if (isNaN(seconds)) return dateString;
+      if (seconds < 60) return `${seconds}s ago`;
+      const minutes = Math.floor(seconds / 60);
+      if (minutes < 60) return `${minutes}m ago`;
+      const hours = Math.floor(minutes / 60);
+      if (hours < 24) return `${hours}h ago`;
+      const days = Math.floor(hours / 24);
+      return `${days}d ago`;
+    } catch {
+      return dateString;
+    }
   };
 
-
-
-
-
-  // Socket listeners
+  //========================= SOCKET LISTENERS ========================
   useEffect(() => {
-
     const handleTicketCreated = (newTicket) => {
       setTickets(prev => [newTicket, ...prev]);
     };
-
     const handleTicketUpdated = (updatedTicket) => {
-      setTickets(prev =>
-        prev.map(ticket => ticket._id === updatedTicket._id ? updatedTicket : ticket)
-      );
+      setTickets(prev => prev.map(ticket => ticket._id === updatedTicket._id ? updatedTicket : ticket));
     };
-
     const handleTicketDeleted = (deletedId) => {
       setTickets(prev => prev.filter(ticket => ticket._id !== deletedId));
     };
@@ -192,74 +174,85 @@ const AppProvider = ({ children }) => {
         setNotifications(prev => [newNotification, ...prev]);
       }
     };
-
     const handleNotificationUpdated = (updatedNotification) => {
       if (userInfo.userID === updatedNotification.receiverUserId) {
-        setNotifications(prev =>
-          prev.map(n => n._id === updatedNotification._id ? updatedNotification : n)
-        );
+        setNotifications(prev => prev.map(n => n._id === updatedNotification._id ? updatedNotification : n));
       }
     };
+    const handleNotificationDeleted = (deletedId) => {
+      setNotifications(prev => prev.filter(n => n._id !== deletedId));
+    };
 
-    const handleNotificationDeleted = (notificationsDeletedId) => {
-      setNotifications(prev => prev.filter(n => n._id !== notificationsDeletedId));
-    }
+    const handleArticleCreated = (newArticle) => {
+      setArticles(prev => [newArticle, ...prev]);
+    };
+    const handleArticleUpdated = (updatedArticle) => {
+      setArticles(prev => prev.map(article => article._id === updatedArticle._id ? updatedArticle : article));
+    };
+    const handleArticleDeleted = (deletedId) => {
+      setArticles(prev => prev.filter(article => article._id !== deletedId));
+    };
 
-    // Attach listeners
     socket.on('ticketCreated', handleTicketCreated);
     socket.on('ticketUpdated', handleTicketUpdated);
     socket.on('ticketDeleted', handleTicketDeleted);
+
     socket.on('notificationCreated', handleNotificationCreated);
     socket.on('notificationUpdated', handleNotificationUpdated);
-    socket.on('notificationDeleted', handleNotificationDeleted)
+    socket.on('notificationDeleted', handleNotificationDeleted);
 
-    // Cleanup on unmount
+    socket.on('articleCreated', handleArticleCreated);
+    socket.on('articleUpdated', handleArticleUpdated);
+    socket.on('articleDeleted', handleArticleDeleted);
+
     return () => {
       socket.off('ticketCreated', handleTicketCreated);
       socket.off('ticketUpdated', handleTicketUpdated);
       socket.off('ticketDeleted', handleTicketDeleted);
+
       socket.off('notificationCreated', handleNotificationCreated);
       socket.off('notificationUpdated', handleNotificationUpdated);
-      socket.off('notificationDeleted', handleNotificationDeleted)
+      socket.off('notificationDeleted', handleNotificationDeleted);
+
+      socket.off('articleCreated', handleArticleCreated);
+      socket.off('articleUpdated', handleArticleUpdated);
+      socket.off('articleDeleted', handleArticleDeleted);
     };
   }, [userInfo]);
 
-
-
-
-
-
-
-
-
+  //============================ PROVIDER =============================
   return (
     <AppContext.Provider value={{
-      fetchAllUserRelatedData,
-      navOpen, setNavOpen,
-      users, setUsers,
-      userInfo, setUserInfo,
-      rolePrivilege, setRolePrivilege,
-      tickets, setTickets,
-      deleteTicketModal, setDeleteTicketModal,
-      selectedTicket, setSelectedTicket,
-      createTicketResponse, setCreateTicketResponse,
-      editTicketResponse, setEditTicketResponse,
-      startWorkingResponse, setStartWorkingResponse,
-      notifications, setNotifications,
-      popupNotification, setPopupNotification,
-      pagePrivilege,setPagePrivilege,
-      privilegeLoaded, setPrivilegeLoaded,
-      deleteArticleModal, setDeleteArticleModal,
       articles, setArticles,
-      selectedArticle, setSelectedArticle,
-      createArticleResponse, setCreateArticleResponse,
-      fetchTickets,
-      fetchTicketInfo,
-      formatNotificationDate,
-      fetchPagePrivilege,
-      fetchArticleInfo,
       canView,
-      timeAgo
+      createArticleResponse, setCreateArticleResponse,
+      createTicketResponse, setCreateTicketResponse,
+      deleteArticleModal, setDeleteArticleModal,
+      deleteTicketModal, setDeleteTicketModal,
+      editTicketResponse, setEditTicketResponse,
+      editArticleResponse, setEditArticleResponse,
+      deleteArticleResponse, setDeleteArticleResponse,
+      deleteTicketResponse, setDeleteTicketResponse,
+      fetchAllUserRelatedData,
+      fetchArticleInfo,
+      fetchPagePrivilege,
+      fetchTicketInfo,
+      fetchTickets,
+      formatNotificationDate,
+      handleArticleInfoUpdate,
+      navOpen, setNavOpen,
+      notifications, setNotifications,
+      pagePrivilege, setPagePrivilege,
+      popupNotification, setPopupNotification,
+      privilegeLoaded, setPrivilegeLoaded,
+      rolePrivilege, setRolePrivilege,
+      selectedArticle, setSelectedArticle,
+      selectedTicket, setSelectedTicket,
+      startWorkingResponse, setStartWorkingResponse,
+      tickets, setTickets,
+      timeAgo,
+      userInfo, setUserInfo,
+      users, setUsers
     }}>
       {children}
     </AppContext.Provider>

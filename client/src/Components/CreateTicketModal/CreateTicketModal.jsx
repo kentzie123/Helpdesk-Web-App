@@ -35,7 +35,9 @@ const CreateTicketModal = () => {
             setPriority('');
             setAssignedTo({});
             setTargetResolveDate('');
-            setCreateTicketResponse(res.data.message || "Created ticket successfully");
+            console.log(res.data);
+            
+            setCreateTicketResponse(res.data);
             createTicketClsBtn.current.click();      
             
         } catch (err) {

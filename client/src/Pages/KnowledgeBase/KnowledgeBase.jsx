@@ -1,14 +1,17 @@
 import './KnowledgeBase.css';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 
 import CreateArticleModal from '../../Components/CreateArticleModal/CreateArticleModal';
+import EditArticleModal from '../../Components/EditArticleModal/EditArticleModal';
 import KnowledgeBaseCard from '../../Components/KnowledgeBaseCard/KnowledgeBaseCard';
 import { useGlobalContext } from '../../Context/Context';
 
 const KnowledgeBase = () => {
     const { articles } = useGlobalContext();
+
     const [searchTerm, setSearchTerm] = useState('');
     const [showArticleDrafts, setShowArticleDrafts] = useState(false);
+    const [selectedArticleCategory, setSelectedArticleCategory] = useState('All Articles');
 
     const filteredArticles = articles.filter(article => {
         const term = searchTerm.toLowerCase();
@@ -20,17 +23,74 @@ const KnowledgeBase = () => {
 
         const matchesPublishStatus = article.isPublished === !showArticleDrafts;
 
-        return matchesSearch && matchesPublishStatus;
+        const matchesCategory = selectedArticleCategory === 'All Articles' 
+            || article.category === selectedArticleCategory;
+
+        return matchesSearch && matchesPublishStatus && matchesCategory;
     });
+
 
 
     const handleShowDrafts = () => {
         setShowArticleDrafts((prev)=> !prev);
     }
 
+    const allArticlesCount = useMemo(()=>{
+        return articles.length;
+    },[articles])
+    const technicalIssueCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Technical Issue').length
+    },[articles])
+    const accountAccessCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Account Access').length
+    },[articles])
+    const hardwareRequestCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Hardware Request').length
+    },[articles])
+    const softwareInstallationCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Software Installation').length
+    },[articles])
+    const networkProblemCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Network Problem').length
+    },[articles])
+    const maintenanceRequestCount = useMemo(()=>{
+        return articles.filter((a)=> a.category === 'Maintenance Request').length
+    },[articles])
+
+    const articleCategories = [
+        {
+            name: 'All Articles',
+            count: allArticlesCount
+        },
+        {
+            name: 'Technical Issue',
+            count: technicalIssueCount
+        },
+        {
+            name: 'Account Access',
+            count: accountAccessCount
+        },
+        {
+            name: 'Hardware Request',
+            count: hardwareRequestCount
+        },
+        {
+            name: 'Software Installation',
+            count: softwareInstallationCount
+        },
+        {
+            name: 'Network Problem',
+            count: networkProblemCount
+        },
+        {
+            name: 'Maintenance Request',
+            count: maintenanceRequestCount
+        }
+    ]
     return (
         <div className="knowledge-base-main-container d-flex flex-column gap-1 p-2">
             <CreateArticleModal />
+            <EditArticleModal />
             <div className="d-flex justify-content-between">
                 <h4>Knowledge Base</h4>
                 <div className="d-flex gap-2">
@@ -95,23 +155,14 @@ const KnowledgeBase = () => {
                     <div className='rounded-3 shadow-sm border p-4 h-100'>
                         <h4 className='mb-3'>Categories</h4>
                         <div className="d-flex flex-column gap-1">
-                            <div className="article-category-menu d-flex justify-content-between align-items-center bg-primary-subtle fw-medium w-100 px-3 py-2 rounded-3">
-                                <div className='text-primary'>All Articles</div>
-                                <div className="rounded-circle p-1 bg-body-secondary articles-category-counter f-size-12">{articles.length}</div>
-                            </div>
-                            {/* You can map real categories dynamically here later */}
-                            <div className="article-category-menu d-flex justify-content-between align-items-center text-muted fw-medium w-100 px-3 py-2 rounded-3">
-                                <div>Technical Support</div>
-                                <div className="rounded-circle p-1 bg-body-secondary articles-category-counter f-size-12">3</div>
-                            </div>
-                            <div className="article-category-menu d-flex justify-content-between align-items-center text-muted fw-medium w-100 px-3 py-2 rounded-3">
-                                <div>Security</div>
-                                <div className="rounded-circle p-1 bg-body-secondary articles-category-counter f-size-12">3</div>
-                            </div>
-                            <div className="article-category-menu d-flex justify-content-between align-items-center text-muted fw-medium w-100 px-3 py-2 rounded-3">
-                                <div>Account Management</div>
-                                <div className="rounded-circle p-1 bg-body-secondary articles-category-counter f-size-12">3</div>
-                            </div>
+                            {
+                                articleCategories.map((ac, i)=>(
+                                   <div key={i} onClick={()=> setSelectedArticleCategory(ac.name)} className={`${ac.name === selectedArticleCategory ? 'bg-primary-subtle' : ''} article-category-menu d-flex justify-content-between align-items-center fw-medium w-100 px-3 py-2 rounded-3`}>
+                                        <div className={`${ac.name === selectedArticleCategory ? 'text-primary' : ''}`}>{ac.name}</div>
+                                        <div className="rounded-circle p-1 bg-body-secondary articles-category-counter f-size-12">{ac.count}</div>
+                                    </div> 
+                                ))
+                            }
                         </div>
                     </div>
                 </div>
@@ -138,7 +189,7 @@ const KnowledgeBase = () => {
                                         <KnowledgeBaseCard key={article._id} article={article} />
                                     ))
                                 ) : (
-                                    <div className='text-muted text-center'>No articles found.</div>
+                                    <div className='text-muted text-center p-4 border shadow-sm rounded-3 fw-medium'>No articles found.</div>
                                 )
                             }
                         </div>

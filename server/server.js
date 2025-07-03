@@ -11,6 +11,8 @@ const ticketRoutes = require('./routes/ticketRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
 const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
+const articleViewsRoutes = require('./routes/articleViewsRoutes');
+const articleRatingsRoutes = require('./routes/articleRatingRoute');
 
 const Ticket = require('./models/tickets');
 const Notification = require('./models/notification');
@@ -39,6 +41,8 @@ app.use('/api', ticketRoutes);
 app.use('/api', notificationRoutes);
 app.use('/api', pagePrivilegeRoutes);
 app.use('/api', knowledgeBaseRoutes);
+app.use('/api', articleViewsRoutes);
+app.use('/api', articleRatingsRoutes);
 
 // Connect to DB and watch changes
 connectDB().then(() => {
@@ -46,6 +50,8 @@ connectDB().then(() => {
   const notificationChangeStream = Notification.watch();
   const articleChangeStream = Article.watch();
 
+
+  
   // Article Change Stream
   articleChangeStream.on('change', (change) => {
       console.log('🟡 Article Change detected:', change.operationType);

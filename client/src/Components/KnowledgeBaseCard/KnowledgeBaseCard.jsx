@@ -2,7 +2,7 @@ import { useGlobalContext } from '../../Context/Context';
 import { Link } from 'react-router-dom';
 
 const KnowledgeBaseCard = ({ article }) => {
-  const { setDeleteArticleModal, formatNotificationDate, setSelectedArticle } = useGlobalContext();
+  const { setDeleteArticleModal, formatNotificationDate, setSelectedArticle, handleArticleInfoUpdate } = useGlobalContext();
 
   const showDeleteArticleModal = () => {
     setDeleteArticleModal(true);
@@ -33,11 +33,14 @@ const KnowledgeBaseCard = ({ article }) => {
       <div className="d-flex flex-column gap-2">
         <div className="d-flex align-items-center gap-3">
           <h5 className="m-0">{article.title}</h5>
-          <div
-            className={` rounded-pill f-size-12 fw-medium px-2 d-flex align-items-center ${getCategoryBadgeClass(article.category)}`}
-          >
+          <div className={` rounded-pill f-size-12 fw-medium px-2 d-flex align-items-center ${getCategoryBadgeClass(article.category)}`}>
             {article.category}
           </div>
+          {!article.isPublished && 
+            <div className='rounded-pill f-size-12 fw-medium px-2 d-flex align-items-center text-dark bg-dark-subtle'>
+              Draft
+            </div>
+          }
         </div>
 
         <div className="text-muted">{article.description}</div>
@@ -56,7 +59,7 @@ const KnowledgeBaseCard = ({ article }) => {
             <i className="bi bi-eye"></i> {article.views} views
           </div>
           <div>
-            <i className="bi bi-star text-warning"></i> {article.ratings.average}
+            <i className="bi bi-star-fill text-warning"></i> {article.ratings.average}
           </div>
           <div>
             <i className="bi bi-clock"></i> Updated {formatNotificationDate(article.updatedAt)}
@@ -64,10 +67,18 @@ const KnowledgeBaseCard = ({ article }) => {
         </div>
       </div>
 
-      <div className="d-flex gap-4">
-        <Link to={`/knowledge-base/${article.slug}`}><i className="kb-action-btn bi bi-eye"></i></Link>
-        <i className="kb-action-btn bi bi-pencil-square"></i>
-        <i onClick={()=>{ showDeleteArticleModal(); setSelectedArticle(article); }} className="kb-action-btn bi bi-trash text-danger"></i>
+      <div className="d-flex align-items-start gap-4">
+        <Link to={`/knowledge-base/${article.slug}`} className='mt-1'><i className="kb-action-btn bi bi-eye"></i></Link>
+        
+        <button onClick={()=> setSelectedArticle(article)} className="btn btn-light f-size-14 fw-medium" type="button" data-bs-toggle="offcanvas" data-bs-target="#editArticleModal" aria-controls="offcanvasRight">
+            <i className="kb-action-btn bi bi-pencil-square mt-1"></i>
+        </button>
+        {
+          !article.isPublished ? 
+          <button onClick={()=> handleArticleInfoUpdate(article.slug, {isPublished: true} )} type='button' className='btn btn-light text-success fw-medium'>Publish</button> 
+          : null
+        }
+        <i onClick={()=>{ showDeleteArticleModal(); setSelectedArticle(article); }} className="kb-action-btn bi bi-trash text-danger mt-1"></i>
       </div>
     </div>
   );

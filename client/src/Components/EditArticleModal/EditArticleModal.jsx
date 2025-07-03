@@ -1,10 +1,11 @@
-import './CreateArticleModal.css';
-import { useState, useRef } from 'react';
-import axios from 'axios';
-import { useGlobalContext } from '../../Context/Context';
-import { API_BASE } from '../../config/api';
+import './EditArticleModal.css';
 
-const CreateArticleModal = () => {
+import { useGlobalContext } from "../../Context/Context";
+import { useState, useRef, useEffect } from 'react';
+
+const EditArticleModal = () => {
+    const { selectedArticle, handleArticleInfoUpdate } = useGlobalContext();
+
     const [title, setTitle] = useState('');
     const [category, setCategory] = useState('');
     const [description, setDescription] = useState('');
@@ -12,8 +13,19 @@ const CreateArticleModal = () => {
     const [articleTag, setArticleTag] = useState([]);
     const [isPublished, setIsPublished] = useState(false);
     const articleTagInput = useRef();
+    const articleModalButton = useRef();
 
-    const { userInfo, setCreateArticleResponse } = useGlobalContext(); 
+    // Sync selectedArticle when it's available
+    useEffect(() => {
+        if (selectedArticle) {
+            setTitle(selectedArticle.title || '');
+            setCategory(selectedArticle.category || '');
+            setDescription(selectedArticle.description || '');
+            setContent(selectedArticle.content || '');
+            setArticleTag(selectedArticle.tags || []);
+            setIsPublished(selectedArticle.isPublished || false);
+        }
+    }, [selectedArticle]);
 
     const handleInsertArticleTag = (newItem) => {
         const trimmedItem = newItem.trim();
@@ -27,39 +39,26 @@ const CreateArticleModal = () => {
         setArticleTag(prev => prev.filter((_, i) => i !== index));
     };
 
-    const handleSubmit = async () => {
-       
-        try {
-            const res = await axios.post(`${API_BASE}/api/knowledge-base`, {
-                title,
-                category,
-                content,
-                tags: articleTag,
-                isPublished,
-                author: {
-                    name: userInfo.fullname,
-                    profilePic: userInfo.profilePic,
-                    role: userInfo.role
-                },
-                description
-            });    
-            setCreateArticleResponse(res.data || 'Created article successfully')
-            setTitle('');
-            setCategory('');
-            setDescription('');
-            setContent('');
-            setArticleTag([]);
-            setIsPublished(false);
-        } catch (err) {
-            setCreateArticleResponse(err.response?.data?.error || "Error creating article");
+    const handleSubmitArticleInfoUpdate = ()=> {
+        const updatedField = {
+            title,
+            category,
+            description,
+            content,
+            tags: articleTag,
+            isPublished
         }
-    };
+        handleArticleInfoUpdate(selectedArticle.slug, updatedField);
+        articleModalButton.current.click();
+    }
+
+    if (!selectedArticle) return null;
 
     return (
-        <div className="create-article-modal offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div className="create-article-modal offcanvas offcanvas-end" tabIndex="-1" id="editArticleModal" aria-labelledby="offcanvasRightLabel">
             <div className="offcanvas-header">
-                <h5 className="offcanvas-title" id="offcanvasRightLabel">Create New Knowledge Base Article</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <h5 className="offcanvas-title" id="offcanvasRightLabel">Update Knowledge Base Article</h5>
+                <button ref={articleModalButton} type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div className="offcanvas-body">
                 <div className='row mt-3'>
@@ -127,6 +126,7 @@ const CreateArticleModal = () => {
                         <button onClick={() => handleInsertArticleTag(articleTagInput.current.value)} className='btn btn-light border fw-medium col-2' type='button'>Add tag</button>
                     </div>     
                 </div>
+
                 <div className='d-flex gap-1 mt-1 flex-wrap'>
                     {
                         articleTag.map((tag, index) => (
@@ -153,11 +153,11 @@ const CreateArticleModal = () => {
                 </div>
 
                 <div className='d-flex justify-content-end gap-2 mt-5'>
-                    <button onClick={handleSubmit} className='btn btn-primary'>Create Article</button>
+                    <button onClick={handleSubmitArticleInfoUpdate} className='btn btn-primary'>Confirm Edit</button>
                 </div>
             </div>
         </div>
-    )
+    );
 }
 
-export default CreateArticleModal;
+export default EditArticleModal;
