@@ -227,6 +227,10 @@ function App() {
               )
             }
           />
+            <Route
+              path="/forgot-password/:email"
+              element={<Forgot />}
+            />
         </Route>
 
         {/* Fallback route for unmatched paths (optional) */}

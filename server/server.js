@@ -13,6 +13,7 @@ const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
 const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
 const articleViewsRoutes = require('./routes/articleViewsRoutes');
 const articleRatingsRoutes = require('./routes/articleRatingRoute');
+const confirmationCodeRoutes = require('./routes/confirmationCodeRoutes');
 
 const Ticket = require('./models/tickets');
 const Notification = require('./models/notification');
@@ -43,6 +44,7 @@ app.use('/api', pagePrivilegeRoutes);
 app.use('/api', knowledgeBaseRoutes);
 app.use('/api', articleViewsRoutes);
 app.use('/api', articleRatingsRoutes);
+app.use('/api', confirmationCodeRoutes);
 
 // Connect to DB and watch changes
 connectDB().then(() => {
