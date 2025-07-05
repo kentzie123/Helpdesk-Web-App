@@ -7,6 +7,8 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   //============================= STATE =============================
+  const [loading, setLoading] = useState(true);
+
   const [users, setUsers] = useState([]);
   const [userInfo, setUserInfo] = useState({});
   const [rolePrivilege, setRolePrivilege] = useState({});
@@ -35,8 +37,15 @@ const AppProvider = ({ children }) => {
 
   const [startWorkingResponse, setStartWorkingResponse] = useState('');
 
+  const [resetPassView, setResetPassView] = useState('s1');
+
   const [navOpen, setNavOpen] = useState(false);
 
+
+  //======================== FORGOT PASSWORD ========================
+  const [isRequestCodeSuccess, setIsRequestCodeSuccess] = useState(false);
+
+  const [emailResetCode, setEmailResetCode] = useState('');
   //============================ FETCH ==============================
   const fetchAllUserRelatedData = async (user) => {
     try {
@@ -249,10 +258,14 @@ const AppProvider = ({ children }) => {
       selectedArticle, setSelectedArticle,
       selectedTicket, setSelectedTicket,
       startWorkingResponse, setStartWorkingResponse,
+      resetPassView, setResetPassView,
       tickets, setTickets,
       timeAgo,
       userInfo, setUserInfo,
-      users, setUsers
+      users, setUsers,
+      loading, setLoading,
+      isRequestCodeSuccess, setIsRequestCodeSuccess,
+      emailResetCode, setEmailResetCode
     }}>
       {children}
     </AppContext.Provider>

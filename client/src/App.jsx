@@ -28,6 +28,8 @@ import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal'
 import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
 import ToastNotification from './Components/ToastNotification/ToastNotification';
 import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
+import LoadingSpinner from './Components/LoadingSpinner/LoadingSpinner';
+import OuterNotificationToast from './Components/OuterNotificationToast/OuterNotificationToast';
 
 
 // Route guard
@@ -39,10 +41,8 @@ const ProtectedRoute = ({ canAccess, children }) => {
 
 function App() {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
 
   const {
-    rolePrivilege,
     setUserInfo,
     deleteTicketModal, 
     userInfo,
@@ -56,7 +56,9 @@ function App() {
     createArticleResponse, setCreateArticleResponse,
     createTicketResponse, setCreateTicketResponse,
     deleteArticleResponse, setDeleteArticleResponse,
-    deleteTicketResponse, setDeleteTicketResponse
+    deleteTicketResponse, setDeleteTicketResponse,
+    loading, setLoading,
+    isRequestCodeSuccess, setIsRequestCodeSuccess
   } = useGlobalContext();
 
   // Load saved user from localStorage
@@ -139,11 +141,15 @@ function App() {
 
       {/* Global Notification */}
       {popupNotification && <NotificationToastResponse />}
+      {isRequestCodeSuccess && <OuterNotificationToast state={isRequestCodeSuccess} setState={setIsRequestCodeSuccess} title={'Request code sent'} content={'Please check your email for the password reset code.'}/>}
 
+      {/* Loader */}
+      {loading && <LoadingSpinner/>}
+    
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/forgot" element={<Forgot />} />
+        <Route path="/forgot-password" element={<Forgot />} />
         <Route path="/403" element={<Page403 />} />
 
         <Route element={<Layout />}>
@@ -227,10 +233,6 @@ function App() {
               )
             }
           />
-            <Route
-              path="/forgot-password/:email"
-              element={<Forgot />}
-            />
         </Route>
 
         {/* Fallback route for unmatched paths (optional) */}

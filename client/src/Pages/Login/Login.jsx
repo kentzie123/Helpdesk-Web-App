@@ -1,91 +1,123 @@
 import { useState } from 'react';
-import axios from 'axios'
-import './Login.css'
+import axios from 'axios';
+import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../Context/Context';
 
-
 const Login = () => {
-
   const navigate = useNavigate();
-  const { setUserInfo, setRolePrivilege, rolePrivilege } = useGlobalContext();
+  const { setUserInfo, setRolePrivilege } = useGlobalContext();
   const [isPassHidden, setIsPassHidden] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [responseMessage, setResponseMessage] = useState('');
 
-  const handleHidePassword = ()=>{
-    setIsPassHidden(prev => !prev);
-  }
+  const handleHidePassword = () => {
+    setIsPassHidden((prev) => !prev);
+  };
 
-  const handleLogin = async (e) =>{
-    e.preventDefault();
+  const handleLogin = async (e) => {
+    e.preventDefault()
     try {
       const loginUserResponse = await axios.post('http://localhost:3000/api/login', {
         email,
-        password
+        password,
       });
+
       setEmail('');
       setPassword('');
-      localStorage.setItem('user', JSON.stringify(loginUserResponse.data.user));
       setResponseMessage(loginUserResponse.data.message);
+      localStorage.setItem('user', JSON.stringify(loginUserResponse.data.user));
       setUserInfo(loginUserResponse.data.user);
-      console.log(loginUserResponse.data.user);
-      
 
       const getRole = await axios.get(`http://localhost:3000/api/roles/${loginUserResponse.data.user.role}`);
-      setRolePrivilege(getRole.data)
+      setRolePrivilege(getRole.data);
+
       navigate('/tickets');
-
-    } catch(error){
-
+    } catch (error) {
       if (error.response) {
         setResponseMessage(error.response.data.error);
       } else {
         setResponseMessage('Something went wrong.');
       }
     }
-
-  }
-
-
-
-
+  };
 
   return (
-    <div className='login-container'>
-        <form onSubmit={handleLogin} className="login-form border shadow-sm rounded-2 p-4">
-            <div className='d-flex flex-column align-items-center gap-4'>
-              <div className='text-center'>
-                <h3 className='fw-bold'>Welcome Back</h3>
-                <p>Enter your credentials to login</p>
-              </div>
-              
-              <div className='d-flex flex-column gap-3 w-100'>
-                <div className='position-relative'> 
-                  <i className="bi bi-envelope-fill position-absolute top-50 translate-middle" style={{left: '14px'}}></i>
-                  <input onChange={(e)=>{setEmail(e.target.value); setResponseMessage('')}} value={email} type="email" className="form-control p-2 ps-4" id="exampleFormControlInput1" placeholder="Email"/>
-                </div>
-                <div className='position-relative'> 
-                  <i className="bi bi-key-fill position-absolute top-50 translate-middle" style={{left: '14px'}}></i>
-                  <input onChange={(e)=>{setPassword(e.target.value); setResponseMessage('')}} value={password} type={isPassHidden?'password':'text'}  className="form-control ps-4" id="exampleFormControlInput2" placeholder="Password"/>
-                  <i className={`${isPassHidden?'bi bi-eye-fill': 'bi bi-eye-slash-fill'} position-absolute top-50 end-0 translate-middle`} style={{cursor:"pointer"}} onClick={handleHidePassword}></i>
-                </div>
-                {responseMessage && <div className={`text-center ${responseMessage === 'Login successful'? "text-success": "text-danger"}`}>{responseMessage}</div>}
-                <button type="submit" className="btn btn-primary">Login</button>
-              </div>
-              
-              <div className='text-center mt-4'>
-                <Link className='text-decoration-none' to="/forgot">Forgot password?</Link>
-                <div className='d-flex mt-1'>
-                  <div>Don't have an account?</div>
-                  <Link className='text-decoration-none ms-2' to="/signup">Signup</Link>
-                </div>
-              </div>
-            </div>
-        </form>
-    </div>
-  )
-}
+    <div className="vh-100 d-flex justify-content-center align-items-center bg-light px-3">
+      <div className="login-container w-100" style={{ maxWidth: '400px' }}>
+        <div className="text-center mb-3">
+          <h4 className="fw-bold">Sign in to your account</h4>
+          <div className="text-muted f-size-14">Access the helpdesk management system</div>
+        </div>
 
-export default Login
+
+        <form onSubmit={handleLogin} className="rounded-3 border shadow p-4 bg-white">
+          <h5 className="fw-medium text-center mb-4">Login</h5>
+
+          <div className="mb-3">
+            <label htmlFor="email-signin" className="form-label f-size-14 fw-medium">Email</label>
+            <div className="position-relative">
+              <i className="bi bi-envelope text-secondary position-absolute top-50 start-0 translate-middle-y ms-3 icon-bold"></i>
+              <input
+                type="text"
+                className="form-control ps-5 email-signin-input f-size-14"
+                id="email-signin"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="mb-3">
+            <label htmlFor="password-signin" className="form-label f-size-14 fw-medium">Password</label>
+            <div className="position-relative">
+              <i className="bi bi-lock text-secondary position-absolute top-50 start-0 translate-middle-y ms-3 icon-bold"></i>
+              <i
+                onClick={handleHidePassword}
+                className={`bi ${isPassHidden ? 'bi-eye' : 'bi-eye-slash'} password-hide-icon text-secondary position-absolute top-50 end-0 translate-middle-y me-3 icon-bold`}
+                style={{ cursor: 'pointer' }}
+              ></i>
+              <input
+                type={isPassHidden ? 'password' : 'text'}
+                className="form-control ps-5 pe-5 password-signin-input f-size-14"
+                id="password-signin"
+                placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </div>
+
+          {responseMessage && (
+            <div className="alert alert-warning f-size-14 py-2 px-3" role="alert">
+              {responseMessage}
+            </div>
+          )}
+
+          <div className="mb-3">
+            <Link className="f-size-14 text-decoration-none" to={'/forgot-password'}>
+              Forgot your password?
+            </Link>
+          </div>
+
+          <button type="submit" className="btn btn-primary f-size-14 w-100 fw-medium">
+            Sign in
+          </button>
+
+          <hr />
+
+          <div className="text-center f-size-14">
+            <span>Don't have an account?</span>
+            <Link className="text-decoration-none fw-medium ms-1" to={'/signup'}>
+              Signup
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default Login;

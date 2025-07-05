@@ -2,6 +2,8 @@ import { useGlobalContext } from "../../Context/Context"
 import { useState, useRef } from "react";
 import axios from "axios";
 
+import { API_BASE } from "../../config/api";
+
 import CreateTicketToastResponse from "../CreateTicketToastResponse/CreateTicketToastResponse";
 
 const CreateTicketModal = () => {
@@ -16,7 +18,7 @@ const CreateTicketModal = () => {
 
     const handleCreateTicket = async () => {
         try {
-            const res = await axios.post('http://localhost:3000/api/tickets', {
+            const res = await axios.post(`${API_BASE}/api/tickets`, {
                 ownerPic: userInfo.profilePic,
                 ownerName: userInfo.fullname,
                 ownerUserId: userInfo.userID,
@@ -42,7 +44,6 @@ const CreateTicketModal = () => {
             
         } catch (err) {
             console.log(err);
-            
             setCreateTicketResponse(err.response?.data?.error || "Error creating ticket"); 
         }
     }

@@ -1,11 +1,9 @@
-import React from 'react';
+import './LoadingSpinner.css';
 
 const LoadingSpinner = () => {
   return (
-    <div className="d-flex justify-content-center align-items-center" style={{ height: '100%' }}>
-      <div className="spinner-border text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
-      </div>
+    <div className="loading-overlay bg-dark bg-opacity-50 z-3">
+      <span className="loader"></span>
     </div>
   );
 };

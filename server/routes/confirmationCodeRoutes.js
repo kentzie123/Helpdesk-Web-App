@@ -2,9 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    generateConfirmationCode
+    generateConfirmationCode,
+    verifyCode,
+    checkPasswordResetAccess
 } = require('../controllers/confirmationCodeController');
 
 router.post('/confirmation-code', generateConfirmationCode);
+router.post('/verify-code', verifyCode);
+router.post('/reset-password', checkPasswordResetAccess);
 
 module.exports = router;
