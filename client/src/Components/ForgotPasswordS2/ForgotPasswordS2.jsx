@@ -8,8 +8,7 @@ import { useGlobalContext } from '../../Context/Context';
 
 
 const Forgot2 = () => {
-    const { emailResetCode, setResetPassView, setLoading, loading } = useGlobalContext();
-    const [verificationCode, setVerificationCode] = useState('');
+    const { resetCodeEmail, setResetPassView, setLoading, loading, setResetPassToken,resetPassVerificationCode, setResetPassVerificationCode } = useGlobalContext();
     const [error, setError] = useState('');
 
     const handleVerifyCode = async (e) => {
@@ -17,11 +16,11 @@ const Forgot2 = () => {
         setLoading(true);
         try{
             const res = await axios.post(`${API_BASE}/api/verify-code`, {
-                email: emailResetCode,
-                code: verificationCode
+                email: resetCodeEmail,
+                code: resetPassVerificationCode
             })
             setLoading(false);
-            console.log(res.data);
+            setResetPassToken(res.data.resetToken);
             setResetPassView('s3');
         }catch(err){
             setLoading(false); 
@@ -62,11 +61,11 @@ const Forgot2 = () => {
                     id="forgot-pass-code"
                     placeholder="Enter 6-digit code"
                     required
-                    value={verificationCode}
+                    value={resetPassVerificationCode}
                     onChange={(e) => {
                         const value = e.target.value;
                         if (/^\d{0,6}$/.test(value)) {
-                        setVerificationCode(value);
+                        setResetPassVerificationCode(value);
                         }
                     }}
                     />
@@ -76,7 +75,9 @@ const Forgot2 = () => {
                 <button type='submit' className='btn btn-primary fw-medium' disabled={loading}>
                     {loading ? 'Verifying...' : 'Verify code'}
                 </button>
+
                 <Link to={'/'} className='text-decoration-none f-size-14 text-center'>Didn't receive the code? Resend</Link>
+
                 <hr />
 
                 <Link to={'/'} className='text-decoration-none f-size-14 text-center'><i className="bi bi-arrow-left icon-bold me-1"></i> Back to login</Link>

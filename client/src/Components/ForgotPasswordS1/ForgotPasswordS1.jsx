@@ -7,7 +7,7 @@ import { API_BASE } from '../../config/api';
 import { useGlobalContext } from '../../Context/Context';
 
 const Forgot1 = () => {
-  const { setResetPassView, setLoading, setIsRequestCodeSuccess, emailResetCode, setEmailResetCode } = useGlobalContext();
+  const { setResetPassView, setLoading, setIsRequestCodeSuccess, resetCodeEmail, setResetCodeEmail } = useGlobalContext();
 
   const [error, setError] = useState('');
   const [cooldown, setCooldown] = useState(0);
@@ -20,7 +20,7 @@ const Forgot1 = () => {
 
     try {
       await axios.post(`${API_BASE}/api/confirmation-code`, {
-        email: emailResetCode,
+        email: resetCodeEmail,
       });
 
       setResetPassView('s2');
@@ -95,8 +95,8 @@ const Forgot1 = () => {
               className="form-control ps-5 email-signin-input f-size-14"
               id="email-signup"
               placeholder="Enter your email"
-              value={emailResetCode}
-              onChange={(e) => setEmailResetCode(e.target.value)}
+              value={resetCodeEmail}
+              onChange={(e) => setResetCodeEmail(e.target.value)}
               disabled={cooldown > 0}
               required
             />

@@ -1,10 +1,19 @@
-.outer-notif-close-btn{
+.outer-notif-container {
+    width: 400px;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+    background-color: white; /* Optional: to make sure it has a background */
+}
+
+.outer-notif-close-btn {
     cursor: pointer;
     opacity: 0;
     font-size: 20px;
-    transition: opacity .2s ease;
+    transition: opacity 0.2s ease;
 }
-.outer-notif-container:hover .outer-notif-close-btn{
+
+.outer-notif-container:hover .outer-notif-close-btn {
     opacity: 1;
 }
 
@@ -20,22 +29,35 @@
     }
 }
 
+/* Fade in animation */
 @keyframes fadeInTop {
     0% {
         opacity: 0;
         transform: translateY(100%);
     }
-    100%{
+    100% {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Class to trigger animation */
 .fade-out-left {
     animation: fadeOutLeft 0.5s forwards;
 }
 
 .fade-in-top {
     animation: fadeInTop 0.5s forwards;
+}
+
+/* Mobile View (max-width: 576px) */
+@media (max-width: 576px) {
+    .outer-notif-container {
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: auto;
+        margin: 0;
+        border-radius: 0;
+    }
 }

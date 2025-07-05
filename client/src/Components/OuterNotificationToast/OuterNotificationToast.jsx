@@ -12,11 +12,11 @@ const OuterNotificationToast = ({ title, content, state, setState }) => {
 
             popupTimeout = setTimeout(() => {
                 setPopup(false);
-            }, 4000);
+            }, 6000);
 
             stateTimeout = setTimeout(() => {
                 setState(false);
-            }, 5000);
+            }, 7000);
         }
 
         return () => {
@@ -33,7 +33,7 @@ const OuterNotificationToast = ({ title, content, state, setState }) => {
     };
 
     return (
-        <div className={`position-fixed outer-notif-container ${popup ? 'fade-in-top' : 'fade-out-left'} bottom-0 end-0 me-3 mb-3 p-0 border shadow rounded-2 overflow-hidden z-3 p-4`}>
+        <div className={`position-fixed outer-notif-container ${popup ? 'fade-in-top' : 'fade-out-left'} p-0 border shadow rounded-2 overflow-hidden z-3 p-4`}>
             <i onClick={handleClose} className="outer-notif-close-btn bi bi-x position-absolute top-0 end-0 mt-1 me-2 icon-bold"></i>
             <div className="fw-bold f-size-14">{title}</div>
             <div className="f-size-14">{content}</div>

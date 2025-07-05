@@ -58,7 +58,8 @@ function App() {
     deleteArticleResponse, setDeleteArticleResponse,
     deleteTicketResponse, setDeleteTicketResponse,
     loading, setLoading,
-    isRequestCodeSuccess, setIsRequestCodeSuccess
+    isRequestCodeSuccess, setIsRequestCodeSuccess,
+    isResetPasswordSucces, setIsResetPasswordSuccess
   } = useGlobalContext();
 
   // Load saved user from localStorage
@@ -142,6 +143,7 @@ function App() {
       {/* Global Notification */}
       {popupNotification && <NotificationToastResponse />}
       {isRequestCodeSuccess && <OuterNotificationToast state={isRequestCodeSuccess} setState={setIsRequestCodeSuccess} title={'Request code sent'} content={'Please check your email for the password reset code.'}/>}
+      { isResetPasswordSucces && <OuterNotificationToast state={isResetPasswordSucces} setState={setIsResetPasswordSuccess} title={'Password reset successful'} content={'Your password has been reset. You can now sign in with your new password.'}/>}
 
       {/* Loader */}
       {loading && <LoadingSpinner/>}

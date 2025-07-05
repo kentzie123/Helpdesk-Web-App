@@ -38,14 +38,17 @@ const AppProvider = ({ children }) => {
   const [startWorkingResponse, setStartWorkingResponse] = useState('');
 
   const [resetPassView, setResetPassView] = useState('s1');
+  const [resetPassToken, setResetPassToken] = useState('');
+  const [resetPassVerificationCode, setResetPassVerificationCode] = useState('');
 
   const [navOpen, setNavOpen] = useState(false);
 
 
   //======================== FORGOT PASSWORD ========================
   const [isRequestCodeSuccess, setIsRequestCodeSuccess] = useState(false);
+  const [isResetPasswordSucces, setIsResetPasswordSuccess] = useState(false);
 
-  const [emailResetCode, setEmailResetCode] = useState('');
+  const [resetCodeEmail, setResetCodeEmail] = useState('');
   //============================ FETCH ==============================
   const fetchAllUserRelatedData = async (user) => {
     try {
@@ -265,7 +268,10 @@ const AppProvider = ({ children }) => {
       users, setUsers,
       loading, setLoading,
       isRequestCodeSuccess, setIsRequestCodeSuccess,
-      emailResetCode, setEmailResetCode
+      isResetPasswordSucces, setIsResetPasswordSuccess,
+      resetCodeEmail, setResetCodeEmail,
+      resetPassToken, setResetPassToken,
+      resetPassVerificationCode, setResetPassVerificationCode,
     }}>
       {children}
     </AppContext.Provider>
