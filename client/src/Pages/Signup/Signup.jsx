@@ -1,15 +1,16 @@
 import SignupModal from "../../Components/SignupModal/SignupModal";
-import VerifyEmail from "../../Components/VerifyEmail/VerifyEmail";
+import VerifyEmail from "../../Components/VerifyEmail/SignUpVerifyEmail";
 
+import { useGlobalContext } from "../../Context/Context";
 import { useState } from "react";
 
 const Signup = () => {
-  const [view, setView] = useState('verify-email');
+  const { signupView} = useGlobalContext();
 
   return (
     <div>
-      { view === 'signup' && <SignupModal/> }
-      { view === 'verify-email' && <VerifyEmail/> }
+      { signupView === 'signup' && <SignupModal/> }
+      { signupView === 'verify-email' && <VerifyEmail/> }
     </div>
   )
 }

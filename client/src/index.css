@@ -3,7 +3,9 @@
 }
 
 body{
-  min-height: 100vh;  
+  min-height: 100vh; 
+  font-family: 'Inter', sans-serif;
+  /* font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";  */
 }
 
 :root{

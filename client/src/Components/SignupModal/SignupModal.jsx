@@ -2,8 +2,11 @@ import { useState } from 'react';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignupModal.css';
+import { API_BASE } from '../../config/api';
+import { useGlobalContext } from '../../Context/Context';
 
 const SignupModal = () => {
+  const { setSignupView, setSignupInfo, setLoading, loading, setIsSignupRequestCodeSuccess } = useGlobalContext();
   const navigate = useNavigate();
 
   const [fullname, setFullname] = useState('');
@@ -16,27 +19,36 @@ const SignupModal = () => {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     if (password !== confirmPassword) {
+      setLoading(false);
       setResponseMessage("Passwords don't match!");
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:3000/api/create', {
-        ProfilePic: "",
+      await axios.post(`${API_BASE}/api/signup/generate-code`, {
         fullname,
         email,
         password
       });
 
+      setLoading(false);
+      setResponseMessage('');
+      setSignupInfo({
+        fullname,
+        email,
+        password
+      });
       setFullname('');
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      setResponseMessage(response.data.message);
-      navigate('/');
+
+      setIsSignupRequestCodeSuccess(true);
+      setSignupView('verify-email');
     } catch (error) {
+      setLoading(false);
       setResponseMessage(error.response?.data?.error || "Signup failed.");
     }
   };
@@ -63,6 +75,7 @@ const SignupModal = () => {
                 placeholder="Enter your name"
                 value={fullname}
                 onChange={(e) => setFullname(e.target.value)}
+                required
               />
             </div>
           </div>
@@ -123,12 +136,14 @@ const SignupModal = () => {
           </div>
 
           {responseMessage && (
-            <div className="alert alert-info f-size-14 py-2 mt-2" role="alert">
+            <div className="alert alert-info f-size-14 py-2 mt-2 text-center" role="alert">
               {responseMessage}
             </div>
           )}
 
-          <button type='submit' className='btn btn-primary w-100 mt-3 fw-medium'>Create account</button>
+          <button type='submit' className='btn btn-primary fw-medium' disabled={loading}>
+              {loading ? 'Please wait...' : 'Create Account'}
+          </button>
 
           <hr />
 

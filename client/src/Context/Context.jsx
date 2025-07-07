@@ -37,18 +37,24 @@ const AppProvider = ({ children }) => {
 
   const [startWorkingResponse, setStartWorkingResponse] = useState('');
 
-  const [resetPassView, setResetPassView] = useState('s1');
-  const [resetPassToken, setResetPassToken] = useState('');
-  const [resetPassVerificationCode, setResetPassVerificationCode] = useState('');
-
   const [navOpen, setNavOpen] = useState(false);
 
 
   //======================== FORGOT PASSWORD ========================
+  const [resetPassView, setResetPassView] = useState('s1');
+  const [resetPassToken, setResetPassToken] = useState('');
+  const [resetPassVerificationCode, setResetPassVerificationCode] = useState('');
   const [isRequestCodeSuccess, setIsRequestCodeSuccess] = useState(false);
   const [isResetPasswordSucces, setIsResetPasswordSuccess] = useState(false);
 
   const [resetCodeEmail, setResetCodeEmail] = useState('');
+
+  //============================ SIGNUP =============================
+  const [signupView, setSignupView] = useState('signup');
+  const [signupInfo, setSignupInfo] = useState({});
+  const [isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+
   //============================ FETCH ==============================
   const fetchAllUserRelatedData = async (user) => {
     try {
@@ -272,6 +278,10 @@ const AppProvider = ({ children }) => {
       resetCodeEmail, setResetCodeEmail,
       resetPassToken, setResetPassToken,
       resetPassVerificationCode, setResetPassVerificationCode,
+      signupInfo, setSignupInfo,
+      isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess,
+      signupView, setSignupView,
+      isEmailVerified, setIsEmailVerified
     }}>
       {children}
     </AppContext.Provider>

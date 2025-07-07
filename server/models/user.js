@@ -3,7 +3,7 @@ const bcrypt = require('bcryptjs');
 const { v4: uuidv4 } = require('uuid');
 
 const UserSchema = new mongoose.Schema({
-  profilePic: { type: String },
+  profilePic: { type: String, default: '' },
   userID: { type: String, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },

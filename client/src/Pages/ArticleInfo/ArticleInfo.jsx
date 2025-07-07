@@ -130,7 +130,7 @@ const ArticleInfo = () => {
         <div className='px-5 py-3'>
             <div className='d-flex flex-column gap-4'>
                 <Link to={'/knowledge-base'}>
-                    <button className='btn btn-light fw-medium' style={{width: '210px'}}>
+                    <button className='btn btn-light fw-medium'>
                         <i className='bi bi-arrow-left me-2'></i> Back to Knowledge Base
                     </button>
                 </Link>

@@ -1,5 +1,12 @@
 const User = require('../models/user');
+const ConfirmationCode = require('../models/confirmationCode');
+const sendEmail = require('../utils/sendEmail');
+
 const bcrypt = require('bcryptjs');
+
+const generateCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
 
 const getAllUsers = async (req, res) => {
   try {
@@ -46,45 +53,85 @@ const loginUser = async (req, res) => {
   }
 };
 
-// Create a new user
-const createUser = async (req, res) => {
-  const { email, password, fullname, profilePic } = req.body;
 
-  // Input validation
+const signUpGenerateConfirmationCode = async (req, res) => {
+  const { email, password, fullname } = req.body;
+  const code = generateCode();
+
   if (!email || !password || !fullname) {
-    return res.status(400).json({ error: 'Please fill in all fields.' });
+    return res.status(400).json({ error: 'Please fill all required fields.'})
   }
 
   try {
-    // Check if user exists
+    const emailExist = await User.findOne({ email });
+
+    if(emailExist){
+      return res.status(409).json({ error: 'Email already used.' })
+    }
+ 
+    const recentCode = await ConfirmationCode.findOne({ userEmail: email }).sort({ createdAt: -1 });
+
+    const newConfirmationCode = new ConfirmationCode({
+      userEmail: email,
+      code
+    });
+
+    await newConfirmationCode.save();
+    await sendEmail(email, code);
+
+    return res.status(200).json({ message: 'Confirmation code created and sent.' });
+
+  } catch (err) {
+    console.error('Error generating confirmation code:', err);
+    return res.status(500).json({ error: 'Server error while generating confirmation code.' });
+  }
+};
+
+
+
+// Create a new user
+const createUser = async (req, res) => {
+  const { email, password, fullname, code } = req.body;
+
+  if (!email || !password || !fullname) {
+      return res.status(400).json({ error: 'Missing required fields. Please refresh the page and try again.' });
+  }
+
+  if (!code) {
+      return res.status(400).json({ error: 'Please enter the verification code.' });
+    }
+  
+  try {
+    const record = await ConfirmationCode.findOne({ userEmail: email, code });
+
+    if (!record) {
+      return res.status(404).json({ error: 'Invalid or expired code.' });
+    } 
+
+    const isExpired = new Date() > new Date(record.expiresAt);
+    if (isExpired) {
+      return res.status(410).json({ error: 'Code has expired.' });
+    }
+
+    // Input validation
     const userExists = await User.findOne({ email });
     if (userExists) {
       return res.status(400).json({ error: 'Email already exists' });
     }
 
-    
+    await ConfirmationCode.deleteMany({ userEmail: email });
+
     const newUser = new User({
-      profilePic,
       email,
       password, 
       fullname,
     });
 
     await newUser.save();
+    res.status(201).json({ message: 'User created successfully' } );
 
-    // Return user data (excluding password)
-   /* res.status(201).json({ 
-      message: 'User created successfully', 
-      user: { 
-        id: newUser._id, 
-        email: newUser.email, 
-        fullname: newUser.fullname, 
-        role: newUser.role 
-      } 
-    });*/
-    
-  } catch (err) {
-    res.status(500).json({ error: 'Server error while creating user' });
+  } catch(err){
+    return res.status(500).json({ error: 'Server error while verifying code.'});
   }
 };
 
@@ -175,5 +222,6 @@ module.exports = {
   getAllUsers,
   createUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  signUpGenerateConfirmationCode
 };

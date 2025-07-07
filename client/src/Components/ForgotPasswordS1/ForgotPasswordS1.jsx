@@ -84,7 +84,7 @@ const Forgot1 = () => {
           </div>
         </div>
 
-        {error && <div className="alert alert-light m-0 text-danger f-size-14" role="alert"><i className="bi bi-exclamation-circle icon-bold me-2"></i>{error}</div>}
+        {error && <div className="alert alert-light m-0 text-danger text-center f-size-14" role="alert"><i className="bi bi-exclamation-circle icon-bold me-2"></i>{error}</div>}
 
         <div>
           <label htmlFor="email-signup" className="form-label f-size-14 fw-medium">Email</label>

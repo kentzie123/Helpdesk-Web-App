@@ -92,7 +92,7 @@ const Login = () => {
           </div>
 
           {responseMessage && (
-            <div className="alert alert-warning f-size-14 py-2 px-3" role="alert">
+            <div className="alert alert-warning f-size-14 py-2 px-3 text-center" role="alert">
               {responseMessage}
             </div>
           )}

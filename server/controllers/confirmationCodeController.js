@@ -52,7 +52,8 @@ const generateConfirmationCode = async (req, res) => {
     console.error('Error generating confirmation code:', err);
     return res.status(500).json({ error: 'Server error while generating confirmation code.' });
   }
-};
+};  
+
 
 const verifyCode = async (req, res) => {
   const { email, code } = req.body;
@@ -70,7 +71,7 @@ const verifyCode = async (req, res) => {
 
     if (!record) {
       return res.status(404).json({ error: 'Invalid or expired code.' });
-    }
+    } 
 
     const isExpired = new Date() > new Date(record.expiresAt);
     if (isExpired) {
