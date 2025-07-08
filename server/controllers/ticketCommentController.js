@@ -2,7 +2,8 @@ const TicketComment = require('../models/ticketComment');
 
 const createTicketComment = async (req, res) => {
     const { ticketId, userId, fullname, comment } = req.body;
-
+    console.log({ticketId, userId, fullname, comment});
+    
     if (!ticketId || !userId || !fullname || !comment) {
         return res.status(400).json({ message: "All fields are required" });
     }
@@ -57,3 +58,9 @@ const deleteTicketComment = async (req, res) => {
         return res.status(500).json({ message: "Server error" });
     }
 };
+
+module.exports = {
+    createTicketComment,
+    getTicketComments,
+    deleteTicketComment
+}
