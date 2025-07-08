@@ -25,6 +25,7 @@ import ArticleInfo from './Pages/ArticleInfo/ArticleInfo';
 import Page403 from './Pages/Page403/Page403';
 
 // Components
+import DeleteModal from './Components/DeleteModal/DeleteModal';
 import DeleteTicketModal from './Components/DeleteTicketModal/DeleteTicketModal';
 import DeleteArticleModal from './Components/DeleteArticleModal/DeleteArticleModal';
 import ToastNotification from './Components/ToastNotification/ToastNotification';
@@ -65,7 +66,10 @@ function App() {
     isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess,
     isEmailVerified, setIsEmailVerified,
     selectedTicket,
-    showRateTicketModal
+    showRateTicketModal,
+    showDeleteTicketCommentModal,setShowDeleteTicketCommentModal,
+    deleteTicketCommentHandler,
+    selectedTicketComment
   } = useGlobalContext();
 
   // Load saved user from localStorage
@@ -101,6 +105,16 @@ function App() {
       {/* Modals */}
       {deleteArticleModal && <DeleteArticleModal />}
       {deleteTicketModal && <DeleteTicketModal />}
+      {showDeleteTicketCommentModal && 
+        <DeleteModal 
+          setShowModal={setShowDeleteTicketCommentModal} 
+          title={'Delete Ticket Comment'} 
+          message={'Are you sure you want to delete this ticket comment? This will permanently remove the comment.'}
+          deleteHandler={deleteTicketCommentHandler}
+          selectedItemId={selectedTicketComment._id}
+          selectedItemContent={selectedTicketComment.comment}
+        />
+      }
 
       {/* Rate Ticket Modal */}
       {showRateTicketModal && <RateTicketModal/>}

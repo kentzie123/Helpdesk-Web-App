@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGlobalContext } from '../../Context/Context';
 import axios from 'axios';
-import EditTicketToastResponse from '../EditTicketToastResponse/EditTicketToastResponse';
+import { API_BASE } from '../../config/api';
 
 const EditTicketModal = () => {
 
@@ -31,7 +31,7 @@ const EditTicketModal = () => {
 
     const handleEditTicket = async () => {
         try {
-            const res = await axios.patch(`http://localhost:3000/api/tickets/${selectedTicket.ticketId}`, {
+            const res = await axios.patch(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`, {
                 subject: editSubject,
                 description: editDescription,
                 category: editCategory,
@@ -53,7 +53,6 @@ const EditTicketModal = () => {
 
     return (
         <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
-            { editTicketResponse !== "Ticket updated successfully"? <EditTicketToastResponse/> : null }
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id="offcanvasRightLabel">Edit ticket</h5>
                 <button ref={editTicketClsBtn} type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGlobalContext } from '../../Context/Context';
 import axios from 'axios';
 import EditTicketModal from '../../Components/EditTicketModal/EditTicketModal';
@@ -10,16 +10,17 @@ import { API_BASE } from '../../config/api';
 
 const TicketInfo2 = () => {
     const [comment, setComment] = useState('');
-    const [ticketComments, setTicketComments] = useState([]);
     const { 
-        setDeleteTicketModal, 
         selectedTicket, 
         fetchTicketInfo, 
         userInfo, 
         setChangeTicketStatusResponse, 
         setLoading,
         setShowRateTicketModal,
-        timeAgo2
+        timeAgo2,
+        setShowDeleteTicketCommentModal,
+        setSelectedTicketComment,
+        ticketComments, setTicketComments
     } = useGlobalContext();
     const { id } = useParams();
     
@@ -89,7 +90,6 @@ const TicketInfo2 = () => {
             });
             
             setChangeTicketStatusResponse('Ticket status changed successfully');
-            console.log('working started');
             fetchTicketInfo(selectedTicket.ticketId);
             setLoading(false)
         } catch (error) {
@@ -210,7 +210,7 @@ const TicketInfo2 = () => {
                             <span>
                                 <i className='bi bi-chat-left icon-bold me-2' style={{fontSize:'15px'}}></i>
                             </span>
-                            <span>Comments (1)</span>
+                            <span>Comments ({ticketComments.length})</span>
                         </h5>
 
                         <div className='mt-3' style={{maxHeight: '300px', overflowY: 'auto'}}>
@@ -226,9 +226,11 @@ const TicketInfo2 = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <button className='btn btn-light'>
-                                                    <i className='bi bi-trash icon-bold text-danger'></i>
-                                                </button>
+                                                {userInfo.userID === comment.userId && 
+                                                    <button onClick={()=> {setShowDeleteTicketCommentModal(true); setSelectedTicketComment(comment)}} className='btn btn-light'>
+                                                        <i className='bi bi-trash icon-bold text-danger'></i>
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                         <div className='comment f-size-14 text-muted mt-3'>

@@ -4,7 +4,6 @@ import axios from "axios";
 
 import { API_BASE } from "../../config/api";
 
-import CreateTicketToastResponse from "../CreateTicketToastResponse/CreateTicketToastResponse";
 
 const CreateTicketModal = () => {
     const { userInfo, users, setCreateTicketResponse, createTicketResponse } = useGlobalContext();
@@ -50,7 +49,6 @@ const CreateTicketModal = () => {
 
     return ( 
         <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
-            { createTicketResponse !== "Created ticket successfully"? <CreateTicketToastResponse/> : null }
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id="offcanvasRightLabel">Create ticket</h5>
                 <button type="button" ref={createTicketClsBtn} className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>

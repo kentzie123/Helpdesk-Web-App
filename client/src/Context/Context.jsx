@@ -17,6 +17,9 @@ const AppProvider = ({ children }) => {
 
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [ticketComments, setTicketComments] = useState([]);
+  const [selectedTicketComment, setSelectedTicketComment] = useState(null);
+  const [showDeleteTicketCommentModal, setShowDeleteTicketCommentModal] = useState(false);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);
 
   const [articles, setArticles] = useState([]);
@@ -26,6 +29,7 @@ const AppProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [popupNotification, setPopupNotification] = useState(null);
 
+  const [createTicketRatingResponse, setCreateTicketRatingResponse] = useState('');
   const [createTicketResponse, setCreateTicketResponse] = useState('');
   const [createArticleResponse, setCreateArticleResponse] = useState('');
   
@@ -128,6 +132,18 @@ const AppProvider = ({ children }) => {
       console.error('Error updating article info:', err);
     }
   };
+
+
+  //======================== DELETE HANDLERS ==========================
+
+  const deleteTicketCommentHandler = async (id) => {
+    try {
+      await axios.delete(`${API_BASE}/api/ticket-comments/${id}`);
+      setTicketComments(prev => prev.filter((comment)=> comment._id !== id));
+    }catch(err){
+      console.error('Error deleting ticket comments:', err);
+    }
+  }
 
  
   //========================= PRIVILEGE CHECK =========================
@@ -270,6 +286,7 @@ const AppProvider = ({ children }) => {
     <AppContext.Provider value={{
       articles, setArticles,
       canView,
+      createTicketRatingResponse, setCreateTicketRatingResponse,
       createArticleResponse, setCreateArticleResponse,
       createTicketResponse, setCreateTicketResponse,
       deleteArticleModal, setDeleteArticleModal,
@@ -309,7 +326,11 @@ const AppProvider = ({ children }) => {
       isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess,
       signupView, setSignupView,
       isEmailVerified, setIsEmailVerified,
-      showRateTicketModal, setShowRateTicketModal
+      showRateTicketModal, setShowRateTicketModal,
+      selectedTicketComment, setSelectedTicketComment,
+      showDeleteTicketCommentModal, setShowDeleteTicketCommentModal,
+      deleteTicketCommentHandler,
+      ticketComments, setTicketComments
     }}>
       {children}
     </AppContext.Provider>

@@ -5,6 +5,11 @@ const RateTicketModal = () => {
     const { setShowRateTicketModal} = useGlobalContext();
     const [hoveredStar, setHoveredStar] = useState(null);
     const [selectedRating, setSelectedRating] = useState(0);
+
+    const handleSubmitTicketRating = async () => {
+        
+    }
+
     return (
         <div
             className="position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center bg-dark bg-opacity-50 z-3"
