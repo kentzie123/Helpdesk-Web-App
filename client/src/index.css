@@ -4,7 +4,7 @@
 
 body{
   min-height: 100vh; 
-  font-family: 'Inter', sans-serif;
+  /* font-family: 'Inter', sans-serif; */
   /* font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";  */
 }
 
@@ -36,13 +36,17 @@ body{
 .f-size-14{
     font-size: 14px;
 }
-
 .f-size-12{
     font-size: 12px;
 }
-
 .f-size-16{
+    font-size: 16px;
+}
+.f-size-18{
     font-size: 18px;
+}
+.f-size-20{
+    font-size: 20px;
 }
 
 .icon-bold{

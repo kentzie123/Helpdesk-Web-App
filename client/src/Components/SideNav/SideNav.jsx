@@ -33,7 +33,7 @@ const SideNav = () => {
           {navOpen && <div className='menu-item-text user-select-none fw-bold'>HELP HIVE</div>}
         </div>
 
-        <div className='d-flex flex-column gap-3 w-100'>
+        <div className='d-flex flex-column gap-3 w-100 fw-medium'>
 
           {canView('Dashboard') && (
             <NavLink to='/dashboard' className={({ isActive }) =>
@@ -79,7 +79,7 @@ const SideNav = () => {
            (<NavLink to='/knowledge-base' className={({ isActive }) =>
             `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
             <i className="bi bi-book-fill"></i>
-            {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
+            {navOpen && <div className='menu-item-text user-select-none'>Knowledge Base</div>}
           </NavLink>)
           }
         </div>

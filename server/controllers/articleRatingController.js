@@ -3,6 +3,14 @@ const ArticleRatings = require('../models/articleRating');
 
 const createArticleRating = async (req, res) => {
     const { userID, articleId, rating } = req.body;
+    if (!userID || !articleId || !rating) {
+        return res.status(400).json({ message: "User ID, Article ID, and Rating are required" });
+    }
+    
+    if (rating < 1 || rating > 5) {
+        return res.status(400).json({ message: "Rating must be between 1 and 5" });
+    }
+
 
     try {
         const article = await Article.findById(articleId);

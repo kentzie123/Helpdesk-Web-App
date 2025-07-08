@@ -2,22 +2,22 @@ import { useEffect } from "react";
 import { useGlobalContext } from "../../Context/Context";
 
 const StartWorkingToastResponse = () => {
-    const { startWorkingResponse, setStartWorkingResponse } = useGlobalContext();
+    const { changeTicketStatusResponse, setChangeTicketStatusResponse } = useGlobalContext();
 
     useEffect(() => {
-        if (startWorkingResponse) {
+        if (changeTicketStatusResponse) {
             const timer = setTimeout(() => {
-                setStartWorkingResponse("");
+                setChangeTicketStatusResponse("");
             }, 3000);
             return () => clearTimeout(timer);
         }
-    }, [startWorkingResponse]);
+    }, [changeTicketStatusResponse]);
 
     return (
-        <div className={`toast position-fixed top-0 start-0 ms-3 mt-3 p-1 z-3 ${startWorkingResponse === 'Ticket is now in progress' ? 'text-bg-success' : 'text-bg-danger'} border-0 fade ${startWorkingResponse ? 'show' : 'hide'}`} role="alert" aria-live="assertive" aria-atomic="true">
+        <div className={`toast position-fixed top-0 start-0 ms-3 mt-3 p-1 z-3 ${changeTicketStatusResponse === 'Ticket is now in progress' ? 'text-bg-success' : 'text-bg-danger'} border-0 fade ${changeTicketStatusResponse ? 'show' : 'hide'}`} role="alert" aria-live="assertive" aria-atomic="true">
             <div className="d-flex">
                 <div className="toast-body">
-                    {startWorkingResponse}
+                    {changeTicketStatusResponse}
                 </div>
                 <button type="button" className="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>

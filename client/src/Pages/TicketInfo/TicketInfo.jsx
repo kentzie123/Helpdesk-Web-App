@@ -10,9 +10,12 @@ import EditTicketModal from '../../Components/EditTicketModal/EditTicketModal';
 
 
 const TicketInfo = () => {
-  const { setDeleteTicketModal, selectedTicket, fetchTicketInfo, userInfo, setStartWorkingResponse } = useGlobalContext();
+  const { setDeleteTicketModal, selectedTicket, fetchTicketInfo, userInfo, setChangeTicketStatusResponse } = useGlobalContext();
   const { id } = useParams();
 
+  useEffect(() => {
+    fetchTicketInfo(id);
+  }, [id]);
 
   const handleStartWorking = async () => {
     try{
@@ -20,12 +23,12 @@ const TicketInfo = () => {
         status: 'In Progress',
         modifiedBy: userInfo.fullname
       });
-      setStartWorkingResponse("Ticket is now in progress");
+      setChangeTicketStatusResponse("Ticket is now in progress");
       console.log('working started');
       
       fetchTicketInfo(selectedTicket.ticketId);
     } catch (error) {
-      setStartWorkingResponse("Error starting work on ticket");
+      setChangeTicketStatusResponse("Error starting work on ticket");
       console.error('Error starting work on ticket:', error);
     }
   };
@@ -79,9 +82,7 @@ const TicketInfo = () => {
     setDeleteTicketModal(true);
   };
 
-  useEffect(() => {
-    fetchTicketInfo(id);
-  }, [id]);
+  
 
   return (
     <div className='border rounded shadow-sm m-2 p-2'>

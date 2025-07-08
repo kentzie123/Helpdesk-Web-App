@@ -12,7 +12,7 @@ const ticketSchema = new mongoose.Schema({
   assignedTo: { type: String },
   status: { 
     type: String,
-    enum: ['New', 'In Progress', 'Open', 'Closed', 'Resolved'],
+    enum: ['In Progress', 'Open', 'Closed', 'Resolved'],
     required: true
   },
   modifiedBy: { type: String, default: '' }, 

@@ -14,6 +14,8 @@ const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
 const articleViewsRoutes = require('./routes/articleViewsRoutes');
 const articleRatingsRoutes = require('./routes/articleRatingRoute');
 const confirmationCodeRoutes = require('./routes/confirmationCodeRoutes');
+const ticketRatingsRoutes = require('./routes/ticketRatingRoutes')
+const ticketCommentsRoutes = require('./routes/ticketCommentRoutes');
 
 const Ticket = require('./models/tickets');
 const Notification = require('./models/notification');
@@ -45,6 +47,8 @@ app.use('/api', knowledgeBaseRoutes);
 app.use('/api', articleViewsRoutes);
 app.use('/api', articleRatingsRoutes);
 app.use('/api', confirmationCodeRoutes);
+app.use('/api', ticketRatingsRoutes);
+app.use('/api', ticketCommentsRoutes)
 
 // Connect to DB and watch changes
 connectDB().then(() => {

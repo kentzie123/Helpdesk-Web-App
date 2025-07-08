@@ -16,7 +16,7 @@ const AppProvider = ({ children }) => {
   const [privilegeLoaded, setPrivilegeLoaded] = useState(false);
 
   const [tickets, setTickets] = useState([]);
-  const [selectedTicket, setSelectedTicket] = useState({});
+  const [selectedTicket, setSelectedTicket] = useState(null);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);
 
   const [articles, setArticles] = useState([]);
@@ -35,7 +35,8 @@ const AppProvider = ({ children }) => {
   const [deleteTicketResponse, setDeleteTicketResponse] = useState('');
   const [deleteArticleResponse, setDeleteArticleResponse] = useState('');
 
-  const [startWorkingResponse, setStartWorkingResponse] = useState('');
+  const [changeTicketStatusResponse, setChangeTicketStatusResponse] = useState('');
+  const [showRateTicketModal, setShowRateTicketModal] = useState(false);
 
   const [navOpen, setNavOpen] = useState(false);
 
@@ -266,7 +267,7 @@ const AppProvider = ({ children }) => {
       rolePrivilege, setRolePrivilege,
       selectedArticle, setSelectedArticle,
       selectedTicket, setSelectedTicket,
-      startWorkingResponse, setStartWorkingResponse,
+      changeTicketStatusResponse, setChangeTicketStatusResponse,
       resetPassView, setResetPassView,
       tickets, setTickets,
       timeAgo,
@@ -281,7 +282,8 @@ const AppProvider = ({ children }) => {
       signupInfo, setSignupInfo,
       isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess,
       signupView, setSignupView,
-      isEmailVerified, setIsEmailVerified
+      isEmailVerified, setIsEmailVerified,
+      showRateTicketModal, setShowRateTicketModal
     }}>
       {children}
     </AppContext.Provider>

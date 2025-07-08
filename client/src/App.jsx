@@ -15,6 +15,7 @@ import Signup from './Pages/Signup/Signup';
 import Forgot from './Pages/Forgot/Forgot';
 import Tickets from './Pages/Tickets/Tickets';
 import TicketInfo from './Pages/TicketInfo/TicketInfo';
+import TicketInfo2 from './Pages/TicketInfo/TicketInfo2';
 import Users from './Pages/Users/Users';
 import Notifications from './Pages/Notifications/Notifications';
 import Dashboard from './Pages/Dashboard/Dashboard';
@@ -30,6 +31,7 @@ import ToastNotification from './Components/ToastNotification/ToastNotification'
 import NotificationToastResponse from './Components/NotificationToastResponse/NotificationToastResponse';
 import LoadingSpinner from './Components/LoadingSpinner/LoadingSpinner';
 import OuterNotificationToast from './Components/OuterNotificationToast/OuterNotificationToast';
+import RateTicketModal from './Components/RateTicketModal/RateTicketModal';
 
 
 // Route guard
@@ -52,7 +54,7 @@ function App() {
     privilegeLoaded,
     deleteArticleModal,
     editTicketResponse, setEditTicketResponse,
-    startWorkingResponse, setStartWorkingResponse,
+    changeTicketStatusResponse, setChangeTicketStatusResponse,
     createArticleResponse, setCreateArticleResponse,
     createTicketResponse, setCreateTicketResponse,
     deleteArticleResponse, setDeleteArticleResponse,
@@ -61,7 +63,9 @@ function App() {
     isRequestCodeSuccess, setIsRequestCodeSuccess,
     isResetPasswordSucces, setIsResetPasswordSuccess,
     isSignupRequestCodeSuccess, setIsSignupRequestCodeSuccess,
-    isEmailVerified, setIsEmailVerified
+    isEmailVerified, setIsEmailVerified,
+    selectedTicket,
+    showRateTicketModal
   } = useGlobalContext();
 
   // Load saved user from localStorage
@@ -98,6 +102,9 @@ function App() {
       {deleteArticleModal && <DeleteArticleModal />}
       {deleteTicketModal && <DeleteTicketModal />}
 
+      {/* Rate Ticket Modal */}
+      {showRateTicketModal && <RateTicketModal/>}
+
       {/* Toast Notifications */}
       {createTicketResponse && (
         <ToastNotification
@@ -113,11 +120,11 @@ function App() {
           message="Ticket updated successfully"
         />
       )}
-      {startWorkingResponse && (
+      {changeTicketStatusResponse && selectedTicket && (
         <ToastNotification
-          state={startWorkingResponse}
-          setState={setStartWorkingResponse}
-          message="Ticket is now in progress"
+          state={changeTicketStatusResponse}
+          setState={setChangeTicketStatusResponse}
+          message={`Ticket status changed successfully`}
         />
       )}
       {createArticleResponse && (
@@ -186,7 +193,7 @@ function App() {
             element={
               isReady && (
                 <ProtectedRoute canAccess={canView('Tickets')}>
-                  <TicketInfo />
+                  <TicketInfo2 />
                 </ProtectedRoute>
               )
             }
