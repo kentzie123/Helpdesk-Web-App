@@ -1,0 +1,5 @@
+.users-table td, .users-table th{
+    padding: 1rem;
+    font-size: 14px;
+    vertical-align: middle;
+}

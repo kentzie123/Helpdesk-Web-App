@@ -123,8 +123,7 @@ const createTicket = async (req, res) => {
       priority,
       category,
       description,
-      assignedTo : assignedTo.fullname,
-      status: assignedTo ? 'New' : 'Open',  
+      assignedTo : assignedTo.fullname,  
       targetResolveDate
     });
 

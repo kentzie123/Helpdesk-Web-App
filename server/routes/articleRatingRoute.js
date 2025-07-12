@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken');
+
 
 const {
     createArticleRating,
@@ -7,7 +9,7 @@ const {
 } = require('../controllers/articleRatingController');
 
 
-router.post('/article-ratings', createArticleRating);
-router.get('/article-ratings/:articleId/:userID', getUserArticleRating);
+router.post('/article-ratings', verifyToken, createArticleRating);
+router.get('/article-ratings/:articleId/:userID', verifyToken, getUserArticleRating);
 
 module.exports = router;

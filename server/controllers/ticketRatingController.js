@@ -30,18 +30,16 @@ const createTicketRating = async (req, res) => {
 
 const getTicketRatingsByTicketId = async (req, res) => {
     const { ticketId } = req.params;
-
     try {
-        const ratings = await TicketRating.find({ ticketId });
-        if (ratings.length === 0) {
-            return res.status(404).json({ message: 'No ratings found for this ticket' });
-        }
-        return res.status(200).json(ratings);
+        const latestRating = await TicketRating.findOne({ ticketId }).sort({ createdAt: -1 });
+
+        return res.status(200).json(latestRating);
     } catch (err) {
-        console.error("Error fetching ticket ratings:", err);
+        console.error("Error fetching ticket rating:", err);
         return res.status(500).json({ message: "Server error" });
     }
-}
+};
+
 
 const deleteTicketRating = async (req, res) => {
     const { ratingId } = req.params;

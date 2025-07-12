@@ -103,7 +103,6 @@ const Dashboard = () => {
                 </div>
               ))
             }
-            
           </div>
           <div className='row dashboard-content-container'>
             <div className="col-12 col-lg-6 p-3 ">

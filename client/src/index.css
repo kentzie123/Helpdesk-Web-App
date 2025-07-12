@@ -48,6 +48,15 @@ body{
 .f-size-20{
     font-size: 20px;
 }
+.f-size-22{
+    font-size: 22px;
+}
+.f-size-24{
+    font-size: 24px;
+}
+.f-size-26{
+    font-size: 26px;
+}
 
 .icon-bold{
   text-shadow: 0 0 .8px currentColor;
@@ -55,4 +64,12 @@ body{
 
 .btn {
   font-size: 14px !important; 
+}
+
+.bg-violet-subtle {
+  background-color: #eee6ff; 
+}
+
+.text-violet {
+  color: #7f00ff; 
 }

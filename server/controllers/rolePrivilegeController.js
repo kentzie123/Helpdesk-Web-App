@@ -9,7 +9,7 @@ const getRoles = async (req, res) => {
     }
 }
 
-const getRoleById = async (req, res) => {
+const getRoleByRoleId = async (req, res) => {
     const { id } = req.params;
     
     try {
@@ -28,5 +28,5 @@ const getRoleById = async (req, res) => {
 
 module.exports = {
     getRoles,
-    getRoleById
+    getRoleByRoleId
 };

@@ -2,13 +2,13 @@ import { Link, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { useGlobalContext } from '../../Context/Context';
 import axios from 'axios';
-import EditTicketModal from '../../Components/EditTicketModal/EditTicketModal';
 
 import './TicketInfo2.css';
 import { API_BASE } from '../../config/api';
 
 
 const TicketInfo2 = () => {
+    const [ticketRating, setTicketRating] = useState(null);
     const [comment, setComment] = useState('');
     const { 
         selectedTicket, 
@@ -45,8 +45,12 @@ const TicketInfo2 = () => {
     }, [id]);
 
     useEffect(() => {  
+        setTicketRating(null);
         const fetchTicketComments = async () => {
             try {
+                const ticketRateingResponse = await axios.get(`${API_BASE}/api/ticket-ratings/${selectedTicket.ticketId}`);
+                console.log(ticketRateingResponse);
+                setTicketRating(ticketRateingResponse.data);
                 const ticketComments = await axios.get(`${API_BASE}/api/ticket-comments/${selectedTicket.ticketId}`);
                 setTicketComments(ticketComments.data);
             }catch (err) {
@@ -61,7 +65,8 @@ const TicketInfo2 = () => {
     }, [selectedTicket]);
 
 
-    const handleAddTicketComment = async () => {
+    const handleAddTicketComment = async (e) => {
+        e.preventDefault();
         try{
             setLoading(true);
 
@@ -199,9 +204,29 @@ const TicketInfo2 = () => {
                                 </div>
                             </div>
 
-                            <div className='text-center mt-4'>
-                                <button onClick={()=> setShowRateTicketModal(true)} type='button' className='btn btn-primary fw-medium'><i className='bi bi-star me-2'></i>Rate This Resolution</button>
-                            </div>
+                            {(selectedTicket.status === 'Resolved' && !ticketRating) && 
+                                <div className='text-center mt-4'>
+                                    <button onClick={()=> setShowRateTicketModal(true)} type='button' className='btn btn-primary fw-medium'><i className='bi bi-star me-2'></i>Rate This Resolution</button>
+                                </div>
+                            }
+
+                            {ticketRating &&
+                                <div className='bg-success-subtle p-4 rounded-3 mt-4'>
+                                    <h5 className='fw-medium'>
+                                        <i className='bi bi-star text-warning icon-bold me-2'></i><span>Customer Rating</span>
+                                    </h5>
+                                    <div>
+                                        <div className='d-flex align-items-center gap-1'>
+                                            {[...Array(5)].map((_,index)=> (
+                                                <i key={index} className={`bi ${index < (ticketRating.rating || 0) ? 'bi-star-fill text-warning' : 'bi-star text-secondary'}`} style={{fontSize: '20px'}}></i>
+                                            ))}
+                                            <span className='ms-2 text-muted'>{ticketRating.rating}/5 stars</span>
+                                        </div>
+                                        <p className="fst-italic mt-2 mb-0 text-muted">"{ticketRating.comment}"</p>
+                                    </div>
+                                </div>
+                            }
+                            
                         </div>
                     </div>
 
@@ -245,16 +270,16 @@ const TicketInfo2 = () => {
 
                         <hr />
 
-                        <div>
+                        <form onSubmit={handleAddTicketComment}>
                             <div className='fw-medium'>Add Comment</div>
                             <div className='mt-2'>
                                 <textarea value={comment} onChange={(e)=> setComment(e.target.value)} className='form-control f-size-14' rows='4' placeholder='Add a comment...'/>
                             </div>
 
                             <div className='mt-3 d-flex justify-content-end'>
-                                <button onClick={handleAddTicketComment} type='button' className='btn btn-primary fw-medium'>Add Comment</button>
+                                <button type='submit' className='btn btn-primary fw-medium'>Add Comment</button>
                             </div>
-                        </div>
+                        </form>
 
                     </div>
 

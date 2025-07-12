@@ -1,8 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getRoleById, getRoles } = require('../controllers/rolePrivilegeController');
+const verifyToken = require('../middleware/verifyToken');
 
-router.get('/roles/:id', getRoleById);
-router.get('/roles', getRoles);
+const { getRoleByRoleId, getRoles } = require('../controllers/rolePrivilegeController');
+
+router.get('/roles/:id', verifyToken, getRoleByRoleId);
+router.get('/roles', verifyToken, getRoles);
 
 module.exports = router;

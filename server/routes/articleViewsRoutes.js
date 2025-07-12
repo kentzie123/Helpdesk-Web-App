@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const verifyToken = require('../middleware/verifyToken');
+
 const {
     createArticleView
 } = require('../controllers/articleViewsController');
@@ -7,6 +9,6 @@ const {
 
 // router.get('/article-views/:userID/:article_id', checkAlreadyViewed);
 
-router.post('/article-views', createArticleView);
+router.post('/article-views', verifyToken, createArticleView);
 
 module.exports = router;

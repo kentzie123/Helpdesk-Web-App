@@ -71,7 +71,7 @@ const SideNav = () => {
            (<NavLink to='/reports' className={({ isActive }) =>
             `${isActive ? 'active' : ''} menu-item rounded-3 text-decoration-none d-flex gap-3 align-items-center ${!navOpen ? 'justify-content-center' : ''}`}>
             <i className="bi bi-bar-chart-line-fill"></i>
-            {navOpen && <div className='menu-item-text user-select-none'>Notifications</div>}
+            {navOpen && <div className='menu-item-text user-select-none'>Reports</div>}
           </NavLink>)
           }
 

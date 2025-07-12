@@ -1,13 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const { loginUser, getAllUsers, createUser, updateUser, deleteUser, signUpGenerateConfirmationCode} = require('../controllers/userController');
+const { requireRole } = require('../middleware/requireRoleVerifyToken');
+const verifyToken = require('../middleware/verifyToken');
+
+const { getAllUsers, createUser, updateUser, deleteUser, signUpGenerateConfirmationCode} = require('../controllers/userController');
 
 router.post('/signup/generate-code', signUpGenerateConfirmationCode)
 router.post('/signup/create-account', createUser);
-router.post('/login', loginUser);
-router.get('/users', getAllUsers);
-router.patch('/users/:id', updateUser); 
-router.delete('/users/:id', deleteUser);
+router.get('/users', requireRole('Admin'), getAllUsers);
+router.patch('/users/:id', verifyToken, updateUser); 
+router.delete('/users/:id', verifyToken, deleteUser);
 
 module.exports = router;
     

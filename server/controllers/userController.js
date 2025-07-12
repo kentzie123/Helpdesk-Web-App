@@ -17,41 +17,7 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-// User login
-const loginUser = async (req, res) => {
-  const { email, password } = req.body;
 
-  // Basic input validation
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Email and password are required' });
-  }
-
-  try {
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-    // Return minimal user data (exclude password)
-    res.json({ 
-      message: 'Login successful', 
-      user: { 
-        userID: user.userID, 
-        profilePic: user.profilePic,
-        email: user.email, 
-        fullname: user.fullname, 
-        role: user.role 
-      } 
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Server error during login' });
-  }
-};
 
 
 const signUpGenerateConfirmationCode = async (req, res) => {
@@ -218,7 +184,6 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
-  loginUser,
   getAllUsers,
   createUser,
   updateUser,

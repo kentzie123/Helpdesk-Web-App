@@ -2,7 +2,6 @@ const TicketComment = require('../models/ticketComment');
 
 const createTicketComment = async (req, res) => {
     const { ticketId, userId, fullname, comment } = req.body;
-    console.log({ticketId, userId, fullname, comment});
     
     if (!ticketId || !userId || !fullname || !comment) {
         return res.status(400).json({ message: "All fields are required" });

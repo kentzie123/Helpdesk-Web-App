@@ -1,13 +1,29 @@
-import { use, useState } from "react";
+import { useState } from "react";
 import { useGlobalContext } from "../../Context/Context";
 
+import axios from "axios";
+import { API_BASE } from "../../config/api";
+
 const RateTicketModal = () => {
-    const { setShowRateTicketModal} = useGlobalContext();
+    const { setShowRateTicketModal, userInfo, selectedTicket, setLoading } = useGlobalContext();
+    const [ticketRatingComment, setTicektRatingComment] = useState('');
     const [hoveredStar, setHoveredStar] = useState(null);
     const [selectedRating, setSelectedRating] = useState(0);
 
     const handleSubmitTicketRating = async () => {
-        
+        try{
+            setLoading(true);
+            await axios.post(`${API_BASE}/api/ticket-ratings`, {
+                userId: userInfo.userID,
+                ticketId: selectedTicket.ticketId, 
+                rating: selectedRating, 
+                comment: ticketRatingComment
+            });
+            setLoading(false);
+        }catch(err){
+            setLoading(false);
+            console.error("Error submitting ticket rating:", err);
+        }
     }
 
     return (
@@ -31,18 +47,18 @@ const RateTicketModal = () => {
                                 style={{ cursor: 'pointer' }}
                                 onMouseEnter={() => setHoveredStar(starNumber)}
                                 onMouseLeave={() => setHoveredStar(null)}
-                                // onClick={() => handleRatingSubmit(starNumber)}
+                                onClick={() => setSelectedRating(starNumber)}
                             ></i>
                         );
                     })}
                 </div>
 
                 <div className='fw-medium f-size-14'>Additional Comments (Optional)</div>
-                <textarea rows='5' className="form-control f-size-14" placeholder="Tell us about your experience..."/>
+                <textarea onChange={(e)=> setTicektRatingComment(e.target.value)} value={ticketRatingComment} rows='5' className="form-control f-size-14" placeholder="Tell us about your experience..."/>
 
                 <div className="d-flex justify-content-end gap-2 mt-3 fw-medium">
                     <button onClick={()=> setShowRateTicketModal(false)} type="button" className="btn btn-light border fw-medium">Cancel</button>
-                    <button type="button" className="btn btn-primary fw-medium">Submit Rating</button>
+                    <button onClick={()=> {handleSubmitTicketRating(); setShowRateTicketModal(false)}} type="button" className="btn btn-primary fw-medium">Submit Rating</button>
                 </div>
             </div>
         </div>
