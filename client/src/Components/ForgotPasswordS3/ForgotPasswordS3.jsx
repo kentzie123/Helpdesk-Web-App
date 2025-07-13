@@ -1,8 +1,7 @@
 import './ForgotPasswordS3.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
-import { API_BASE } from '../../config/api';
+import api from '../../api/api';
 import { useGlobalContext } from '../../Context/Context';
 
 const Forgot3 = () => {
@@ -26,7 +25,7 @@ const Forgot3 = () => {
         }
 
         try{
-            await axios.post(`${API_BASE}/api/reset-password`, {
+            await api.post(`/reset-password`, {
                 email: resetCodeEmail,
                 code: resetPassVerificationCode, 
                 resetToken: resetPassToken, 

@@ -1,7 +1,7 @@
 // React & Router
 import { useEffect, useState } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from './api/api';
 
 // Context
 import { useGlobalContext } from './Context/Context';
@@ -72,14 +72,22 @@ function App() {
     selectedTicketComment
   } = useGlobalContext();
 
-  // Load saved user from localStorage
+  // Fetch current user on initial load
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem('user'));
-    if (savedUser) {
-      setUserInfo(savedUser);
-    } else {
+
+    const fetchCurrentUser = async () => {
+    try {
+      const res = await api.get('/me');
+  
+      setUserInfo(res.data.user);
+      setLoading(false);
+    } catch (err) {
+      console.log('User not logged in or session expired');
       setLoading(false);
     }
+  };
+
+  fetchCurrentUser();
   }, []);
 
   // Fetch all user-related data if user is present

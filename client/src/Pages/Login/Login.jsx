@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../Context/Context';
@@ -20,7 +20,7 @@ const Login = () => {
     e.preventDefault();
     
     try {
-      const loginUserResponse = await axios.post('http://localhost:3000/api/login', {
+      const loginUserResponse = await api.post('/login', {
         email,
         password,
       });
@@ -28,12 +28,9 @@ const Login = () => {
       setEmail('');
       setPassword('');
       setResponseMessage(loginUserResponse.data.message);
-      localStorage.setItem('user', JSON.stringify(loginUserResponse.data.user));
       setUserInfo(loginUserResponse.data.user);
-
-      const getRole = await axios.get(`http://localhost:3000/api/roles/${loginUserResponse.data.user.role}`);
+      const getRole = await api.get(`/roles/${loginUserResponse.data.user.role}`);
       setRolePrivilege(getRole.data);
-
       navigate('/tickets');
     } catch (error) {
       if (error.response) {

@@ -3,7 +3,7 @@ import './TicketInfo.css';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useGlobalContext } from '../../Context/Context';
-import axios from 'axios';
+import api from '../../api/api';
 
 import EditTicketModal from '../../Components/EditTicketModal/EditTicketModal';
 
@@ -19,7 +19,7 @@ const TicketInfo = () => {
 
   const handleStartWorking = async () => {
     try{
-      const res = await axios.patch(`http://localhost:3000/api/tickets/${selectedTicket.ticketId}`, {
+      const res = await api.patch(`/tickets/${selectedTicket.ticketId}`, {
         status: 'In Progress',
         modifiedBy: userInfo.fullname
       });

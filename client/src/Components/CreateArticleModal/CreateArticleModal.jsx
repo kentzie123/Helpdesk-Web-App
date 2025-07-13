@@ -1,8 +1,7 @@
 import './CreateArticleModal.css';
 import { useState, useRef } from 'react';
-import axios from 'axios';
+import api from '../../api/api'
 import { useGlobalContext } from '../../Context/Context';
-import { API_BASE } from '../../config/api';
 
 const CreateArticleModal = () => {
     const [title, setTitle] = useState('');
@@ -30,7 +29,7 @@ const CreateArticleModal = () => {
     const handleSubmit = async () => {
        
         try {
-            const res = await axios.post(`${API_BASE}/api/knowledge-base`, {
+            const res = await api.post('$/knowledge-base', {
                 title,
                 category,
                 content,

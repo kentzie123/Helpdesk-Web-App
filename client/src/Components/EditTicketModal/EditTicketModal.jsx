@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGlobalContext } from '../../Context/Context';
-import axios from 'axios';
-import { API_BASE } from '../../config/api';
+import api from '../../api/api';
 
 const EditTicketModal = () => {
 
@@ -31,7 +30,7 @@ const EditTicketModal = () => {
 
     const handleEditTicket = async () => {
         try {
-            const res = await axios.patch(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`, {
+            const res = await api.patch(`/tickets/${selectedTicket.ticketId}`, {
                 subject: editSubject,
                 description: editDescription,
                 category: editCategory,

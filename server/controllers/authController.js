@@ -25,7 +25,7 @@ const loginUser = async (req, res) => {
 
      // ✅ Generate JWT
     const token = jwt.sign(
-      { userID: user.userID, role: user.role }, // you can add more fields if needed
+      { userID: user.userID, fullname: user.fullname, email: user.email, role: user.role }, // you can add more fields if needed
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );

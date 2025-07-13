@@ -1,7 +1,6 @@
-import axios from "axios";
+import api from "../../api/api";
 import { useGlobalContext } from "../../Context/Context";
 import { useNavigate } from "react-router-dom";
-import { API_BASE } from "../../config/api";
 
 const DeleteArticleModal = () => {
     const navigate = useNavigate();
@@ -9,7 +8,7 @@ const DeleteArticleModal = () => {
 
     const handleDeleteArticle = async ()=>{
         try{
-            const res = await axios.delete(`${API_BASE}/api/knowledge-base/${selectedArticle.slug}`);
+            const res = await api.delete(`/knowledge-base/${selectedArticle.slug}`);
 
             setDeleteArticleResponse(res.data.message);  
             setDeleteArticleModal(false);

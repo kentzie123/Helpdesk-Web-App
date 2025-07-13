@@ -1,9 +1,7 @@
 import './ForgotPasswordS1.css';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../api/api';
 import { useState, useEffect } from 'react';
-import { API_BASE } from '../../config/api';
-
 import { useGlobalContext } from '../../Context/Context';
 
 const Forgot1 = () => {
@@ -19,7 +17,7 @@ const Forgot1 = () => {
     setError('');
 
     try {
-      await axios.post(`${API_BASE}/api/confirmation-code`, {
+      await api.post('/confirmation-code', {
         email: resetCodeEmail,
       });
 

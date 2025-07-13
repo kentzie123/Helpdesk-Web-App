@@ -1,10 +1,9 @@
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { useGlobalContext } from '../../Context/Context';
-import axios from 'axios';
+import api from '../../api/api';
 
 import './TicketInfo2.css';
-import { API_BASE } from '../../config/api';
 
 
 const TicketInfo2 = () => {
@@ -48,10 +47,10 @@ const TicketInfo2 = () => {
         setTicketRating(null);
         const fetchTicketComments = async () => {
             try {
-                const ticketRateingResponse = await axios.get(`${API_BASE}/api/ticket-ratings/${selectedTicket.ticketId}`);
+                const ticketRateingResponse = await api.get(`/ticket-ratings/${selectedTicket.ticketId}`);
                 console.log(ticketRateingResponse);
                 setTicketRating(ticketRateingResponse.data);
-                const ticketComments = await axios.get(`${API_BASE}/api/ticket-comments/${selectedTicket.ticketId}`);
+                const ticketComments = await api.get(`/ticket-comments/${selectedTicket.ticketId}`);
                 setTicketComments(ticketComments.data);
             }catch (err) {
                 console.error('Error fetching ticket comments:', err);
@@ -76,7 +75,7 @@ const TicketInfo2 = () => {
                 fullname: userInfo.fullname, 
                 comment
             } 
-            await axios.post(`${API_BASE}/api/ticket-comments`, newComment);
+            await api.post(`/ticket-comments`, newComment);
 
             setComment(prev => [...prev, newComment]); 
             setLoading(false);
@@ -89,7 +88,7 @@ const TicketInfo2 = () => {
     const handleChangeStatus = async (status) => {
         try{
             setLoading(true)
-                await axios.patch(`${API_BASE}/api/tickets/${selectedTicket.ticketId}`, {
+                await api.patch(`/tickets/${selectedTicket.ticketId}`, {
                 status,
                 modifiedBy: userInfo.fullname
             });

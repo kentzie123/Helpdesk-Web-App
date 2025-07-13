@@ -1,8 +1,7 @@
 import NotificationCard from "../../Components/NotificationCard/NotificationCard"
 import { useGlobalContext } from "../../Context/Context";
 import { useState } from "react";
-import axios from 'axios';
-import { API_BASE } from "../../config/api";
+import api from "../../api/api";
 
 import './Notifications.css';
 
@@ -19,7 +18,7 @@ const Notifications = () => {
 
   const handleMarkAllRead = async () => {
     try {
-      await axios.put(`${API_BASE}/api/notifications/mark-all-as-read/${userInfo.userID}`);
+      await api.put(`/notifications/mark-all-as-read/${userInfo.userID}`);
       
     } catch(err) {
       console.error('Error marking all notifications as read:', err);
@@ -28,7 +27,7 @@ const Notifications = () => {
 
   const handleClearAll = async () => {
     try {
-      await axios.delete(`${API_BASE}/api/notifications/clear-all/${userInfo.userID}`);
+      await api.delete(`/notifications/clear-all/${userInfo.userID}`);
       setNotifications([]);
     } catch(err) {
       console.error('Error clearing all notifications:', err)

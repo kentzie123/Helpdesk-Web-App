@@ -7,7 +7,7 @@ const { getAllUsers, createUser, updateUser, deleteUser, signUpGenerateConfirmat
 
 router.post('/signup/generate-code', signUpGenerateConfirmationCode)
 router.post('/signup/create-account', createUser);
-router.get('/users', requireRole('Admin'), getAllUsers);
+router.get('/users', requireRole(1), getAllUsers);
 router.patch('/users/:id', verifyToken, updateUser); 
 router.delete('/users/:id', verifyToken, deleteUser);
 

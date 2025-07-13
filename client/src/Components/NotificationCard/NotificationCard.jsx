@@ -1,6 +1,6 @@
 import { useGlobalContext } from "../../Context/Context";
 import "./NotificationCard.css"
-import axios from "axios";
+import api from "../../api/api";
 import { Link } from 'react-router-dom'
 
 const NotificationCard = ({notification}) => {
@@ -13,7 +13,7 @@ const NotificationCard = ({notification}) => {
 
     const handleMarkAsRead = async (notificationId) => {
         try{
-            await axios.patch(`http://localhost:3000/api/notifications/${notificationId}`)
+            await api.patch(`/notifications/${notificationId}`)
         } catch(err){
             console.error("Error marking notification as read:", err);
         }

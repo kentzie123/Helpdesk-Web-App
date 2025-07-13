@@ -15,7 +15,7 @@ const {
 
 // Routes
 router.get('/tickets/by-role', verifyToken, getTicketsByRole);
-router.get('/tickets', requireRole('Admin'), getAllTickets);
+router.get('/tickets', requireRole(1), getAllTickets);
 router.get('/tickets/:ticketId', verifyToken, getTicketById);
 router.post('/tickets', verifyToken, createTicket);
 router.delete('/tickets/:ticketId', verifyToken, deleteTicket);

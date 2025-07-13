@@ -1,7 +1,6 @@
 import './ForgotPasswordS2.css';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { API_BASE } from '../../config/api';
+import api from '../../api/api';
 
 import { useState } from 'react';
 import { useGlobalContext } from '../../Context/Context';
@@ -15,7 +14,7 @@ const Forgot2 = () => {
         e.preventDefault();
         setLoading(true);
         try{
-            const res = await axios.post(`${API_BASE}/api/verify-code`, {
+            const res = await api.post(`/verify-code`, {
                 email: resetCodeEmail,
                 code: resetPassVerificationCode
             })

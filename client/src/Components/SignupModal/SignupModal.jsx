@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../../api/api';
 import { Link, useNavigate } from 'react-router-dom';
 import './SignupModal.css';
-import { API_BASE } from '../../config/api';
 import { useGlobalContext } from '../../Context/Context';
 
 const SignupModal = () => {
@@ -27,7 +26,7 @@ const SignupModal = () => {
     }
 
     try {
-      await axios.post(`${API_BASE}/api/signup/generate-code`, {
+      await api.post(`/signup/generate-code`, {
         fullname,
         email,
         password
@@ -47,6 +46,7 @@ const SignupModal = () => {
 
       setIsSignupRequestCodeSuccess(true);
       setSignupView('verify-email');
+      navigate('/');
     } catch (error) {
       setLoading(false);
       setResponseMessage(error.response?.data?.error || "Signup failed.");

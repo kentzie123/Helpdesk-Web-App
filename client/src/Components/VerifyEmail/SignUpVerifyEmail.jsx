@@ -2,8 +2,7 @@ import './SignUpVerifyEmail.css';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useGlobalContext } from '../../Context/Context';
-import axios from 'axios';
-import { API_BASE } from '../../config/api';
+import api from '../../api/api';
 import { useState } from 'react';
 
 const SignUpVerifyEmail = () => {
@@ -16,7 +15,7 @@ const SignUpVerifyEmail = () => {
         e.preventDefault();
         setLoading(true);
         try{
-            await axios.post(`${API_BASE}/api/signup/create-account`,{
+            await api.post(`/signup/create-account`,{
                 email: signupInfo.email,
                 password: signupInfo.password,
                 fullname: signupInfo.fullname,

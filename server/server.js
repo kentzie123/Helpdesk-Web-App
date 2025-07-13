@@ -6,6 +6,7 @@ const socketIO = require('socket.io');
 const connectDB = require('./config/db');
 const cookieParser = require("cookie-parser");
 
+const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const roleRoutes = require('./routes/rolePrivilegeRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
@@ -35,11 +36,12 @@ const io = socketIO(server, {
 });
 
 // Middleware
-app.use(cors({ origin: '*', credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
 
 // Routes
+app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', roleRoutes);
 app.use('/api', ticketRoutes);

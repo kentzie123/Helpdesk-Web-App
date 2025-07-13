@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { useGlobalContext } from "../../Context/Context";
-
-import axios from "axios";
-import { API_BASE } from "../../config/api";
+import api from "../../api/api";
 
 const RateTicketModal = () => {
     const { setShowRateTicketModal, userInfo, selectedTicket, setLoading } = useGlobalContext();
@@ -13,7 +11,7 @@ const RateTicketModal = () => {
     const handleSubmitTicketRating = async () => {
         try{
             setLoading(true);
-            await axios.post(`${API_BASE}/api/ticket-ratings`, {
+            await api.post(`/ticket-ratings`, {
                 userId: userInfo.userID,
                 ticketId: selectedTicket.ticketId, 
                 rating: selectedRating, 

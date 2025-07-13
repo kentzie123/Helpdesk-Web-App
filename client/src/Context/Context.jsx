@@ -1,7 +1,6 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
-import axios from 'axios';
+import api from '../api/api'
 import socket from '../socket';
-import { API_BASE } from '../config/api';
 
 const AppContext = React.createContext();
 
@@ -65,10 +64,10 @@ const AppProvider = ({ children }) => {
     try {
       await fetchPagePrivilege(Number(user.role));
       const [notificationsRes, roleRes, usersRes, articlesRes] = await Promise.all([
-        axios.get(`${API_BASE}/api/notifications/${user.userID}`),
-        axios.get(`${API_BASE}/api/roles/${user.role}`),
-        axios.get(`${API_BASE}/api/users`),
-        axios.get(`${API_BASE}/api/knowledge-base`)
+        api.get(`/notifications/${user.userID}`),
+        api.get(`/roles/${user.role}`),
+        api.get(`/users`),
+        api.get(`/knowledge-base`)
       ]);
       fetchTickets(user);
       setNotifications(notificationsRes.data.notifications);
@@ -85,7 +84,7 @@ const AppProvider = ({ children }) => {
 
   const fetchPagePrivilege = async (roleId) => {
     try {
-      const res = await axios.get(`${API_BASE}/api/privilege/${roleId}`);
+      const res = await api.get(`/privilege/${roleId}`);
       setPagePrivilege(res.data);
     } catch (err) {
       console.error('Error fetching page privileges:', err);
@@ -94,7 +93,7 @@ const AppProvider = ({ children }) => {
 
   const fetchTickets = async (user) => {
     try {
-      const res = await axios.get(`${API_BASE}/api/tickets/by-role`, {
+      const res = await api.get(`/tickets/by-role`, {
         params: {
           role: user.role,
           fullname: user.fullname,
@@ -109,7 +108,7 @@ const AppProvider = ({ children }) => {
 
   const fetchTicketInfo = async (id) => {
     try {
-      const res = await axios.get(`${API_BASE}/api/tickets/${id}`);
+      const res = await api.get(`/tickets/${id}`);
       setSelectedTicket(res.data);
     } catch (error) {
       console.error('Error fetching ticket info:', error);
@@ -118,7 +117,7 @@ const AppProvider = ({ children }) => {
 
   const fetchArticleInfo = async (slug) => {
     try {
-      const res = await axios.get(`${API_BASE}/api/knowledge-base/${slug}`);
+      const res = await api.get(`/knowledge-base/${slug}`);
       setSelectedArticle(res.data);
     } catch (error) {
       console.error('Error fetching article info:', error);
@@ -127,7 +126,7 @@ const AppProvider = ({ children }) => {
 
   const handleArticleInfoUpdate = async (slug, updatedFields) => {
     try {
-      await axios.put(`${API_BASE}/api/knowledge-base/${slug}`, updatedFields);
+      await api.put(`/knowledge-base/${slug}`, updatedFields);
     } catch (err) {
       console.error('Error updating article info:', err);
     }
@@ -138,7 +137,7 @@ const AppProvider = ({ children }) => {
 
   const deleteTicketCommentHandler = async (id) => {
     try {
-      await axios.delete(`${API_BASE}/api/ticket-comments/${id}`);
+      await api.delete(`/ticket-comments/${id}`);
       setTicketComments(prev => prev.filter((comment)=> comment._id !== id));
     }catch(err){
       console.error('Error deleting ticket comments:', err);

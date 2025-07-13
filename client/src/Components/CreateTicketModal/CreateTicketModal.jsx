@@ -1,8 +1,6 @@
 import { useGlobalContext } from "../../Context/Context"
 import { useState, useRef } from "react";
-import axios from "axios";
-
-import { API_BASE } from "../../config/api";
+import api from "../../api/api";
 
 
 const CreateTicketModal = () => {
@@ -17,7 +15,7 @@ const CreateTicketModal = () => {
 
     const handleCreateTicket = async () => {
         try {
-            const res = await axios.post(`${API_BASE}/api/tickets`, {
+            const res = await api.post('/tickets', {
                 ownerPic: userInfo.profilePic,
                 ownerName: userInfo.fullname,
                 ownerUserId: userInfo.userID,

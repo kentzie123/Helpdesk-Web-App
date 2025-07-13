@@ -2,8 +2,7 @@ import './ArticleInfo.css';
 import { Link, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useGlobalContext } from '../../Context/Context';
-import axios from 'axios';
-import { API_BASE } from '../../config/api';
+import api from '../../api/api';
 
 const ArticleInfo = () => {
     const { slug } = useParams();
@@ -11,6 +10,24 @@ const ArticleInfo = () => {
 
     const [hoveredStar, setHoveredStar] = useState(null);
     const [selectedRating, setSelectedRating] = useState(0);
+
+
+    const handleRatingSubmit = async (rating) => {
+        try {
+            setSelectedRating(rating);
+
+            const res = await api.post(`/article-ratings`, {
+                userID: userInfo.userID,
+                articleId: selectedArticle._id,
+                rating
+            });
+
+            console.log('Rating submitted:', res.data);
+            fetchArticleInfo(slug);
+        } catch (err) {
+            console.error('Error submitting rating:', err);
+        }
+    };
 
     useEffect(() => {
         fetchArticleInfo(slug);    
@@ -22,7 +39,7 @@ const ArticleInfo = () => {
 
         const getUserRatings = async () => {
             try{
-                const res = await axios.get(`${API_BASE}/api/article-ratings/${selectedArticle._id}/${userInfo.userID}`) 
+                const res = await api.get(`/article-ratings/${selectedArticle._id}/${userInfo.userID}`) 
                 setSelectedRating(res.data.rating);
             }catch(err){
                 console.error('Error fetching user rating:', err);
@@ -31,7 +48,7 @@ const ArticleInfo = () => {
 
         const handleArticleView = async () => {
             try {
-                const res = await axios.post(`${API_BASE}/api/article-views`, {
+                const res = await api.post(`/article-views`, {
                     userID: userInfo.userID,
                     _id: selectedArticle._id
                 });
@@ -49,23 +66,6 @@ const ArticleInfo = () => {
         console.log(selectedRating);     
     },[selectedRating])
 
-
-    const handleRatingSubmit = async (rating) => {
-        try {
-            setSelectedRating(rating); // Update local state immediately for UX
-
-            const res = await axios.post(`${API_BASE}/api/article-ratings`, {
-                userID: userInfo.userID,
-                articleId: selectedArticle._id,
-                rating
-            });
-
-            console.log('Rating submitted:', res.data);
-            fetchArticleInfo(slug); // Refresh article info to update average/count
-        } catch (err) {
-            console.error('Error submitting rating:', err);
-        }
-    };
 
     const getRoleById = (id) => {
         switch(id) {
