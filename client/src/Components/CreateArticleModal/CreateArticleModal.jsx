@@ -11,6 +11,7 @@ const CreateArticleModal = () => {
     const [articleTag, setArticleTag] = useState([]);
     const [isPublished, setIsPublished] = useState(false);
     const articleTagInput = useRef();
+    const articleCloseModalBtn = useRef();
 
     const { userInfo, setCreateArticleResponse } = useGlobalContext(); 
 
@@ -29,7 +30,7 @@ const CreateArticleModal = () => {
     const handleSubmit = async () => {
        
         try {
-            const res = await api.post('$/knowledge-base', {
+            const res = await api.post('/knowledge-base', {
                 title,
                 category,
                 content,
@@ -49,6 +50,7 @@ const CreateArticleModal = () => {
             setContent('');
             setArticleTag([]);
             setIsPublished(false);
+            articleCloseModalBtn.current.click();
         } catch (err) {
             setCreateArticleResponse(err.response?.data?.error || "Error creating article");
         }
@@ -58,7 +60,7 @@ const CreateArticleModal = () => {
         <div className="create-article-modal offcanvas offcanvas-end" tabIndex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id="offcanvasRightLabel">Create New Knowledge Base Article</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button ref={articleCloseModalBtn} type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div className="offcanvas-body">
                 <div className='row mt-3'>

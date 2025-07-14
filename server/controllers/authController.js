@@ -2,35 +2,26 @@ const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-
-// User login
+// LOGIN
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
 
-  // Basic input validation
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required' });
   }
 
   try {
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ error: 'Invalid email or password' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid email or password' });
-    }
-
-     // ✅ Generate JWT
     const token = jwt.sign(
-      { userID: user.userID, fullname: user.fullname, email: user.email, role: user.role }, // you can add more fields if needed
+      { userID: user.userID, fullname: user.fullname, email: user.email, role: user.role, profilePic: user.profilePic },
       process.env.JWT_SECRET,
       { expiresIn: '1h' }
     );
 
-    // ✅ Store JWT in HttpOnly cookie
     res.cookie('access', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production', // true if live, false for localhost
@@ -38,21 +29,36 @@ const loginUser = async (req, res) => {
       maxAge: 3600000, // 1 hour in ms
     });
 
-    res.json({ 
-      message: 'Login successful', 
-      user: { 
-        userID: user.userID, 
+    res.json({
+      message: 'Login successful',
+      user: {
+        userID: user.userID,
         profilePic: user.profilePic,
-        email: user.email, 
-        fullname: user.fullname, 
-        role: user.role 
-      } 
+        email: user.email,
+        fullname: user.fullname,
+        role: user.role
+      }
     });
   } catch (err) {
     res.status(500).json({ error: 'Server error during login' });
   }
 };
 
+// LOGOUT
+const logoutUser = (req, res) => {
+  res.clearCookie('access', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict' // must match your login config
+  });
+
+  res.status(200).json({ message: 'Logged out successfully' });
+};
+
+
+
+
 module.exports = {
-    loginUser
-}
+  loginUser,
+  logoutUser
+};

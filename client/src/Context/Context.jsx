@@ -27,6 +27,9 @@ const AppProvider = ({ children }) => {
 
   const [notifications, setNotifications] = useState([]);
   const [popupNotification, setPopupNotification] = useState(null);
+  const [showDeleteNotificationModal, setShowDeleteNotificationModal] = useState(false);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [deleteNotificationToastResponse, setDeleteNotificationToastResponse] = useState('');
 
   const [createTicketRatingResponse, setCreateTicketRatingResponse] = useState('');
   const [createTicketResponse, setCreateTicketResponse] = useState('');
@@ -144,6 +147,15 @@ const AppProvider = ({ children }) => {
     }
   }
 
+  const deleteNotificationHandler = async (id) => {
+    try {
+      const res = await api.delete(`/notifications/${id}`);
+      setNotifications(prev => prev.filter((notif) => notif.notificationId !== id));
+      setDeleteNotificationToastResponse(res.data.message);   
+    } catch(err){
+      console.error('Error deleting notification:', err);
+    }
+  }
  
   //========================= PRIVILEGE CHECK =========================
   const canView = useCallback((pageName) => {
@@ -329,7 +341,11 @@ const AppProvider = ({ children }) => {
       selectedTicketComment, setSelectedTicketComment,
       showDeleteTicketCommentModal, setShowDeleteTicketCommentModal,
       deleteTicketCommentHandler,
-      ticketComments, setTicketComments
+      ticketComments, setTicketComments,
+      showDeleteNotificationModal, setShowDeleteNotificationModal,
+      deleteNotificationHandler,
+      selectedNotification, setSelectedNotification,
+      deleteNotificationToastResponse, setDeleteNotificationToastResponse
     }}>
       {children}
     </AppContext.Provider>

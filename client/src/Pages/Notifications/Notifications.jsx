@@ -1,6 +1,6 @@
 import NotificationCard from "../../Components/NotificationCard/NotificationCard"
 import { useGlobalContext } from "../../Context/Context";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import api from "../../api/api";
 
 import './Notifications.css';
@@ -14,7 +14,9 @@ const Notifications = () => {
   ? notifications
   : notifications.filter(notification => notification.status === filterBy);
 
-  const unreadCount = notifications.filter(n => n.status === 'Unread').length;
+  const unreadCount = useMemo(()=>{
+    return notifications.filter(n => n.status === 'Unread').length
+  });
 
   const handleMarkAllRead = async () => {
     try {

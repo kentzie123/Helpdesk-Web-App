@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import api from '../../api/api';
 import './Login.css';
 import { Link, useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { useGlobalContext } from '../../Context/Context';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setUserInfo, setRolePrivilege } = useGlobalContext();
+  const { userInfo, setUserInfo, setRolePrivilege } = useGlobalContext();
   const [isPassHidden, setIsPassHidden] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -29,8 +29,8 @@ const Login = () => {
       setPassword('');
       setResponseMessage(loginUserResponse.data.message);
       setUserInfo(loginUserResponse.data.user);
-      const getRole = await api.get(`/roles/${loginUserResponse.data.user.role}`);
-      setRolePrivilege(getRole.data);
+      console.log(loginUserResponse.data.user);
+      
       navigate('/tickets');
     } catch (error) {
       if (error.response) {
@@ -40,6 +40,22 @@ const Login = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const fetchRolePrivilege = async () => {
+      try {
+        const getRole = await api.get(`/roles/${userInfo.role}`);
+        setRolePrivilege(getRole.data);
+      } catch (err) {
+        console.error('Error fetching role privilege:', err);
+      }
+    };
+
+    if (userInfo && userInfo.role) {
+      fetchRolePrivilege();
+    }
+  }, [userInfo]);
+
 
   return (
     <div className="vh-100 d-flex justify-content-center align-items-center bg-light px-3">

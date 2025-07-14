@@ -69,20 +69,25 @@ function App() {
     showRateTicketModal,
     showDeleteTicketCommentModal,setShowDeleteTicketCommentModal,
     deleteTicketCommentHandler,
-    selectedTicketComment
+    selectedTicketComment,
+    showDeleteNotificationModal, setShowDeleteNotificationModal,
+    deleteNotificationHandler,
+    selectedNotification,
+    deleteNotificationToastResponse, setDeleteNotificationToastResponse
   } = useGlobalContext();
 
   // Fetch current user on initial load
   useEffect(() => {
-
     const fetchCurrentUser = async () => {
     try {
       const res = await api.get('/me');
-  
       setUserInfo(res.data.user);
+      console.log('Current user:', res.data.user);
+      
       setLoading(false);
     } catch (err) {
-      console.log('User not logged in or session expired');
+      navigate('/');
+      console.log('Session expired');
       setLoading(false);
     }
   };
@@ -110,6 +115,7 @@ function App() {
 
   return (
     <div className="position-relative">
+
       {/* Modals */}
       {deleteArticleModal && <DeleteArticleModal />}
       {deleteTicketModal && <DeleteTicketModal />}
@@ -121,6 +127,16 @@ function App() {
           deleteHandler={deleteTicketCommentHandler}
           selectedItemId={selectedTicketComment._id}
           selectedItemContent={selectedTicketComment.comment}
+        />
+      }
+      {showDeleteNotificationModal && 
+        <DeleteModal 
+          setShowModal={setShowDeleteNotificationModal} 
+          title={'Delete Notification'} 
+          message={'Are you sure you want to delete this notification? This will permanently remove the notification.'}
+          deleteHandler={deleteNotificationHandler}
+          selectedItemId={selectedNotification.notificationId}
+          selectedItemContent={selectedNotification.message}
         />
       }
 
@@ -170,15 +186,54 @@ function App() {
           message="Ticket deleted successfully"
         />
       )}
+      {deleteNotificationToastResponse && (
+        <ToastNotification
+          state={deleteNotificationToastResponse}
+          setState={setDeleteNotificationToastResponse}
+          message="Notification deleted successfully"
+        />
+      )}
+
+
 
       {/* Global Notification */}
       {popupNotification && <NotificationToastResponse />}
       
-      {isRequestCodeSuccess && <OuterNotificationToast state={isRequestCodeSuccess} setState={setIsRequestCodeSuccess} title={'Request code sent'} content={'Please check your email for the password reset code.'}/>}
-      {isResetPasswordSucces && <OuterNotificationToast state={isResetPasswordSucces} setState={setIsResetPasswordSuccess} title={'Password reset successful'} content={'Your password has been reset. You can now sign in with your new password.'}/>}
+      {isRequestCodeSuccess && 
+        <OuterNotificationToast 
+          state={isRequestCodeSuccess} 
+          setState={setIsRequestCodeSuccess} 
+          title={'Request code sent'} 
+          content={'Please check your email for the password reset code.'}
+        />
+      }
 
-      {isSignupRequestCodeSuccess && <OuterNotificationToast state={isSignupRequestCodeSuccess} setState={setIsSignupRequestCodeSuccess} title={'Request code sent'} content={'Please check your email for the password reset code.'}/>}
-      {isEmailVerified && <OuterNotificationToast state={isEmailVerified} setState={setIsEmailVerified} title={'Email verified'} content={'Your account has been successfully verified. You can now sign in.'}/>}
+      {isResetPasswordSucces && 
+        <OuterNotificationToast 
+          state={isResetPasswordSucces} 
+          setState={setIsResetPasswordSuccess} 
+          title={'Password reset successful'} 
+          content={'Your password has been reset. You can now sign in with your new password.'}
+        />
+      }
+
+      {isSignupRequestCodeSuccess && 
+        <OuterNotificationToast 
+          state={isSignupRequestCodeSuccess} 
+          setState={setIsSignupRequestCodeSuccess} 
+          title={'Request code sent'} 
+          content={'Please check your email for the password reset code.'}
+        />
+      }
+
+      {isEmailVerified && 
+        <OuterNotificationToast
+          state={isEmailVerified} 
+          setState={setIsEmailVerified} 
+          title={'Email verified'} 
+          content={'Your account has been successfully verified. You can now sign in.'}
+        />
+      }
 
       {/* Loader */}
       {loading && <LoadingSpinner/>}

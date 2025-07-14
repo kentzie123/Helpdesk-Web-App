@@ -56,7 +56,7 @@ const signUpGenerateConfirmationCode = async (req, res) => {
 
 
 // Create a new user
-const createUser = async (req, res) => {
+const SignUpCreateUser = async (req, res) => {
   const { email, password, fullname, code } = req.body;
 
   if (!email || !password || !fullname) {
@@ -185,7 +185,7 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
   getAllUsers,
-  createUser,
+  SignUpCreateUser,
   updateUser,
   deleteUser,
   signUpGenerateConfirmationCode

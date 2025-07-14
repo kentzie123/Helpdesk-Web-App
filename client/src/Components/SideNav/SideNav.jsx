@@ -1,5 +1,6 @@
 import { useGlobalContext } from '../../Context/Context';
 import { NavLink, useNavigate } from 'react-router-dom';
+import api from '../../api/api';
 import appLogo from '../../assets/imgs/appLogo.png';
 import './SideNav.css';
 
@@ -7,19 +8,24 @@ const SideNav = () => {
   const navigate = useNavigate();
   const {
     navOpen,
-    setUserInfo,
-    setTickets,
-    pagePrivilege,
-    setPagePrivilege,
-    canView
+    canView,
+    setUserInfo
   } = useGlobalContext();
 
-  const handleLogout = () => {
-    setUserInfo(null);
-    setPagePrivilege([]);
-    setTickets([]);
-    localStorage.removeItem('user');
-    navigate('/');
+
+
+  
+  const handleLogout = async () => {
+    try {
+      const res = await api.post('/logout');
+      console.log(res.data.message);
+      
+    } catch (err) {
+      console.error('Logout failed:', err);
+    }
+    setUserInfo({});
+    navigate('/')
+
   };
 
   

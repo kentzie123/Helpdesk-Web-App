@@ -4,7 +4,7 @@ import api from "../../api/api";
 import { Link } from 'react-router-dom'
 
 const NotificationCard = ({notification}) => {
-    const { formatNotificationDate } = useGlobalContext();
+    const { formatNotificationDate, setShowDeleteNotificationModal, setSelectedNotification } = useGlobalContext();
     const {title, message, status, createdAt, type, ticketId} = notification;
     const notificationType = {
         'Ticket Assignment': 'bi-ticket-perforated bg-primary-subtle text-primary',
@@ -42,7 +42,9 @@ const NotificationCard = ({notification}) => {
                             <button type="button" disabled className="btn btn-light text-secondary"><i className="bi bi-check2"></i></button>
                         )
                     }
-                    <button type="button" className="btn btn-light text-danger"><i className="bi bi-trash"></i></button>
+
+                    <button onClick={()=> {setShowDeleteNotificationModal(true); setSelectedNotification(notification) }} type="button" className="btn btn-light text-danger"><i className="bi bi-trash"></i></button>
+
                     <Link to={`/ticket/${ticketId}`} onClick={()=>{handleMarkAsRead(notification.notificationId)}}>
                         <button type="button" className="btn btn-light text-primary">
                             Info <i className="bi bi-arrow-right-short"></i>
