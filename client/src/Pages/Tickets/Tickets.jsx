@@ -6,7 +6,15 @@ import CreateTicketModal from '../../Components/CreateTicketModal/CreateTicketMo
 
 const Tickets = () => {
   const { tickets } = useGlobalContext();
-  
+  const [ selectedTickets, setSelectedTickets ] = useState([]);
+
+
+  const handleToggleTicketSelection = (ticketId) => {
+    setSelectedTickets(prev => 
+      prev.includes(ticketId) ? prev.filter((id) => id !== ticketId)
+      : [...prev, ticketId]
+    )
+  }
   
   const [filters, setFilters] = useState({
     search: '',
@@ -69,7 +77,7 @@ const Tickets = () => {
               />
             </div>
             <div className='col-md-3'>
-              <button className='d-flex align-items-center gap-1 btn btn-success w-100 h-100' type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
+              <button className='d-flex align-items-center gap-1 btn btn-primary w-100 h-100' type="button" data-bs-toggle="offcanvas" data-bs-target="#staticBackdrop" aria-controls="staticBackdrop">
                 <i className="bi bi-plus-lg"></i>
                 <span>Create ticket</span>
               </button>
@@ -80,7 +88,9 @@ const Tickets = () => {
         <div className='container-fluid'>
           <div className='tickets-container border border-secondary rounded m-1 row p-2 g-3 overflow-y-scroll'>
             {filteredTickets.map((ticket) => (
-              <TicketCard key={ticket.ticketId} ticket={ticket} />
+              <div className='ticket-container p-1 col-lg-3 col-md-6 col-12' key={ticket.ticketId} onClick={()=> {handleToggleTicketSelection(ticket.ticketId);}}>
+                <TicketCard isSelected={selectedTickets.includes(ticket.ticketId)} ticket={ticket} />
+              </div>    
             ))}
             
             {filteredTickets.length === 0 && (

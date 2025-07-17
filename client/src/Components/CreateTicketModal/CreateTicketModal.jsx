@@ -4,7 +4,7 @@ import api from "../../api/api";
 
 
 const CreateTicketModal = () => {
-    const { userInfo, users, setCreateTicketResponse, createTicketResponse } = useGlobalContext();
+    const { userInfo, users, setCreateTicketResponse } = useGlobalContext();
     const [ subject, setSubject ] = useState('');
     const [ description, setDescription ] = useState('');
     const [ category, setCategory ] = useState('');
@@ -46,7 +46,7 @@ const CreateTicketModal = () => {
     }
 
     return ( 
-        <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel" data-bs-backdrop="static">
+        <div className="offcanvas offcanvas-end" tabIndex="-1" id="staticBackdrop" aria-labelledby="offcanvasRightLabel">
             <div className="offcanvas-header">
                 <h5 className="offcanvas-title" id="offcanvasRightLabel">Create ticket</h5>
                 <button type="button" ref={createTicketClsBtn} className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -111,7 +111,7 @@ const CreateTicketModal = () => {
                     </div>
                 </div>
                 <div>
-                    <button onClick={handleCreateTicket} type='button' className='btn btn-success w-100'>Create</button>
+                    <button onClick={handleCreateTicket} type='button' className='btn btn-primary w-100'>Create</button>
                 </div>
             </div>
         </div> 

@@ -10,9 +10,11 @@ const AppProvider = ({ children }) => {
 
   const [users, setUsers] = useState([]);
   const [userInfo, setUserInfo] = useState({});
+  const [selectedUser, setSelectedUser] = useState(null);
   const [rolePrivilege, setRolePrivilege] = useState({});
   const [pagePrivilege, setPagePrivilege] = useState([]);
   const [privilegeLoaded, setPrivilegeLoaded] = useState(false);
+  const [showDeleteUserModal, setShowDeleteUserModal] = useState(false);
 
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
@@ -154,6 +156,26 @@ const AppProvider = ({ children }) => {
       setDeleteNotificationToastResponse(res.data.message);   
     } catch(err){
       console.error('Error deleting notification:', err);
+    }
+  }
+
+  const deleteUserHandler = async (userId) => {
+    try {
+      const res = await api.delete(`/users/${userId}`);
+      setUsers(prev => prev.filter((user)=> user.userID != userId));
+      setSelectedUser(null);
+    } catch(err){
+      console.error('Error deleting user:', err);
+    }
+  };
+
+  const deleteSelectedTickets = async (ticketIds) => {
+    try {
+      const res = await api.delete(`/tickets/delete-tickets`, { data: { ticketIds } });
+      setTickets(prev => prev.filter(ticket => !ticketIds.includes(ticket._id)));
+    } catch (err) {
+      console.error('Error deleting selected tickets:', err);
+      return 'Error deleting tickets';
     }
   }
  
@@ -345,7 +367,11 @@ const AppProvider = ({ children }) => {
       showDeleteNotificationModal, setShowDeleteNotificationModal,
       deleteNotificationHandler,
       selectedNotification, setSelectedNotification,
-      deleteNotificationToastResponse, setDeleteNotificationToastResponse
+      deleteNotificationToastResponse, setDeleteNotificationToastResponse,
+      selectedUser, setSelectedUser,
+      showDeleteUserModal, setShowDeleteUserModal,
+      deleteUserHandler,
+      deleteSelectedTickets
     }}>
       {children}
     </AppContext.Provider>

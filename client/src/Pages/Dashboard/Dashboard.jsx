@@ -133,7 +133,7 @@ const Dashboard = () => {
             
             
             <div className="col-12 col-lg-6 p-3">
-              <div className='border shadow-sm rounded-3 p-3' style={{minHeight: '13a0px'}}>
+              <div className='border shadow-sm rounded-3 p-3' style={{minHeight: '130px'}}>
                 <h5 className='mb-3'>Recent Activity</h5>
                 <div className='recent-activity-container d-flex flex-column gap-3 p-1'>
                   {

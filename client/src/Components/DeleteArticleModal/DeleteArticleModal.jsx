@@ -36,7 +36,7 @@ const DeleteArticleModal = () => {
                     <div className="f-size-16 fw-medium">Delete Knowledge Article</div>
                 </div>
                 <div className="text-muted f-size-14">
-                    Are you sure you want to delete this knowledge base article? This will permanently remove the article and all associated data.
+                    Are you sure you want to delete this knowledge base article? This will permanently remove the article.
                 </div>
                 <div className="fw-bold f-size-14">{`"${selectedArticle.title}"`}</div>
                 <div className="fw-bold text-danger f-size-14">This action cannot be undone.</div>

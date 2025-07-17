@@ -2,12 +2,11 @@ import './Users.css';
 import api from '../../api/api'
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useGlobalContext } from '../../Context/Context';
-
-
+import CreateUserModal from '../../Components/CreateUserModal/CreateUserModal';
+import EditUserModal from '../../Components/EditUserModal/EditUserModal';
 
 const Users = () => {
-  const { userInfo } = useGlobalContext();
-  const [ allUsers, setAllUsers ] = useState([]);
+  const { userInfo, setSelectedUser, setShowDeleteUserModal, users, setUsers } = useGlobalContext();
   const [ currentPage, setCurrentPage ] = useState(1);
   const [ usersPerPage, setUsersPerPage ] = useState(10);
   const [userFilters, setUserFilters] = useState({
@@ -23,16 +22,16 @@ const Users = () => {
   }
 
   const totalStaff = useMemo(() => {
-    return allUsers.filter((user)=> (
+    return users.filter((user)=> (
       user.roleName === 'Staff'
     )).length
-  }, [allUsers]);
+  }, [users]);
 
   const totalClient = useMemo(() => {
-    return allUsers.filter((user)=> (
+    return users.filter((user)=> (
       user.roleName === 'Client'
     )).length
-  }, [allUsers]);
+  }, [users]);
 
   
 
@@ -42,7 +41,7 @@ const Users = () => {
     (async () => {
       try {
         const res = await api.get('/users');
-        setAllUsers(res.data);
+        setUsers(res.data);
         setCurrentPage(1);           
       } catch (err) {
         console.error('Error fetching all users:', err);
@@ -51,7 +50,7 @@ const Users = () => {
   }, [userInfo, userFilters]);
 
   const filteredUsers = useMemo(() => {
-    return allUsers
+    return users
       .filter((user) =>
         user.fullname.toLowerCase().includes(userFilters.search.toLowerCase()) ||
         user.email.toLowerCase().includes(userFilters.search.toLowerCase())
@@ -59,7 +58,7 @@ const Users = () => {
       .filter((user) =>
         userFilters.role === 'All Roles' || user.roleName === userFilters.role
       );
-  }, [allUsers, userFilters]);
+  }, [users, userFilters]);
 
   const currentUsers = useMemo(() => {
     const start = (currentPage - 1) * usersPerPage;
@@ -87,34 +86,40 @@ const Users = () => {
       <h4>Users Management</h4>
       <div className='container-fluid mt-4'>
         <div className='row border rounded shadow-sm py-4 px-3'>
-          <div className='col-12 col-md-6 position-relative'> 
+          <div className='col-12 col-md-5 position-relative'> 
             <i className="bi bi-search icon-bold text-secondary position-absolute top-50 translate-middle ms-4"></i>
             <input value={userFilters.search} onChange={(e)=> setUserFilters({...userFilters, search: e.target.value})} type="text" className='form-control ps-5 f-size-14' placeholder='Search users by name and email'/>
           </div>
-          <div className='col-12 col-md-6 mt-sm-3 mt-md-0 row'>
-            <div className='col-12 col-md-9 d-flex gap-2 align-items-center'>
-              <i className="bi bi-funnel icon-bold text-secondary"></i>
-              <div className="dropdown w-100">
-                <button className="btn btn-light border dropdown-toggle d-flex justify-content-between align-items-center w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  {userFilters.role}
-                </button>
-                <ul className="dropdown-menu w-100">
-                  <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'All Roles'}) }>All Roles</a></li>
-                  <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Admin'}) }>Admin</a></li>
-                  <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Staff'}) }>Staff</a></li>
-                  <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Client'}) }>Client</a></li>
-                </ul>
+          <div className='col-12 col-md-7'>
+            <div className="row mt-sm-3 mt-md-0">
+              <div className='col-12 col-md-8 d-flex gap-2 align-items-center'>
+                <i className="bi bi-funnel icon-bold text-secondary"></i>
+                <div className="dropdown w-100">
+                  <button className="btn btn-light border dropdown-toggle d-flex justify-content-between align-items-center w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {userFilters.role}
+                  </button>
+                  <ul className="dropdown-menu w-100">
+                    <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'All Roles'}) }>All Roles</a></li>
+                    <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Admin'}) }>Admin</a></li>
+                    <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Staff'}) }>Staff</a></li>
+                    <li><a className="dropdown-item" onClick={()=> setUserFilters({...userFilters, role: 'Client'}) }>Client</a></li>
+                  </ul>
+                </div>
               </div>
+              <div className='col-12 col-md-4 mt-3 mt-md-0'>
+                <button type='button' className='btn btn-primary w-100' data-bs-toggle="offcanvas" data-bs-target="#createUserModal" aria-controls="offcanvasRight">
+                  <i className='bi bi-plus me-2'></i>
+                  <span>Add User</span>
+                </button>
+              </div>
+              
             </div>
-            <button type='button' className='btn btn-primary col-12 col-md-3 mt-3 mt-md-0'>
-              <i className='bi bi-plus me-2'></i>
-              <span>Add User</span>
-            </button>
           </div>
         </div>
       </div>
       
-
+      <CreateUserModal/>
+    
       <div className="row mt-4">
         <div className="col-12 col-lg-4">
           <div className="d-flex align-items-center gap-3 p-4 border shadow-sm rounded-3">
@@ -123,7 +128,7 @@ const Users = () => {
             </div>
             <div>
               <h5 className='f-size-14 text-muted m-0'>Total Users</h5>
-              <h4 className='m-0'>{allUsers.length}</h4>
+              <h4 className='m-0'>{users.length}</h4>
             </div>
           </div>
         </div>
@@ -191,10 +196,11 @@ const Users = () => {
                     </div>
                   </td>
                   <td>
-                    <button type="button" className="btn btn-light me-2">
+                    <button onClick={()=> setSelectedUser(user)} type="button" className="btn btn-light me-2" data-bs-toggle="offcanvas" data-bs-target="#updateUserModal" aria-controls="offcanvasRight">
                       <i className="bi bi-pencil-square icon-bold" />
                     </button>
-                    <button type="button" className="btn btn-light">
+                    <EditUserModal/>
+                    <button onClick={()=> {setShowDeleteUserModal(true); setSelectedUser(user)}} type="button" className="btn btn-light">
                       <i className="bi bi-trash3 text-danger icon-bold" />
                     </button>
                   </td>

@@ -1,4 +1,13 @@
-/* styles.css or your global stylesheet */
+.ticket {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ticket:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
 
 .status-open {
   background-color: #e2e3e5; /* Light gray */

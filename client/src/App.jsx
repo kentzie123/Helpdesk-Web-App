@@ -73,7 +73,10 @@ function App() {
     showDeleteNotificationModal, setShowDeleteNotificationModal,
     deleteNotificationHandler,
     selectedNotification,
-    deleteNotificationToastResponse, setDeleteNotificationToastResponse
+    deleteNotificationToastResponse, setDeleteNotificationToastResponse,
+    showDeleteUserModal, setShowDeleteUserModal,
+    deleteUserHandler,
+    selectedUser
   } = useGlobalContext();
 
   // Fetch current user on initial load
@@ -137,6 +140,16 @@ function App() {
           deleteHandler={deleteNotificationHandler}
           selectedItemId={selectedNotification.notificationId}
           selectedItemContent={selectedNotification.message}
+        />
+      }
+      {showDeleteUserModal && 
+        <DeleteModal 
+          setShowModal={setShowDeleteUserModal} 
+          title={'Delete User'} 
+          message={'Are you sure you want to delete this user? This will permanently remove the user.'}
+          deleteHandler={deleteUserHandler}
+          selectedItemId={selectedUser.userID}
+          selectedItemContent={selectedUser.fullname}
         />
       }
 

@@ -10,7 +10,8 @@ const {
   createTicket,
   updateTicket,
   deleteTicket,
-  getTicketsByRole
+  getTicketsByRole,
+  deleteSelectedTickets
 } = require('../controllers/ticketController');
 
 // Routes
@@ -19,6 +20,7 @@ router.get('/tickets', requireRole(1), getAllTickets);
 router.get('/tickets/:ticketId', verifyToken, getTicketById);
 router.post('/tickets', verifyToken, createTicket);
 router.delete('/tickets/:ticketId', verifyToken, deleteTicket);
+router.delete('/tickets/delete-tickets', verifyToken, deleteSelectedTickets);
 router.patch('/tickets/:ticketId', verifyToken, updateTicket);
 
 
