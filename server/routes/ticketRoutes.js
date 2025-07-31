@@ -11,7 +11,8 @@ const {
   updateTicket,
   deleteTicket,
   getTicketsByRole,
-  deleteSelectedTickets
+  deleteSelectedTickets,
+  sayHi
 } = require('../controllers/ticketController');
 
 // Routes
@@ -19,8 +20,8 @@ router.get('/tickets/by-role', verifyToken, getTicketsByRole);
 router.get('/tickets', requireRole(1), getAllTickets);
 router.get('/tickets/:ticketId', verifyToken, getTicketById);
 router.post('/tickets', verifyToken, createTicket);
+router.delete('/tickets/bulk-delete', verifyToken, deleteSelectedTickets); // this go first before /delete/:ticketId because :ticketId might think bulk-delete is an ticketId
 router.delete('/tickets/:ticketId', verifyToken, deleteTicket);
-router.delete('/tickets/delete-tickets', verifyToken, deleteSelectedTickets);
 router.patch('/tickets/:ticketId', verifyToken, updateTicket);
 
 

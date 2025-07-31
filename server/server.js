@@ -1,32 +1,19 @@
+// Load environment variables
 require('dotenv').config();
-const cors = require('cors');
+
+// Core modules and configuration
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require("cookie-parser");
 const http = require('http');
 const socketIO = require('socket.io');
 const connectDB = require('./config/db');
-const cookieParser = require("cookie-parser");
 
-const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
-const roleRoutes = require('./routes/rolePrivilegeRoutes');
-const ticketRoutes = require('./routes/ticketRoutes');
-const notificationRoutes = require('./routes/notificationRoutes');
-const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
-const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
-const articleViewsRoutes = require('./routes/articleViewsRoutes');
-const articleRatingsRoutes = require('./routes/articleRatingRoute');
-const confirmationCodeRoutes = require('./routes/confirmationCodeRoutes');
-const ticketRatingsRoutes = require('./routes/ticketRatingRoutes')
-const ticketCommentsRoutes = require('./routes/ticketCommentRoutes');
-
-const Ticket = require('./models/tickets');
-const Notification = require('./models/notification');
-const Article = require('./models/knowledgeBase');
-
-const { log } = require('console');
-
+// Initialize Express app and server
 const app = express();
 const server = http.createServer(app);
+
+// Socket.IO setup
 const io = socketIO(server, {
   cors: {
     origin: '*',
@@ -40,7 +27,21 @@ app.use(cors({ origin: process.env.CLIENT_ORIGIN || 'http://localhost:5173', cre
 app.use(express.json());
 app.use(cookieParser());
 
-// Routes
+// Route imports
+const authRoutes = require('./routes/authRoutes');
+const userRoutes = require('./routes/userRoutes');
+const roleRoutes = require('./routes/rolePrivilegeRoutes');
+const ticketRoutes = require('./routes/ticketRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
+const pagePrivilegeRoutes = require('./routes/pagePrivilegeRoutes');
+const knowledgeBaseRoutes = require('./routes/knowledgeBaseRoutes');
+const articleViewsRoutes = require('./routes/articleViewsRoutes');
+const articleRatingsRoutes = require('./routes/articleRatingRoute');
+const confirmationCodeRoutes = require('./routes/confirmationCodeRoutes');
+const ticketRatingsRoutes = require('./routes/ticketRatingRoutes');
+const ticketCommentsRoutes = require('./routes/ticketCommentRoutes');
+
+// Route usage
 app.use('/api', authRoutes);
 app.use('/api', userRoutes);
 app.use('/api', roleRoutes);
@@ -52,105 +53,103 @@ app.use('/api', articleViewsRoutes);
 app.use('/api', articleRatingsRoutes);
 app.use('/api', confirmationCodeRoutes);
 app.use('/api', ticketRatingsRoutes);
-app.use('/api', ticketCommentsRoutes)
+app.use('/api', ticketCommentsRoutes);
 
-// Connect to DB and watch changes
+app.post('/api/test', (req, res) => {
+  console.log("✅ /api/test hit");
+  res.json({ status: "OK" });
+});
+
+// Models for watching changes
+const Ticket = require('./models/tickets');
+const Notification = require('./models/notification');
+const Article = require('./models/knowledgeBase');
+
+// Connect to DB and set up change streams
 connectDB().then(() => {
   const ticketChangeStream = Ticket.watch();
   const notificationChangeStream = Notification.watch();
   const articleChangeStream = Article.watch();
 
-
-  
-  // Article Change Stream
+  // Watch Article changes
   articleChangeStream.on('change', (change) => {
-      console.log('🟡 Article Change detected:', change.operationType);
-      if(change.operationType === 'insert'){
-        const newArticle = change.fullDocument;
-        io.emit('articleCreated', newArticle);
-        console.log('🟢 Emitted articleCreated');
-      }
-      if (change.operationType === 'update') {
-      // By default, update only returns updated fields, not the full doc
-      // So we fetch the full document manually using _id
-      Article.findById(change.documentKey._id).then((updatedArticle) => {
-        if (updatedArticle) {
-          io.emit('articleUpdated', updatedArticle);
-          console.log('🔵 Emitted articleUpdated');
-        }
-      }).catch(err => console.error('Error fetching updated ticket:', err));
+    console.log('🟡 Article Change detected:', change.operationType);
+
+    if (change.operationType === 'insert') {
+      io.emit('articleCreated', change.fullDocument);
+      console.log('🟢 Emitted articleCreated');
     }
-    // Delete
+
+    if (change.operationType === 'update') {
+      Article.findById(change.documentKey._id)
+        .then(updatedArticle => {
+          if (updatedArticle) {
+            io.emit('articleUpdated', updatedArticle);
+            console.log('🔵 Emitted articleUpdated');
+          }
+        })
+        .catch(err => console.error('Error fetching updated article:', err));
+    }
+
     if (change.operationType === 'delete') {
-      const deletedId = change.documentKey._id;
-      io.emit('articleDeleted', deletedId);
+      io.emit('articleDeleted', change.documentKey._id);
       console.log('🔴 Emitted articleDeleted');
     }
-  })
+  });
 
-
-
-  // Ticket Change Stream
+  // Watch Ticket changes
   ticketChangeStream.on('change', (change) => {
-
     console.log('🟡 Ticket Change detected:', change.operationType);
-    // Create
+
     if (change.operationType === 'insert') {
-      const newTicket = change.fullDocument;
-      io.emit('ticketCreated', newTicket);
+      io.emit('ticketCreated', change.fullDocument);
       console.log('🟢 Emitted ticketCreated');
     }
-    // Update
+
     if (change.operationType === 'update') {
-      // By default, update only returns updated fields, not the full doc
-      // So we fetch the full document manually using _id
-      Ticket.findById(change.documentKey._id).then((updatedTicket) => {
-        if (updatedTicket) {
-          io.emit('ticketUpdated', updatedTicket);
-          console.log('🔵 Emitted ticketUpdated');
-        }
-      }).catch(err => console.error('Error fetching updated ticket:', err));
+      Ticket.findById(change.documentKey._id)
+        .then(updatedTicket => {
+          if (updatedTicket) {
+            io.emit('ticketUpdated', updatedTicket);
+            console.log('🔵 Emitted ticketUpdated');
+          }
+        })
+        .catch(err => console.error('Error fetching updated ticket:', err));
     }
-    // Delete
+
     if (change.operationType === 'delete') {
-      const deletedId = change.documentKey._id;
-      io.emit('ticketDeleted', deletedId);
+      io.emit('ticketDeleted', change.documentKey._id);
       console.log('🔴 Emitted ticketDeleted');
     }
   });
 
-
-
-  // Notification Change Stream
+  // Watch Notification changes
   notificationChangeStream.on('change', (change) => {
-    console.log('Notification change detected:', change.operationType);
+    console.log('🟡 Notification Change detected:', change.operationType);
 
-    // Create
-    if(change.operationType === 'insert'){
-      const newNotification = change.fullDocument;
-      io.emit('notificationCreated', newNotification);
-      console.log('Emitted notificationCreated');
+    if (change.operationType === 'insert') {
+      io.emit('notificationCreated', change.fullDocument);
+      console.log('🟢 Emitted notificationCreated');
     }
 
-    // Update
-    if(change.operationType === 'update'){
-      Notification.findById(change.documentKey._id).then((updatedNotification) => {
-        if(updatedNotification){
-          io.emit('notificationUpdated', updatedNotification);
-          console.log('Emitted notificationUpdated');
-        }
-      })
+    if (change.operationType === 'update') {
+      Notification.findById(change.documentKey._id)
+        .then(updatedNotification => {
+          if (updatedNotification) {
+            io.emit('notificationUpdated', updatedNotification);
+            console.log('🔵 Emitted notificationUpdated');
+          }
+        });
     }
 
-    // Delete
-    if(change.operationType === 'delete'){
-      const notificationDeletedId = change.documentKey._id;
-      io.emit('notificationDeleted', notificationDeletedId)
+    if (change.operationType === 'delete') {
+      io.emit('notificationDeleted', change.documentKey._id);
+      console.log('🔴 Emitted notificationDeleted');
     }
-  })
+  });
 });
 
-// Socket.IO
+// Handle socket connections
 io.on('connection', (socket) => {
   console.log('📡 Client connected:', socket.id);
 
@@ -159,6 +158,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Start server
-const PORT = process.env.PORT || 3000;
+// Start the server
+const PORT = process.env.PORT || 8000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));

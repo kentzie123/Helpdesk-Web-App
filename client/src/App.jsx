@@ -76,7 +76,10 @@ function App() {
     deleteNotificationToastResponse, setDeleteNotificationToastResponse,
     showDeleteUserModal, setShowDeleteUserModal,
     deleteUserHandler,
-    selectedUser
+    selectedUser,
+    showDeleteSelectedTicketsModal, setShowDeleteSelectedTicketsModal,
+    deleteSelectedTicketsHandler,
+    selectedTickets
   } = useGlobalContext();
 
   // Fetch current user on initial load
@@ -152,6 +155,16 @@ function App() {
           selectedItemContent={selectedUser.fullname}
         />
       }
+      {showDeleteSelectedTicketsModal && 
+        <DeleteModal 
+          setShowModal={setShowDeleteSelectedTicketsModal} 
+          title={'Delete Selected Tickets'} 
+          message={'Are you sure you want to delete this selected tickets? This will permanently remove the tickets.'}
+          deleteHandler={deleteSelectedTicketsHandler}
+          selectedItemId={selectedTickets}
+          selectedItemContent={`Selected Tickets: ${selectedTickets.length}`}
+        />
+      }
 
       {/* Rate Ticket Modal */}
       {showRateTicketModal && <RateTicketModal/>}
@@ -164,25 +177,18 @@ function App() {
           message="Created ticket successfully"
         />
       )}
-      {editTicketResponse && (
-        <ToastNotification
-          state={editTicketResponse}
-          setState={setEditTicketResponse}
-          message="Ticket updated successfully"
-        />
-      )}
-      {changeTicketStatusResponse && selectedTicket && (
-        <ToastNotification
-          state={changeTicketStatusResponse}
-          setState={setChangeTicketStatusResponse}
-          message={`Ticket status changed successfully`}
-        />
-      )}
       {createArticleResponse && (
         <ToastNotification
           state={createArticleResponse}
           setState={setCreateArticleResponse}
           message="Created article successfully"
+        />
+      )}
+      {editTicketResponse && (
+        <ToastNotification
+          state={editTicketResponse}
+          setState={setEditTicketResponse}
+          message="Ticket updated successfully"
         />
       )}
       {deleteArticleResponse && (
@@ -196,7 +202,7 @@ function App() {
         <ToastNotification
           state={deleteTicketResponse}
           setState={setDeleteTicketResponse}
-          message="Ticket deleted successfully"
+          message="Tickets deleted successfully"
         />
       )}
       {deleteNotificationToastResponse && (
@@ -206,7 +212,13 @@ function App() {
           message="Notification deleted successfully"
         />
       )}
-
+      {changeTicketStatusResponse && selectedTicket && (
+        <ToastNotification
+          state={changeTicketStatusResponse}
+          setState={setChangeTicketStatusResponse}
+          message={`Ticket status changed successfully`}
+        />
+      )}
 
 
       {/* Global Notification */}

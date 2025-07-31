@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useContext, useState, useEffect, useCallback, use } from 'react';
 import api from '../api/api'
 import socket from '../socket';
 
@@ -18,10 +18,12 @@ const AppProvider = ({ children }) => {
 
   const [tickets, setTickets] = useState([]);
   const [selectedTicket, setSelectedTicket] = useState(null);
+  const [selectedTickets, setSelectedTickets] = useState([]);
   const [ticketComments, setTicketComments] = useState([]);
   const [selectedTicketComment, setSelectedTicketComment] = useState(null);
   const [showDeleteTicketCommentModal, setShowDeleteTicketCommentModal] = useState(false);
   const [deleteTicketModal, setDeleteTicketModal] = useState(false);
+  const [showDeleteSelectedTicketsModal, setShowDeleteSelectedTicketsModal] = useState(false);
 
   const [articles, setArticles] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState({});
@@ -169,15 +171,20 @@ const AppProvider = ({ children }) => {
     }
   };
 
-  const deleteSelectedTickets = async (ticketIds) => {
-    try {
-      const res = await api.delete(`/tickets/delete-tickets`, { data: { ticketIds } });
-      setTickets(prev => prev.filter(ticket => !ticketIds.includes(ticket._id)));
-    } catch (err) {
-      console.error('Error deleting selected tickets:', err);
-      return 'Error deleting tickets';
-    }
+const deleteSelectedTicketsHandler = async (selectedTickets) => {
+  try {
+    const res = await api.delete('/tickets/bulk-delete', {
+      data: { ticketIds: selectedTickets }, // 🛠️ Proper placement
+    });
+    setSelectedTickets([]);
+    setDeleteTicketResponse('Tickets deleted successfully');
+    setTickets(prev => prev.filter(ticket => !selectedTickets.includes(ticket._id)));
+  } catch (err) {
+    console.error('Error deleting selected tickets:', err);
+    setDeleteTicketResponse('Error deleting tickets');
   }
+};
+
  
   //========================= PRIVILEGE CHECK =========================
   const canView = useCallback((pageName) => {
@@ -371,7 +378,9 @@ const AppProvider = ({ children }) => {
       selectedUser, setSelectedUser,
       showDeleteUserModal, setShowDeleteUserModal,
       deleteUserHandler,
-      deleteSelectedTickets
+      deleteSelectedTicketsHandler,
+      showDeleteSelectedTicketsModal, setShowDeleteSelectedTicketsModal,
+      selectedTickets, setSelectedTickets
     }}>
       {children}
     </AppContext.Provider>

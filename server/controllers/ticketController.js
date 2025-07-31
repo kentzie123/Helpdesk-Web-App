@@ -225,13 +225,15 @@ const deleteTicket = async (req, res) => {
 
 const deleteSelectedTickets = async (req, res) => {
   const { ticketIds } = req.body;
+  console.log(ticketIds);
+  
 
   if (!Array.isArray(ticketIds) || ticketIds.length === 0) {
     return res.status(400).json({ error: 'Invalid ticket IDs provided' });
   }
 
   try {
-    const result = await Ticket.deleteMany({ ticketId: { $in: ticketIds } });
+    const result = await Ticket.deleteMany({ _id: { $in: ticketIds } });
 
     if (result.deletedCount === 0) {
       return res.status(404).json({ error: 'No tickets found to delete' });
@@ -243,6 +245,7 @@ const deleteSelectedTickets = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting tickets' });
   }
 };
+
 
 
 module.exports = {
